@@ -1,0 +1,118 @@
+require 'rails_helper'
+
+RSpec.describe AiProviders::Base do
+  it "raises NotImplementedError for #complete" do
+    expect { described_class.new.complete(model: "x", system: "x", prompt: "x") }
+      .to raise_error(NotImplementedError)
+  end
+end
+
+RSpec.describe AiProviders::AnthropicAdapter do
+  let(:adapter) { described_class.new(api_key: "test-key") }
+
+  around do |example|
+    original = ENV["ANTHROPIC_API_KEY"]
+    ENV["ANTHROPIC_API_KEY"] = "test-key"
+    Anthropic.configure { |c| c.access_token = "test-key" }
+    example.run
+    ENV["ANTHROPIC_API_KEY"] = original
+    Anthropic.configure { |c| c.access_token = original }
+  end
+
+  before do
+    allow_any_instance_of(Anthropic::Client).to receive(:messages).and_return(
+      { "content" => [{ "type" => "text", "text" => "test response" }] }
+    )
+  end
+
+  it "implements the Base interface" do
+    expect(adapter).to be_a(AiProviders::Base)
+  end
+
+  it "returns an AiResponse from #complete" do
+    response = adapter.complete(model: "claude-opus-4-20250514", system: "test", prompt: "test")
+    expect(response).to be_a(AiResponse)
+    expect(response.text).to eq("test response")
+    expect(response.provider).to eq("anthropic")
+  end
+end
+
+RSpec.describe AiProviders::OllamaAdapter do
+  let(:adapter) { described_class.new(host: "http://localhost:11434", advanced_model: "qwen3:32b", standard_model: "qwen3:8b") }
+
+  let(:chat_response) { { "message" => { "role" => "assistant", "content" => "test response" } } }
+  let(:tags_response) { { "models" => [{ "name" => "qwen3:32b" }, { "name" => "qwen3:8b" }] } }
+
+  before do
+    stub_request(:post, "http://localhost:11434/api/chat")
+      .to_return(status: 200, body: chat_response.to_json, headers: { "Content-Type" => "application/json" })
+    stub_request(:get, "http://localhost:11434/api/tags")
+      .to_return(status: 200, body: tags_response.to_json, headers: { "Content-Type" => "application/json" })
+  end
+
+  it "implements the Base interface" do
+    expect(adapter).to be_a(AiProviders::Base)
+  end
+
+  it "returns an AiResponse from #complete" do
+    response = adapter.complete(model: "qwen3:32b", system: "test", prompt: "test")
+    expect(response).to be_a(AiResponse)
+    expect(response.text).to eq("test response")
+    expect(response.provider).to eq("ollama")
+  end
+
+  it "lists available models" do
+    expect(adapter.available_models).to eq(["qwen3:32b", "qwen3:8b"])
+  end
+
+  it "returns empty array when unreachable" do
+    stub_request(:get, "http://localhost:11434/api/tags").to_raise(Errno::ECONNREFUSED)
+    expect(adapter.available_models).to eq([])
+  end
+
+  describe "#healthy?" do
+    it "returns true when running" do
+      expect(adapter.healthy?).to be true
+    end
+
+    it "returns false when unreachable" do
+      stub_request(:get, "http://localhost:11434/api/tags").to_raise(Errno::ECONNREFUSED)
+      expect(adapter.healthy?).to be false
+    end
+  end
+end
+
+RSpec.describe AiProviders, ".build" do
+  around do |example|
+    original_provider = ENV["AI_PROVIDER"]
+    original_key = ENV["ANTHROPIC_API_KEY"]
+    ENV["ANTHROPIC_API_KEY"] = "test-key"
+    Anthropic.configure { |c| c.access_token = "test-key" }
+    example.run
+    ENV["AI_PROVIDER"] = original_provider
+    ENV["ANTHROPIC_API_KEY"] = original_key
+    Anthropic.configure { |c| c.access_token = original_key }
+  end
+
+  it "returns AnthropicAdapter when AI_PROVIDER is 'anthropic'" do
+    ENV["AI_PROVIDER"] = "anthropic"
+    expect(described_class.build).to be_a(AiProviders::AnthropicAdapter)
+  end
+
+  it "returns OllamaAdapter when AI_PROVIDER is 'ollama'" do
+    ENV["AI_PROVIDER"] = "ollama"
+    stub_request(:get, "http://localhost:11434/api/tags")
+      .to_return(status: 200, body: { models: [{ name: "qwen3:32b" }] }.to_json)
+    expect(described_class.build).to be_a(AiProviders::OllamaAdapter)
+  end
+
+  it "defaults to AnthropicAdapter" do
+    ENV.delete("AI_PROVIDER")
+    expect(described_class.build).to be_a(AiProviders::AnthropicAdapter)
+  end
+
+  it "raises on unknown provider" do
+    ENV["AI_PROVIDER"] = "unknown"
+    expect { described_class.build }.to raise_error(ArgumentError, /Unknown AI_PROVIDER/)
+  end
+end
