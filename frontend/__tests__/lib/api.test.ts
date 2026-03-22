@@ -1,0 +1,172 @@
+const mockLocalStorage: Record<string, string> = {};
+
+beforeAll(() => {
+  Object.defineProperty(global, "localStorage", {
+    value: {
+      getItem: jest.fn((key: string) => mockLocalStorage[key] ?? null),
+      setItem: jest.fn((key: string, value: string) => {
+        mockLocalStorage[key] = value;
+      }),
+      removeItem: jest.fn((key: string) => {
+        delete mockLocalStorage[key];
+      }),
+    },
+    writable: true,
+  });
+});
+
+beforeEach(() => {
+  jest.resetModules();
+  jest.restoreAllMocks();
+  Object.keys(mockLocalStorage).forEach((k) => delete mockLocalStorage[k]);
+});
+
+function loadModule() {
+  return require("@/lib/api") as typeof import("@/lib/api");
+}
+
+describe("setAuthToken / getAuthToken", () => {
+  it("stores and retrieves a token", () => {
+    const { setAuthToken, getAuthToken } = loadModule();
+    setAuthToken("tok_abc");
+    expect(getAuthToken()).toBe("tok_abc");
+  });
+
+  it("persists token to localStorage", () => {
+    const { setAuthToken } = loadModule();
+    setAuthToken("tok_xyz");
+    expect(localStorage.setItem).toHaveBeenCalledWith("auth_token", "tok_xyz");
+  });
+
+  it("reads token from localStorage when in-memory token is absent", () => {
+    mockLocalStorage["auth_token"] = "tok_stored";
+    const { getAuthToken } = loadModule();
+    expect(getAuthToken()).toBe("tok_stored");
+  });
+});
+
+describe("api.get", () => {
+  it("makes a GET fetch with Authorization header", async () => {
+    const mockResponse = { ok: true, status: 200, json: () => Promise.resolve({ data: 1 }) };
+    global.fetch = jest.fn().mockResolvedValue(mockResponse);
+
+    const { api, setAuthToken } = loadModule();
+    setAuthToken("tok_get");
+    const result = await api.get("/lessons");
+
+    expect(global.fetch).toHaveBeenCalledWith(
+      "/api/v1/lessons",
+      expect.objectContaining({
+        method: "GET",
+        headers: expect.objectContaining({ Authorization: "Bearer tok_get" }),
+      })
+    );
+    expect(result).toEqual({ data: 1 });
+  });
+});
+
+describe("api.post", () => {
+  it("sends JSON body with POST method", async () => {
+    const mockResponse = { ok: true, status: 200, json: () => Promise.resolve({ id: 42 }) };
+    global.fetch = jest.fn().mockResolvedValue(mockResponse);
+
+    const { api, setAuthToken } = loadModule();
+    setAuthToken("tok_post");
+    const result = await api.post("/exercises", { answer: "あ" });
+
+    expect(global.fetch).toHaveBeenCalledWith(
+      "/api/v1/exercises",
+      expect.objectContaining({
+        method: "POST",
+        body: JSON.stringify({ answer: "あ" }),
+        headers: expect.objectContaining({ "Content-Type": "application/json" }),
+      })
+    );
+    expect(result).toEqual({ id: 42 });
+  });
+});
+
+describe("api.patch", () => {
+  it("sends PATCH request with JSON body", async () => {
+    const mockResponse = { ok: true, status: 200, json: () => Promise.resolve({ updated: true }) };
+    global.fetch = jest.fn().mockResolvedValue(mockResponse);
+
+    const { api, setAuthToken } = loadModule();
+    setAuthToken("tok_patch");
+    const result = await api.patch("/lessons/1", { title: "Updated" });
+
+    expect(global.fetch).toHaveBeenCalledWith(
+      "/api/v1/lessons/1",
+      expect.objectContaining({
+        method: "PATCH",
+        body: JSON.stringify({ title: "Updated" }),
+        headers: expect.objectContaining({ "Content-Type": "application/json" }),
+      })
+    );
+    expect(result).toEqual({ updated: true });
+  });
+});
+
+describe("api.delete", () => {
+  it("sends DELETE request", async () => {
+    const mockResponse = { ok: true, status: 200, json: () => Promise.resolve({ deleted: true }) };
+    global.fetch = jest.fn().mockResolvedValue(mockResponse);
+
+    const { api, setAuthToken } = loadModule();
+    setAuthToken("tok_delete");
+    const result = await api.delete("/lessons/1");
+
+    expect(global.fetch).toHaveBeenCalledWith(
+      "/api/v1/lessons/1",
+      expect.objectContaining({
+        method: "DELETE",
+        headers: expect.objectContaining({ Authorization: "Bearer tok_delete" }),
+      })
+    );
+    expect(result).toEqual({ deleted: true });
+  });
+});
+
+describe("204 response", () => {
+  it("returns null for 204 No Content", async () => {
+    const mockResponse = { ok: true, status: 204 };
+    global.fetch = jest.fn().mockResolvedValue(mockResponse);
+
+    const { api, setAuthToken } = loadModule();
+    setAuthToken("tok_204");
+    const result = await api.delete("/lessons/1");
+
+    expect(result).toBeNull();
+  });
+});
+
+describe("401 response", () => {
+  it("throws Unauthorized error on 401 status", async () => {
+    const mockResponse = { ok: false, status: 401, statusText: "Unauthorized" };
+    global.fetch = jest.fn().mockResolvedValue(mockResponse);
+
+    const { api, setAuthToken } = loadModule();
+    setAuthToken("tok_expired");
+
+    await expect(api.get("/profile")).rejects.toThrow("Unauthorized");
+    expect(global.fetch).toHaveBeenCalledWith(
+      "/api/v1/profile",
+      expect.objectContaining({
+        method: "GET",
+        headers: expect.objectContaining({ Authorization: "Bearer tok_expired" }),
+      })
+    );
+  });
+});
+
+describe("non-401 error response", () => {
+  it("throws with status and statusText for 500 error", async () => {
+    const mockResponse = { ok: false, status: 500, statusText: "Internal Server Error" };
+    global.fetch = jest.fn().mockResolvedValue(mockResponse);
+
+    const { api, setAuthToken } = loadModule();
+    setAuthToken("tok_500");
+
+    await expect(api.get("/lessons")).rejects.toThrow("500 Internal Server Error");
+  });
+});
