@@ -1,0 +1,15 @@
+services:
+  redis:
+    image: redis:7-alpine
+
+  studio:
+    build: .
+    depends_on: [redis]
+    environment:
+      REDIS_URL: redis://redis:6379/0
+      AI_PROVIDER: ${AI_PROVIDER:-ollama}
+      OLLAMA_HOST: ${OLLAMA_HOST:-http://host.docker.internal:11434}
+      IMAGE_PROVIDER: ${IMAGE_PROVIDER:-dalle}
+      TTS_PROVIDER: ${TTS_PROVIDER:-elevenlabs}
+    volumes:
+      - ./output:/app/output

@@ -1,0 +1,16 @@
+default:
+  style: "Warm hand-painted watercolor with soft edges and natural textures"
+  color_palette: "Muted earth tones, soft greens, gentle blues, cream backgrounds"
+  negative_prompt: "text, labels, watermark, signature, blurry, flat vector, clip art"
+  dimensions:
+    vocabulary_card: { width: 1024, height: 1024 }
+    scene: { width: 2048, height: 1024 }
+    character_sheet: { width: 1024, height: 1536 }
+
+ja:
+  style_reference: "Japanese children's educational textbook, Studio Ghibli backgrounds"
+  scene_settings: ["Japanese garden", "classroom", "neighborhood", "market", "train station"]
+
+ko:
+  style_reference: "Korean children's educational textbook, traditional hanok architecture"
+  scene_settings: ["traditional village", "modern apartment", "school", "market"]

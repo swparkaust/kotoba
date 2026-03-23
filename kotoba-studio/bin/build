@@ -1,0 +1,27 @@
+#!/usr/bin/env ruby
+
+# Load the Rails backend to access ActiveRecord models
+ENV["RAILS_ENV"] ||= "development"
+require_relative "../../backend/config/environment"
+
+# Load Content Studio modules
+require_relative "../lib/studio"
+require_relative "../lib/studio/content_builder"
+require_relative "../lib/studio/curriculum_parser"
+require_relative "../lib/studio/content_pack_exporter"
+require_relative "../lib/studio/generators/exercise_generator"
+require_relative "../lib/studio/generators/illustration_generator"
+require_relative "../lib/studio/generators/audio_generator"
+require_relative "../lib/studio/generators/authentic_content_scaffolder"
+require_relative "../lib/studio/generators/pragmatic_scenario_generator"
+require_relative "../lib/studio/generators/contrastive_grammar_generator"
+require_relative "../lib/studio/generators/real_audio_scaffolder"
+require_relative "../lib/studio/qa/content_quality_reviewer"
+require_relative "../lib/studio/jobs/content_build_job"
+require_relative "../lib/studio/jobs/audio_generation_job"
+require_relative "../lib/studio/jobs/authentic_content_build_job"
+require_relative "../lib/studio/jobs/real_audio_build_job"
+require_relative "../lib/studio/jobs/quality_review_job"
+
+options = Studio::CLI.parse(ARGV)
+Studio::CLI.run(options)

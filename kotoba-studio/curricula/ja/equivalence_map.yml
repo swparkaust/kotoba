@@ -1,0 +1,15 @@
+# Maps Kotoba curriculum levels to JLPT equivalents
+# Uses en-dash (–) for ranges per spec
+levels:
+  1: "Pre-N5"
+  2: "N5"
+  3: "N5–N4"
+  4: "N4"
+  5: "N4–N3"
+  6: "N3"
+  7: "N3–N2"
+  8: "N2"
+  9: "N2"
+  10: "N2–N1"
+  11: "N1"
+  12: "N1+"

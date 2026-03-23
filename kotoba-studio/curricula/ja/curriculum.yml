@@ -1,0 +1,2316 @@
+language:
+  code: ja
+  name: Japanese
+  native_name: 日本語
+  script_systems:
+  - hiragana
+  - katakana
+  - kanji
+  official_curriculum: MEXT Kokugo
+  equivalence_test: JLPT
+  no_english_rule: true
+  classical_variant: classical_japanese
+  kanji_note: Complete kanji lists per grade are in kanji_grades.yml. Curriculum target_items contain representative samples for lesson planning; the content generation pipeline references kanji_grades.yml
+    for the full set.
+  generation_config:
+    exercises_per_lesson: 20
+    target_total_lessons: 1400
+    vocabulary_targets:
+      N5: 800
+      N4: 1500
+      N3: 3750
+      N2: 6000
+      N1: 10000
+    grammar_targets:
+      N5: 80
+      N4: 170
+      N3: 300
+      N2: 500
+      N1: 800
+    reading_speed_targets:
+      N5: 100 chars/min
+      N4: 200 chars/min
+      N3: 300 chars/min
+      N2: 400 chars/min
+      N1: 500 chars/min
+  library_progression:
+    levels_1_2:
+      type: graded_reader
+      word_count: 100-500
+      topics: daily life, animals, seasons
+    levels_3_4:
+      type: graded_reader
+      word_count: 500-1500
+      topics: folk tales, school life, family
+    levels_5_6:
+      type: graded_reader
+      word_count: 1500-3000
+      topics: history, science, social issues
+    levels_7_8:
+      type: adapted_text
+      word_count: 3000-6000
+      topics: news, essays, short stories
+    levels_9_10:
+      type: authentic_text
+      word_count: 6000-15000
+      topics: novels, academic articles, business documents
+    levels_11_12:
+      type: authentic_text
+      word_count: 15000+
+      topics: classical literature, research papers, contemporary media
+levels:
+- position: 1
+  title: Level 1 — Hiragana
+  grade_equivalent: Grade 1 (first half)
+  test_equivalent: Pre-N5
+  description: All 46 hiragana, basic greetings, numbers 1-10, self-introduction
+  teaching_band: beginner
+  units:
+  - position: 1
+    title: Unit 1 — Vowels (あいうえお)
+    description: The five vowel sounds
+    target_items:
+      characters:
+      - あ
+      - い
+      - う
+      - え
+      - お
+      vocabulary:
+      - あめ
+      - いぬ
+      - うま
+      - えき
+      - おに
+      grammar: []
+    lessons:
+    - position: 1
+      title: Lesson 1 — あ (a)
+      skill_type: character_intro
+      objectives:
+      - Recognize あ by sight and sound
+      - Trace あ with correct stroke order
+      - 'Associate あ with vocabulary: あめ (rain)'
+    - position: 2
+      title: Lesson 2 — い (i)
+      skill_type: character_intro
+      objectives:
+      - Recognize い by sight and sound
+      - Trace い with correct stroke order
+      - 'Associate い with vocabulary: いぬ (dog)'
+    - position: 3
+      title: Lesson 3 — う (u)
+      skill_type: character_intro
+      objectives:
+      - Recognize う by sight and sound
+      - Trace う with correct stroke order
+      - 'Associate う with vocabulary: うま (horse)'
+    - position: 4
+      title: Lesson 4 — え (e)
+      skill_type: character_intro
+      objectives:
+      - Recognize え by sight and sound
+      - Trace え with correct stroke order
+    - position: 5
+      title: Lesson 5 — お (o)
+      skill_type: character_intro
+      objectives:
+      - Recognize お by sight and sound
+      - Trace お with correct stroke order
+    - position: 6
+      title: Lesson 6 — Vowel Review
+      skill_type: review
+      objectives:
+      - Distinguish all five vowels by sound
+      - Write all five vowels from memory
+  - position: 2
+    title: Unit 2 — K-row (かきくけこ)
+    description: The K-consonant row
+    target_items:
+      characters:
+      - か
+      - き
+      - く
+      - け
+      - こ
+      vocabulary:
+      - かさ
+      - きく
+      - くも
+      - けむり
+      - こども
+      grammar: []
+    lessons:
+    - position: 1
+      title: Lesson 1 — かきくけこ
+      skill_type: character_intro
+      objectives:
+      - Recognize and write all K-row characters
+      - Read words containing K-row characters
+    - position: 2
+      title: Lesson 2 — K-row Practice
+      skill_type: drill
+      objectives:
+      - Achieve fluent recall of K-row characters
+  - position: 3
+    title: Unit 3 — S-row (さしすせそ)
+    description: The S-consonant row
+    target_items:
+      characters:
+      - さ
+      - し
+      - す
+      - せ
+      - そ
+      vocabulary:
+      - さくら
+      - しろ
+      - すし
+      - せみ
+      - そら
+      grammar: []
+    lessons:
+    - position: 1
+      title: Lesson 1 — さしすせそ
+      skill_type: character_intro
+      objectives:
+      - Recognize and write all S-row characters
+    - position: 2
+      title: Lesson 2 — S-row Practice
+      skill_type: drill
+      objectives:
+      - Achieve fluent recall of S-row characters
+  - position: 4
+    title: Unit 4 — T-row (たちつてと)
+    description: The T-consonant row
+    target_items:
+      characters:
+      - た
+      - ち
+      - つ
+      - て
+      - と
+      vocabulary:
+      - たまご
+      - ちから
+      - つき
+      - てがみ
+      - ともだち
+      grammar: []
+    lessons:
+    - position: 1
+      title: Lesson 1 — たちつてと
+      skill_type: character_intro
+      objectives:
+      - Recognize and write all T-row characters
+    - position: 2
+      title: Lesson 2 — T-row Practice
+      skill_type: drill
+      objectives:
+      - Achieve fluent recall of T-row characters
+  - position: 5
+    title: Unit 5 — N-row (なにぬねの)
+    description: The N-consonant row
+    target_items:
+      characters:
+      - な
+      - に
+      - ぬ
+      - ね
+      - の
+      vocabulary:
+      - なつ
+      - にわ
+      - ぬの
+      - ねこ
+      - のり
+      grammar: []
+    lessons:
+    - position: 1
+      title: Lesson 1 — なにぬねの
+      skill_type: character_intro
+      objectives:
+      - Recognize and write all N-row characters
+  - position: 6
+    title: Unit 6 — H-row (はひふへほ)
+    description: The H-consonant row
+    target_items:
+      characters:
+      - は
+      - ひ
+      - ふ
+      - へ
+      - ほ
+      vocabulary:
+      - はな
+      - ひと
+      - ふね
+      - へや
+      - ほし
+      grammar: []
+    lessons:
+    - position: 1
+      title: Lesson 1 — はひふへほ
+      skill_type: character_intro
+      objectives:
+      - Recognize and write all H-row characters
+      - Understand は as topic particle
+    - position: 2
+      title: 'Lesson 2 — 視写: Copy from Model'
+      skill_type: writing
+      objectives:
+      - Copy hiragana words from a model (視写)
+      - Maintain correct stroke order while copying
+      - Build fluency transitioning from tracing to independent writing
+  - position: 7
+    title: Unit 7 — M-row (まみむめも)
+    description: The M-consonant row
+    target_items:
+      characters:
+      - ま
+      - み
+      - む
+      - め
+      - も
+      vocabulary:
+      - まち
+      - みず
+      - むし
+      - めだか
+      - もり
+      grammar: []
+    lessons:
+    - position: 1
+      title: Lesson 1 — まみむめも
+      skill_type: character_intro
+      objectives:
+      - Recognize and write all M-row characters
+  - position: 8
+    title: Unit 8 — Y/R/W/N rows & Greetings
+    description: Remaining hiragana and basic greetings
+    target_items:
+      characters:
+      - や
+      - ゆ
+      - よ
+      - ら
+      - り
+      - る
+      - れ
+      - ろ
+      - わ
+      - を
+      - ん
+      vocabulary:
+      - こんにちは
+      - ありがとう
+      - さようなら
+      - おはよう
+      - すみません
+      - いただきます
+      - ごちそうさま
+      grammar:
+      - です
+    lessons:
+    - position: 1
+      title: Lesson 1 — やゆよ & らりるれろ
+      skill_type: character_intro
+      objectives:
+      - Recognize and write Y-row and R-row characters
+    - position: 2
+      title: Lesson 2 — わをん & All Hiragana Review
+      skill_type: character_intro
+      objectives:
+      - Complete the hiragana chart
+      - Write all 46 hiragana from memory
+    - position: 3
+      title: Lesson 3 — Greetings
+      skill_type: vocabulary
+      objectives:
+      - Use こんにちは, ありがとう, さようなら
+      - 'Introduce yourself: わたしは___です'
+    - position: 4
+      title: Lesson 4 — Numbers 1-10
+      skill_type: vocabulary
+      objectives:
+      - Count from 1 to 10 in Japanese
+      - Recognize number kanji 一 through 十
+    - position: 5
+      title: 'Lesson 5 — Listening: Sounds of Japanese'
+      skill_type: listening
+      objectives:
+      - Distinguish all 46 hiragana sounds by ear
+      - Identify long vowels vs short vowels
+      - Recognize the っ (sokuon) pause in words
+    - position: 6
+      title: 'Lesson 6 — Speaking: Greetings Practice'
+      skill_type: speaking
+      objectives:
+      - Say こんにちは, ありがとう, さようなら with natural pronunciation
+      - 'Introduce yourself: わたしは＿＿です'
+    - position: 7
+      title: Lesson 7 — Dakuten Preview (がざだば)
+      skill_type: character_intro
+      objectives:
+      - Recognize that voiced sounds exist (が, ざ, だ, ば)
+      - Hear the difference between か/が, さ/ざ, た/だ, は/ば
+      - Understand that ゛ (dakuten) changes the sound
+  - position: 9
+    title: Unit 9 — Japanese Pronunciation (発音)
+    description: 'Japanese phonological system: vowel length, pitch accent, special sounds'
+    target_items:
+      characters: []
+      vocabulary:
+      - おばさん
+      - おばあさん
+      - きて
+      - きって
+      - びょういん
+      - びよういん
+      grammar: []
+    lessons:
+    - position: 1
+      title: Lesson 1 — Vowel Length & Special Sounds
+      skill_type: listening
+      objectives:
+      - Distinguish short vowels from long vowels (おばさん vs おばあさん)
+      - Hear and produce っ (sokuon/double consonant)
+      - Distinguish ん (syllabic n) in different positions
+    - position: 2
+      title: Lesson 2 — Pitch Accent Awareness
+      skill_type: listening
+      objectives:
+      - Recognize that Japanese uses pitch accent (not stress)
+      - Hear the difference between はし (bridge/chopsticks/edge)
+      - Practice natural rhythm of Japanese sentences
+  generation_targets:
+    target_lessons: 60
+    target_vocab: 200
+    target_grammar: 20
+- position: 2
+  title: Level 2 — Katakana & Grade 1 Kanji
+  grade_equivalent: Grade 1 (second half)
+  test_equivalent: N5
+  description: All 46 katakana, 80 Grade-1 kanji, simple sentences, counters, particles は/が/を/に/で
+  teaching_band: beginner
+  units:
+  - position: 1
+    title: Unit 1 — Katakana Vowels & K-row
+    description: First 10 katakana characters
+    target_items:
+      characters:
+      - ア
+      - イ
+      - ウ
+      - エ
+      - オ
+      - カ
+      - キ
+      - ク
+      - ケ
+      - コ
+      vocabulary:
+      - アメリカ
+      - イタリア
+      - カメラ
+      - コーヒー
+      grammar: []
+    lessons:
+    - position: 1
+      title: Lesson 1 — アイウエオ
+      skill_type: character_intro
+      objectives:
+      - Recognize katakana vowels
+      - Distinguish katakana from hiragana equivalents
+      - Write katakana with correct stroke order
+    - position: 2
+      title: Lesson 2 — カキクケコ
+      skill_type: character_intro
+      objectives:
+      - Recognize katakana K-row
+      - Read loanwords with K-row katakana
+      - Write katakana with correct stroke order
+    - position: 3
+      title: 'Lesson 3 — 視写: Katakana Copying Practice'
+      skill_type: writing
+      objectives:
+      - Copy katakana words from a model
+      - Distinguish similar katakana shapes (シ/ツ, ソ/ン, ア/マ)
+  - position: 2
+    title: Unit 2 — Remaining Katakana
+    description: Complete the katakana chart
+    target_items:
+      characters:
+      - サ
+      - シ
+      - ス
+      - セ
+      - ソ
+      - タ
+      - チ
+      - ツ
+      - テ
+      - ト
+      - ナ
+      - ニ
+      - ヌ
+      - ネ
+      - ノ
+      - ハ
+      - ヒ
+      - フ
+      - ヘ
+      - ホ
+      - マ
+      - ミ
+      - ム
+      - メ
+      - モ
+      - ヤ
+      - ユ
+      - ヨ
+      - ラ
+      - リ
+      - ル
+      - レ
+      - ロ
+      - ワ
+      - ヲ
+      - ン
+      vocabulary:
+      - サラダ
+      - テレビ
+      - ハンバーガー
+      - ラーメン
+      - パン
+      grammar: []
+    lessons:
+    - position: 1
+      title: Lesson 1 — S through N rows
+      skill_type: character_intro
+      objectives:
+      - Read and write katakana S, T, N rows
+      - Write katakana with correct stroke order
+    - position: 2
+      title: Lesson 2 — H through W rows
+      skill_type: character_intro
+      objectives:
+      - Complete the katakana chart
+      - Read common loanwords
+      - Write katakana with correct stroke order
+    - position: 3
+      title: Lesson 3 — Katakana Review
+      skill_type: review
+      objectives:
+      - Distinguish all 46 katakana
+      - Read 20 common loanwords
+    - position: 4
+      title: 'Lesson 4 — Listening: Katakana Loanwords'
+      skill_type: listening
+      objectives:
+      - Identify common loanwords by ear
+      - Distinguish katakana pronunciation from English originals
+  - position: 3
+    title: Unit 3 — Grade 1 Kanji (Part 1)
+    description: First 40 Grade-1 kanji
+    target_items:
+      characters:
+      - 一
+      - 二
+      - 三
+      - 四
+      - 五
+      - 六
+      - 七
+      - 八
+      - 九
+      - 十
+      - 百
+      - 千
+      - 上
+      - 下
+      - 左
+      - 右
+      - 大
+      - 小
+      - 中
+      - 山
+      - 川
+      - 田
+      - 木
+      - 林
+      - 森
+      - 花
+      - 草
+      - 竹
+      - 犬
+      - 虫
+      - 貝
+      - 石
+      - 糸
+      - 車
+      - 金
+      - 雨
+      - 赤
+      - 青
+      - 白
+      - 円
+      - 人
+      - 本
+      - 夕
+      vocabulary:
+      - 山川
+      - おおきい
+      - ちいさい
+      grammar:
+      - は particle
+      - が particle
+    lessons:
+    - position: 1
+      title: Lesson 1 — Numbers in Kanji
+      skill_type: kanji_intro
+      objectives:
+      - Read and write 一 through 十
+      - Understand on'yomi and kun'yomi readings
+      - Write with correct stroke order and stroke count
+    - position: 2
+      title: Lesson 2 — Nature Kanji
+      skill_type: kanji_intro
+      objectives:
+      - Read and write 山川田木林森
+      - Form compound words
+      - Write with correct stroke order and stroke count
+    - position: 3
+      title: Lesson 3 — Position & Size Kanji
+      skill_type: kanji_intro
+      objectives:
+      - Read and write 上下左右大小中
+      - Write with correct stroke order and stroke count
+  - position: 4
+    title: Unit 4 — Grade 1 Kanji (Part 2) & Particles
+    description: Remaining Grade-1 kanji and basic particles
+    target_items:
+      characters:
+      - 日
+      - 月
+      - 火
+      - 水
+      - 土
+      - 年
+      - 先
+      - 生
+      - 王
+      - 玉
+      - 正
+      - 字
+      - 文
+      - 名
+      - 女
+      - 男
+      - 子
+      - 目
+      - 耳
+      - 口
+      - 手
+      - 足
+      - 力
+      - 気
+      - 休
+      - 立
+      - 見
+      - 音
+      - 早
+      - 天
+      - 空
+      - 村
+      - 町
+      - 校
+      - 学
+      - 入
+      - 出
+      vocabulary:
+      - 学校
+      - 先生
+      - 女の子
+      - 男の子
+      grammar:
+      - を particle
+      - に particle
+      - で particle
+      - か particle (questions)
+      - ではありません (negative)
+    lessons:
+    - position: 1
+      title: Lesson 1 — Days & Calendar Kanji
+      skill_type: kanji_intro
+      objectives:
+      - Read and write 日月火水木金土
+      - Name the days of the week
+      - Write with correct stroke order and stroke count
+    - position: 2
+      title: Lesson 2 — People & Body Kanji
+      skill_type: kanji_intro
+      objectives:
+      - Read and write 女男子目耳口手足
+      - Write with correct stroke order and stroke count
+    - position: 3
+      title: Lesson 3 — Basic Particles
+      skill_type: grammar_intro
+      objectives:
+      - Use は, が, を, に, で in simple sentences
+      - Write simple S-V-O sentences
+    - position: 4
+      title: Lesson 4 — Self-Introduction & Counters
+      skill_type: speaking
+      objectives:
+      - Give a full self-introduction
+      - 'Use counters: つ, 人, 個'
+  - position: 5
+    title: Unit 5 — JLPT N5 Mock Exam
+    description: 'Practice test in JLPT N5 format: vocabulary, grammar, reading, listening sections'
+    target_items:
+      characters: []
+      vocabulary: []
+      grammar:
+      - JLPT N5 cumulative review
+    lessons:
+    - position: 1
+      title: Lesson 1 — N5 語彙・文法 (Vocab & Grammar Section)
+      skill_type: review
+      objectives:
+      - Complete JLPT N5-format vocabulary questions
+      - Complete JLPT N5-format grammar questions
+      - Score 60%+ on N5 vocabulary and grammar sections
+    - position: 2
+      title: Lesson 2 — N5 読解 (Reading Section)
+      skill_type: authentic_reading
+      objectives:
+      - Complete JLPT N5-format reading comprehension passages
+      - Answer questions within time limit (N5 pace)
+      - Score 60%+ on N5 reading section
+    - position: 3
+      title: Lesson 3 — N5 聴解 (Listening Section)
+      skill_type: listening
+      objectives:
+      - Complete JLPT N5-format listening comprehension
+      - Answer questions from single-play audio at natural speed
+      - Score 60%+ on N5 listening section
+  generation_targets:
+    target_lessons: 80
+    target_vocab: 600
+    target_grammar: 60
+- position: 3
+  title: Level 3 — Dakuten, Combos & Simple Sentences
+  grade_equivalent: Grade 2 (first half)
+  test_equivalent: N5–N4
+  description: Dakuten/handakuten, combo kana, Grade-2 kanji (first 80), basic verb conjugation, adjectives
+  teaching_band: beginner
+  units:
+  - position: 1
+    title: Unit 1 — Voiced Sounds & Combo Kana
+    description: Dakuten, handakuten, and combination characters
+    target_items:
+      characters:
+      - が
+      - ぎ
+      - ぐ
+      - げ
+      - ご
+      - ざ
+      - じ
+      - ず
+      - ぜ
+      - ぞ
+      - だ
+      - ぢ
+      - づ
+      - で
+      - ど
+      - ば
+      - び
+      - ぶ
+      - べ
+      - ぼ
+      - ぱ
+      - ぴ
+      - ぷ
+      - ぺ
+      - ぽ
+      vocabulary:
+      - がっこう
+      - ざっし
+      - でんわ
+      - どうぶつ
+      - パン
+      grammar:
+      - です/ます
+    lessons:
+    - position: 1
+      title: Lesson 1 — Dakuten & Handakuten
+      skill_type: character_intro
+      objectives:
+      - Read all voiced and semi-voiced kana
+    - position: 2
+      title: Lesson 2 — Combo Kana (きゃきゅきょ etc.)
+      skill_type: character_intro
+      objectives:
+      - Read and write combination characters
+      - Distinguish っ (small tsu) and long vowels
+    - position: 3
+      title: 'Lesson 3 — Listening: Voiced & Unvoiced Pairs'
+      skill_type: listening
+      objectives:
+      - Distinguish voiced (が/ざ/だ/ば) from unvoiced (か/さ/た/は) sounds
+      - Recognize combo kana (きゃ/きゅ/きょ) in spoken words
+  - position: 2
+    title: Unit 2 — Grade 2 Kanji (Part 1)
+    description: First 80 Grade-2 kanji
+    target_items:
+      characters:
+      - 言
+      - 話
+      - 読
+      - 書
+      - 記
+      - 作
+      - 引
+      - 思
+      - 知
+      - 考
+      - 用
+      - 売
+      - 買
+      - 店
+      - 食
+      - 馬
+      - 魚
+      - 鳥
+      - 牛
+      - 黒
+      - 黄
+      - 色
+      - 形
+      - 点
+      - 線
+      - 内
+      - 外
+      - 前
+      - 後
+      - 北
+      - 南
+      - 東
+      - 西
+      - 遠
+      - 近
+      - 直
+      - 当
+      - 原
+      vocabulary:
+      - 読む
+      - 書く
+      - 食べる
+      - 買う
+      - 売る
+      grammar:
+      - ます conjugation
+      - adjective い/な
+    lessons:
+    - position: 1
+      title: Lesson 1 — Communication Kanji
+      skill_type: kanji_intro
+      objectives:
+      - Read and write 言話読書記
+      - Write with correct stroke order and stroke count
+      - Distinguish on'yomi and kun'yomi readings in context
+    - position: 2
+      title: Lesson 2 — Direction & Position Kanji
+      skill_type: kanji_intro
+      objectives:
+      - Read and write 北南東西内外前後
+      - Write with correct stroke order and stroke count
+      - Distinguish on'yomi and kun'yomi readings in context
+    - position: 3
+      title: Lesson 3 — Verb Conjugation (ます form)
+      skill_type: grammar_intro
+      objectives:
+      - Conjugate いる/える verbs into ます form
+      - Form negative ません and past ました
+  - position: 3
+    title: Unit 3 — Adjectives & Daily Life
+    description: い-adjectives, な-adjectives, daily routines
+    target_items:
+      characters: []
+      vocabulary:
+      - おおきい
+      - ちいさい
+      - あたらしい
+      - ふるい
+      - あつい
+      - しずか
+      - きれい
+      grammar:
+      - い-adj conjugation
+      - な-adj + な/です
+    lessons:
+    - position: 1
+      title: Lesson 1 — い-adjectives
+      skill_type: grammar_intro
+      objectives:
+      - Conjugate い-adjectives (negative, past)
+      - Describe objects and people
+    - position: 2
+      title: Lesson 2 — な-adjectives
+      skill_type: grammar_intro
+      objectives:
+      - Use な-adjectives with nouns and です
+    - position: 3
+      title: Lesson 3 — My Daily Routine
+      skill_type: writing
+      objectives:
+      - Write 5 sentences about daily routine
+      - Use time expressions correctly
+    - position: 4
+      title: 'Lesson 4 — Speaking: Describe Your Day'
+      skill_type: speaking
+      objectives:
+      - Describe daily routine using ます form
+      - Use time expressions (あさ, ひる, よる) correctly
+  - position: 4
+    title: Unit 4 — 季節と行事 (Seasons & Events)
+    description: Japanese seasonal events and school calendar
+    target_items:
+      characters: []
+      vocabulary:
+      - お正月
+      - おもち
+      - 節分
+      - ひなまつり
+      - 七夕
+      - たなばた
+      - 運動会
+      - 入学式
+      - 卒業式
+      - 'いただきます (review: meal context)'
+      - 'ごちそうさま (review: meal context)'
+      grammar: []
+    lessons:
+    - position: 1
+      title: Lesson 1 — 日本の行事 (Japanese Annual Events)
+      skill_type: vocabulary
+      objectives:
+      - Learn names of major Japanese annual events (お正月, 節分, ひなまつり, 七夕)
+      - Associate events with their seasons
+      - Use いただきます and ごちそうさま correctly
+    - position: 2
+      title: Lesson 2 — 学校の行事 (School Events)
+      skill_type: vocabulary
+      objectives:
+      - Learn school event vocabulary (入学式, 運動会, 卒業式, 遠足)
+      - Describe seasonal activities in simple sentences
+      - Write about a favorite event (行事作文)
+    - position: 3
+      title: 'Lesson 3 — Listening: 行事の歌と音'
+      skill_type: listening
+      objectives:
+      - Listen to descriptions of seasonal events
+      - Match events to correct seasons by audio cues
+  generation_targets:
+    target_lessons: 40
+    target_vocab: 300
+    target_grammar: 40
+- position: 4
+  title: Level 4 — Verb Groups & Daily Conversation
+  grade_equivalent: Grade 2 (second half)
+  test_equivalent: N4
+  description: All three verb groups, te-form, request patterns, Grade-2 kanji (remaining 80), shopping and travel vocabulary
+  teaching_band: elementary
+  units:
+  - position: 1
+    title: Unit 1 — Verb Groups & Te-form
+    description: Ichidan, godan, and irregular verb conjugation
+    target_items:
+      characters: []
+      vocabulary:
+      - 飲む
+      - 行く
+      - 来る
+      - する
+      - 見る
+      - 聴く
+      - 待つ
+      - 話す
+      grammar:
+      - て-form
+      - てください
+      - ている
+      - てもいいですか
+      - ないでください
+      - 丁寧語 awareness (polite vs casual speech)
+    lessons:
+    - position: 1
+      title: Lesson 1 — Ichidan Verbs
+      skill_type: grammar_intro
+      objectives:
+      - Identify and conjugate る-verbs
+      - Form te-form for ichidan verbs
+    - position: 2
+      title: Lesson 2 — Godan Verbs
+      skill_type: grammar_intro
+      objectives:
+      - Identify godan verb groups by ending
+      - Apply te-form rules (って/んで/いて/して)
+    - position: 3
+      title: Lesson 3 — Making Requests
+      skill_type: speaking
+      objectives:
+      - Use てください for polite requests
+      - Use てもいいですか for permission
+  - position: 2
+    title: Unit 2 — Grade 2 Kanji (Part 2)
+    description: Remaining Grade-2 kanji
+    target_items:
+      characters:
+      - 新
+      - 古
+      - 多
+      - 少
+      - 広
+      - 長
+      - 明
+      - 高
+      - 強
+      - 弱
+      - 太
+      - 細
+      - 万
+      - 半
+      - 分
+      - 毎
+      - 母
+      - 父
+      - 姉
+      - 兄
+      - 弟
+      - 妹
+      - 友
+      - 家
+      - 室
+      - 戸
+      - 門
+      - 道
+      - 地
+      - 海
+      - 池
+      - 雪
+      - 風
+      - 雲
+      - 星
+      - 光
+      vocabulary:
+      - 新しい
+      - 古い
+      - 家族
+      - 友だち
+      grammar:
+      - たい (want to)
+      - つもり (plan to)
+    lessons:
+    - position: 1
+      title: Lesson 1 — Opposite Pairs Kanji
+      skill_type: kanji_intro
+      objectives:
+      - 'Learn antonym pairs: 新/古, 多/少, 強/弱, 高/安'
+      - Write with correct stroke order and stroke count
+      - Distinguish on'yomi and kun'yomi readings in context
+    - position: 2
+      title: Lesson 2 — Family & Home Kanji
+      skill_type: kanji_intro
+      objectives:
+      - Read and write family member kanji
+      - Describe your family
+      - Write with correct stroke order and stroke count
+      - Distinguish on'yomi and kun'yomi readings in context
+  - position: 3
+    title: Unit 3 — Shopping & Travel
+    description: Practical conversation for shopping and travel
+    target_items:
+      characters: []
+      vocabulary:
+      - いくら
+      - 高い
+      - 安い
+      - 切符
+      - 乗り場
+      - 降り口
+      grammar:
+      - いくらですか
+      - をください
+      - はどこですか
+    lessons:
+    - position: 1
+      title: Lesson 1 — At the Store
+      skill_type: speaking
+      objectives:
+      - Ask prices and make purchases
+      - Use counter words for objects
+    - position: 2
+      title: Lesson 2 — Taking the Train
+      skill_type: speaking
+      objectives:
+      - Buy tickets and ask for directions
+      - Understand station announcements
+    - position: 3
+      title: Lesson 3 — Shopping Role Play
+      skill_type: writing
+      objectives:
+      - Write a dialogue about shopping
+    - position: 4
+      title: 'Lesson 4 — Listening: Shopping Dialogues'
+      skill_type: listening
+      objectives:
+      - Understand prices and quantities in spoken Japanese
+      - Follow a simple transactional conversation
+    - position: 5
+      title: Lesson 5 — 手紙を書く (Writing a Letter)
+      skill_type: writing
+      objectives:
+      - Write a simple letter to a friend (友だちへの手紙)
+      - 'Learn letter structure: 挨拶 → 本文 → 結び'
+      - Write a thank-you letter (お礼の手紙)
+  - position: 4
+    title: Unit 4 — JLPT N4 Mock Exam
+    description: 'Practice test in JLPT N4 format: vocabulary, grammar, reading, listening sections'
+    target_items:
+      characters: []
+      vocabulary: []
+      grammar:
+      - JLPT N4 cumulative review
+    lessons:
+    - position: 1
+      title: Lesson 1 — N4 語彙・文法 (Vocab & Grammar Section)
+      skill_type: review
+      objectives:
+      - Complete JLPT N4-format vocabulary questions
+      - Complete JLPT N4-format grammar questions
+      - Score 60%+ on N4 vocabulary and grammar sections
+    - position: 2
+      title: Lesson 2 — N4 読解 (Reading Section)
+      skill_type: authentic_reading
+      objectives:
+      - Complete JLPT N4-format reading comprehension passages
+      - Answer questions within time limit (N4 pace)
+      - Score 60%+ on N4 reading section
+    - position: 3
+      title: Lesson 3 — N4 聴解 (Listening Section)
+      skill_type: listening
+      objectives:
+      - Complete JLPT N4-format listening comprehension
+      - Answer questions from single-play audio at natural speed
+      - Score 60%+ on N4 listening section
+  generation_targets:
+    target_lessons: 60
+    target_vocab: 400
+    target_grammar: 50
+- position: 5
+  title: Level 5 — Intermediate Grammar & Reading
+  grade_equivalent: Grade 3
+  test_equivalent: N4–N3
+  description: Potential/volitional/conditional forms, Grade-3 kanji (200), paragraph writing, simple stories
+  teaching_band: intermediate
+  units:
+  - position: 1
+    title: Unit 1 — Verb Forms
+    description: Potential, volitional, conditional forms
+    target_items:
+      characters: []
+      vocabulary:
+      - 泳げる
+      - 読める
+      - 話せる
+      - 走ろう
+      - 食べよう
+      - 行けば
+      - 雨が降ったら
+      grammar:
+      - られる (potential)
+      - よう (volitional)
+      - ば/たら (conditional)
+      - ながら (while)
+      - ことができる
+      - 〜たことがある
+      - なら (conditional)
+      - 'ます form (review: with new verb groups)'
+    lessons:
+    - position: 1
+      title: Lesson 1 — Potential Form
+      skill_type: grammar_intro
+      objectives:
+      - Express ability with potential form
+      - Distinguish られる from passive
+    - position: 2
+      title: Lesson 2 — Volitional & Conditional
+      skill_type: grammar_intro
+      objectives:
+      - Use よう for suggestions
+      - Form ば/たら conditionals
+  - position: 2
+    title: Unit 2 — Grade 3 Kanji
+    description: 200 Grade-3 kanji
+    target_items:
+      characters:
+      - 丁
+      - 世
+      - 両
+      - 主
+      - 乗
+      - 予
+      - 事
+      - 仕
+      - 他
+      - 代
+      - 住
+      - 使
+      - 係
+      - 倍
+      - 全
+      - 具
+      - 写
+      - 列
+      - 助
+      - 勉
+      - 動
+      - 勝
+      - 化
+      - 区
+      - 医
+      - 去
+      - 反
+      - 取
+      - 受
+      - 号
+      - 向
+      - 君
+      - 味
+      - 命
+      - 和
+      - 品
+      - 員
+      - 商
+      - 問
+      - 坂
+      - 短
+      - 暗
+      - 軽
+      - 重
+      vocabulary:
+      - 運ぶ
+      - 始まる
+      - 終わる
+      - 世界
+      - 猿も木から落ちる
+      - 七転び八起き
+      - 石の上にも三年
+      - 目が高い
+      - 手を打つ
+      - 顔が広い
+      - お盆
+      - 花見
+      - 紅葉
+      - 年賀状
+      - 図書館
+      - 自転車
+      - 動物園
+      - 交通
+      - 安全
+      - 実験
+      - 発表
+      - 研究
+      - 問題
+      - 練習
+      grammar: []
+    lessons:
+    - position: 1
+      title: Lesson 1 — Action Kanji
+      skill_type: kanji_intro
+      objectives:
+      - Read and write action/movement kanji
+      - Write with correct stroke order and stroke count
+      - Distinguish on'yomi and kun'yomi readings in context
+    - position: 2
+      title: Lesson 2 — Place & Society Kanji
+      skill_type: kanji_intro
+      objectives:
+      - Read and write kanji for places and social concepts
+      - Write with correct stroke order and stroke count
+      - Distinguish on'yomi and kun'yomi readings in context
+  - position: 3
+    title: Unit 3 — Story Reading & Writing
+    description: Reading and writing short narratives
+    target_items:
+      characters: []
+      vocabulary:
+      - むかしむかし
+      - あるところに
+      - そして
+      - ついに
+      - 桃太郎
+      - 浦島太郎
+      - かぐや姫
+      grammar:
+      - と思う
+      - と言う
+      - たら (narrative past)
+    lessons:
+    - position: 1
+      title: Lesson 1 — Reading a Folk Tale (桃太郎)
+      skill_type: authentic_reading
+      objectives:
+      - Read a simplified version of 桃太郎
+      - Identify narrative structure (beginning, development, climax, resolution)
+      - Recognize traditional folk tale vocabulary and patterns
+    - position: 2
+      title: Lesson 2 — Writing a Short Story
+      skill_type: writing
+      objectives:
+      - Write a 100-character narrative
+      - 'Use connectors: そして, でも, ついに'
+    - position: 3
+      title: 'Lesson 3 — Listening: Folk Tale (桃太郎) Narration'
+      skill_type: listening
+      objectives:
+      - Listen to a narrated version of 桃太郎 and identify key events
+      - Answer comprehension questions based on audio only
+      - Recognize narrative vocabulary (むかしむかし, そして, ついに) by ear
+    - position: 4
+      title: Lesson 4 — 読書感想文 (Book Report)
+      skill_type: writing
+      objectives:
+      - Write a short 読書感想文 about the folk tale
+      - Express personal opinions about characters and events
+      - Use connectors to organize thoughts (まず、つぎに、さいごに)
+  generation_targets:
+    target_lessons: 70
+    target_vocab: 750
+    target_grammar: 50
+- position: 6
+  title: Level 6 — Passive, Causative & Social Japanese
+  grade_equivalent: Grade 4
+  test_equivalent: N3
+  description: Passive/causative/causative-passive, Grade-4 kanji (202), honorific basics, onomatopoeia introduction, question particle か
+  teaching_band: intermediate
+  units:
+  - position: 1
+    title: Unit 1 — Passive & Causative
+    description: Advanced verb conjugations
+    target_items:
+      characters:
+      - 不
+      - 争
+      - 井
+      - 付
+      - 令
+      - 以
+      - 仲
+      - 伝
+      - 位
+      - 低
+      - 佐
+      - 例
+      - 便
+      - 信
+      - 倉
+      - 候
+      - 借
+      - 健
+      - 側
+      - 働
+      - 億
+      - 兆
+      - 児
+      - 共
+      - 兵
+      - 典
+      - 冷
+      - 初
+      - 別
+      - 利
+      vocabulary:
+      - 叱られる
+      - 褒められる
+      - 食べさせる
+      - 行かせる
+      - 読ませられる
+      - 待たされる
+      - 受験
+      - 完成
+      - 共通
+      - 関係
+      - 選択
+      grammar:
+      - れる/られる (passive)
+      - せる/させる (causative)
+    lessons:
+    - position: 1
+      title: Lesson 1 — Passive Voice
+      skill_type: grammar_intro
+      objectives:
+      - Form and use passive constructions
+      - Express adversity with indirect passive
+    - position: 2
+      title: Lesson 2 — Causative & Causative-Passive
+      skill_type: grammar_intro
+      objectives:
+      - Express making/letting someone do something
+      - Use causative-passive for being made to do
+  - position: 2
+    title: Unit 2 — Honorific Basics
+    description: Introduction to keigo
+    target_items:
+      characters:
+      - 刷
+      - 副
+      - 功
+      - 加
+      - 努
+      - 労
+      - 勇
+      - 包
+      - 卒
+      - 協
+      - 単
+      - 博
+      - 印
+      - 参
+      - 司
+      - 各
+      - 周
+      - 唱
+      - 器
+      - 固
+      - 城
+      - 埼
+      - 塩
+      - 変
+      - 夫
+      - 失
+      - 奈
+      - 好
+      - 媛
+      - 季
+      vocabulary:
+      - いらっしゃる
+      - おっしゃる
+      - ございます
+      - 申します
+      - 拝見する
+      grammar:
+      - お + stem + になる
+      - お + stem + する
+    lessons:
+    - position: 1
+      title: Lesson 1 — Respectful Language (尊敬語)
+      skill_type: grammar_intro
+      objectives:
+      - Use basic respectful verb forms
+      - Address superiors appropriately
+    - position: 2
+      title: Lesson 2 — Humble Language (謙譲語)
+      skill_type: grammar_intro
+      objectives:
+      - Use humble verb forms
+      - Distinguish respectful vs humble
+  - position: 3
+    title: Unit 3 — News Reading
+    description: Reading simplified news articles
+    target_items:
+      characters: []
+      vocabulary:
+      - 事件
+      - 政治
+      - 経済
+      - 社会
+      grammar:
+      - によると
+      - ということだ
+    lessons:
+    - position: 1
+      title: Lesson 1 — Reading NHK News Web Easy
+      skill_type: authentic_reading
+      objectives:
+      - Read a simplified news article
+      - Identify main idea and supporting details
+    - position: 2
+      title: Lesson 2 — Summarizing News
+      skill_type: writing
+      objectives:
+      - Write a 3-sentence summary of an article
+    - position: 3
+      title: 'Lesson 3 — Listening: NHK News Web Easy'
+      skill_type: listening
+      objectives:
+      - Listen to a simplified news broadcast
+      - Extract the main topic and key details from audio
+  - position: 4
+    title: Unit 4 — Onomatopoeia & Expressions
+    description: Introduction to Japanese sound symbolism (擬音語・擬態語)
+    target_items:
+      characters: []
+      vocabulary:
+      - わんわん
+      - にゃんにゃん
+      - ぴかぴか
+      - きらきら
+      - どきどき
+      - わくわく
+      - ぐるぐる
+      - ふわふわ
+      grammar:
+      - 〜そうだ (appearance)
+      - 〜ようにする/なる
+    lessons:
+    - position: 1
+      title: Lesson 1 — 擬音語 (Sound Words)
+      skill_type: vocabulary
+      objectives:
+      - Recognize common animal and nature sounds
+      - Use onomatopoeia in sentences
+    - position: 2
+      title: Lesson 2 — 擬態語 (Mimetic Words)
+      skill_type: vocabulary
+      objectives:
+      - Use mimetic words for emotions and textures
+      - Distinguish 擬音語 from 擬態語
+    - position: 3
+      title: Lesson 3 — 詩を読む (Reading Poetry)
+      skill_type: authentic_reading
+      objectives:
+      - Read a simple modern poem (現代詩)
+      - Identify rhythm, imagery, and onomatopoeia in poetry
+      - Express feelings about a poem
+  - position: 5
+    title: Unit 5 — JLPT N3 Mock Exam
+    description: 'Practice test in JLPT N3 format: vocabulary, grammar, reading, listening sections'
+    target_items:
+      characters: []
+      vocabulary: []
+      grammar:
+      - JLPT N3 cumulative review
+    lessons:
+    - position: 1
+      title: Lesson 1 — N3 語彙・文法 (Vocab & Grammar Section)
+      skill_type: review
+      objectives:
+      - Complete JLPT N3-format vocabulary questions
+      - Complete JLPT N3-format grammar questions
+      - Score 60%+ on N3 vocabulary and grammar sections
+    - position: 2
+      title: Lesson 2 — N3 読解 (Reading Section)
+      skill_type: authentic_reading
+      objectives:
+      - Complete JLPT N3-format reading comprehension passages
+      - Answer questions within time limit (N3 pace)
+      - Score 60%+ on N3 reading section
+    - position: 3
+      title: Lesson 3 — N3 聴解 (Listening Section)
+      skill_type: listening
+      objectives:
+      - Complete JLPT N3-format listening comprehension
+      - Answer questions from single-play audio at natural speed
+      - Score 60%+ on N3 listening section
+  generation_targets:
+    target_lessons: 70
+    target_vocab: 700
+    target_grammar: 60
+- position: 7
+  title: Level 7 — Formal Writing & Keigo Mastery
+  grade_equivalent: Grade 5-6
+  test_equivalent: N3–N2
+  description: Full keigo system, Grade-5 kanji (193), formal letter writing, 四字熟語
+  teaching_band: upper_intermediate
+  units:
+  - position: 1
+    title: Unit 1 — Levels 1-6 総復習 (Comprehensive Review)
+    description: Review and consolidation of all grammar, kanji, and skills from Levels 1-6
+    target_items:
+      characters: []
+      vocabulary:
+      - (consolidation of Levels 1-6 vocabulary)
+      grammar:
+      - て-form (review)
+      - 可能形 (review)
+      - 受身・使役 (review)
+      - 基本敬語 (review)
+      - い-adj / な-adj conjugation (review)
+    lessons:
+    - position: 1
+      title: Lesson 1 — Grammar Review (Levels 1-6)
+      skill_type: review
+      objectives:
+      - Demonstrate mastery of all verb forms (ます, て, 可能, 受身, 使役)
+      - Switch between formal and informal register
+      - Use basic 尊敬語 and 謙譲語 correctly
+    - position: 2
+      title: Lesson 2 — Kanji & Vocabulary Review (Grades 1-4)
+      skill_type: review
+      objectives:
+      - Read and write all Grade 1-4 kanji (642 characters)
+      - Use kanji compounds in context
+      - Demonstrate reading comprehension at N3 level
+  - position: 2
+    title: Unit 2 — Complete Keigo
+    description: Mastering the three-tier keigo system
+    target_items:
+      characters:
+      - 久
+      - 仏
+      - 仮
+      - 件
+      - 任
+      - 似
+      - 余
+      - 価
+      - 保
+      - 修
+      - 個
+      - 停
+      - 備
+      - 像
+      - 再
+      - 刊
+      - 判
+      - 制
+      - 則
+      - 効
+      - 務
+      - 勢
+      - 厚
+      - 句
+      - 可
+      vocabulary:
+      - おいでになる
+      - 召し上がる
+      - お目にかかる
+      - ご覧になる
+      - 存じます
+      grammar:
+      - 尊敬語 system
+      - 謙譲語 system
+      - 丁寧語 system
+      - させられる (causative-passive)
+    lessons:
+    - position: 1
+      title: Lesson 1 — Keigo in Business
+      skill_type: pragmatics
+      objectives:
+      - Use appropriate keigo in business settings
+      - Use correct keigo level (尊敬語/謙譲語/丁寧語) based on listener relationship in 3 scenarios
+    - position: 2
+      title: Lesson 2 — Keigo Practice Scenarios
+      skill_type: speaking
+      objectives:
+      - Role-play business phone calls
+      - Practice formal greetings and closings
+    - position: 3
+      title: 'Lesson 3 — Listening: Keigo in Context'
+      skill_type: listening
+      objectives:
+      - Identify 尊敬語 and 謙譲語 in spoken business dialogue
+      - Distinguish formal and informal register by ear
+  - position: 3
+    title: Unit 3 — Formal Writing
+    description: Business emails, letters, and formal composition
+    target_items:
+      characters:
+      - 史
+      - 告
+      - 喜
+      - 営
+      - 因
+      - 団
+      - 囲
+      - 圧
+      - 在
+      - 均
+      - 型
+      - 基
+      - 堂
+      - 報
+      - 境
+      - 墓
+      - 増
+      - 士
+      - 夢
+      - 妻
+      - 婦
+      - 容
+      - 寄
+      - 導
+      - 居
+      vocabulary:
+      - 拝啓
+      - 敬具
+      - お世話になっております
+      - よろしくお願いいたします
+      - 一石二鳥
+      - 以心伝心
+      - 一期一会
+      - 自業自得
+      - 七転八起
+      grammar:
+      - でございます
+      - かしこまりました
+      - 'て-form (review: complex compound sentences)'
+    lessons:
+    - position: 1
+      title: Lesson 1 — Business Email
+      skill_type: writing
+      objectives:
+      - Write a formal business email
+      - Use appropriate opening and closing formulas
+    - position: 2
+      title: Lesson 2 — Formal Letter Format
+      skill_type: writing
+      objectives:
+      - Write a formal letter with proper structure
+    - position: 3
+      title: Lesson 3 — 四字熟語 (Four-Character Idioms)
+      skill_type: vocabulary
+      objectives:
+      - Learn 10 common 四字熟語
+      - Understand their origins and usage
+  - position: 4
+    title: Unit 4 — Pragmatic Scenarios
+    description: Navigating culturally sensitive situations
+    target_items:
+      characters: []
+      vocabulary:
+      - すみません
+      - 気にしないでください
+      - ちょっと...
+      grammar:
+      - 間接的断り (indirect refusal)
+      - 配慮表現 (consideration expressions)
+    lessons:
+    - position: 1
+      title: Lesson 1 — Refusing Politely
+      skill_type: pragmatics
+      objectives:
+      - Decline invitations without direct refusal
+      - Use ちょっと... and trailing sentences
+    - position: 2
+      title: Lesson 2 — Apologizing & Thanking
+      skill_type: pragmatics
+      objectives:
+      - Select the appropriate level of apology (すみません vs 申し訳ございません) for 3 social scenarios
+      - Choose appropriate level of thanks
+  generation_targets:
+    target_lessons: 100
+    target_vocab: 800
+    target_grammar: 70
+- position: 8
+  title: Level 8 — Complex Grammar & Essays
+  grade_equivalent: Junior High 1 (Grade 7)
+  test_equivalent: N2
+  description: Transition to academic Japanese, Grade-6 kanji (191), complex sentence patterns, 漢文 introduction, essay writing, news comprehension
+  teaching_band: upper_intermediate
+  units:
+  - position: 1
+    title: Unit 1 — 意見文 (Opinion Writing)
+    description: Learn to write and read opinion essays
+    target_items:
+      characters:
+      - 並
+      - 乱
+      - 乳
+      - 亡
+      - 仁
+      - 供
+      - 俳
+      - 俵
+      - 値
+      - 傷
+      - 優
+      - 党
+      - 冊
+      - 処
+      - 券
+      - 刻
+      - 割
+      - 創
+      - 劇
+      - 勤
+      - 危
+      - 卵
+      - 厳
+      - 収
+      - 后
+      - 否
+      - 吸
+      - 呼
+      - 善
+      - 困
+      vocabulary:
+      - 意見
+      - 賛成
+      - 反対
+      - 理由
+      - 結論
+      - 俳句
+      - 短歌
+      - 季語
+      - 五七五
+      grammar:
+      - '〜と思う (review: written opinion contexts)'
+      - '〜によると (review: citation in essays)'
+      - 〜というのは
+      - 一方で
+    lessons:
+    - position: 1
+      title: Lesson 1 — 意見を書く
+      skill_type: writing
+      objectives:
+      - Write a short opinion paragraph
+      - Use 〜と思います and 〜と考えます
+    - position: 2
+      title: Lesson 2 — 意見を話す
+      skill_type: speaking
+      objectives:
+      - Express opinions verbally with support
+    - position: 3
+      title: Lesson 3 — ニュースを読む
+      skill_type: authentic_reading
+      objectives:
+      - Read a simplified news article
+      - Identify bias and opinion vs fact
+    - position: 4
+      title: Lesson 4 — 断り方
+      skill_type: pragmatics
+      objectives:
+      - Understand indirect refusal in Japanese culture
+      - Choose culturally appropriate responses to 義理 situations (gift-giving, favors, invitations)
+    - position: 5
+      title: Lesson 5 — 似ている文法の比較
+      skill_type: contrastive_grammar
+      objectives:
+      - Distinguish 〜ても from 〜のに
+      - Choose correct grammar in context
+    - position: 6
+      title: Lesson 6 — 俳句・短歌入門
+      skill_type: authentic_reading
+      objectives:
+      - Read and appreciate simple haiku (5-7-5 structure)
+      - Identify 季語 (seasonal words) in haiku
+      - Read a tanka (5-7-5-7-7) and understand its structure
+  - position: 2
+    title: Unit 2 — 実際の日本語を聞く
+    description: Listen to real Japanese speech
+    target_items:
+      characters: []
+      vocabulary:
+      - アナウンス
+      - まもなく
+      - 参ります
+      grammar: []
+    lessons:
+    - position: 1
+      title: Lesson 1 — 駅のアナウンス
+      skill_type: listening
+      objectives:
+      - Understand a station announcement
+      - Extract key information (platform, destination)
+    - position: 2
+      title: Lesson 2 — ニュースを聞く
+      skill_type: listening
+      objectives:
+      - Understand a news broadcast excerpt
+      - Note main points and vocabulary
+  - position: 3
+    title: Unit 3 — 漢文入門 (Classical Chinese Introduction)
+    description: Introduction to reading classical Chinese texts in Japanese (漢文訓読)
+    target_items:
+      characters: []
+      vocabulary:
+      - 返り点
+      - 一二点
+      - 上下点
+      - レ点
+      - 書き下し文
+      grammar:
+      - 漢文の基本構造 (SVO→SOV conversion)
+      - 返り点の読み方
+    lessons:
+    - position: 1
+      title: Lesson 1 — 返り点と訓読
+      skill_type: grammar_intro
+      objectives:
+      - Understand 返り点 reading marks
+      - Convert simple 漢文 to 書き下し文
+    - position: 2
+      title: Lesson 2 — 論語を読む
+      skill_type: authentic_reading
+      objectives:
+      - Read a passage from the Analects of Confucius
+      - Identify basic 漢文 grammar patterns
+  generation_targets:
+    target_lessons: 80
+    target_vocab: 750
+    target_grammar: 60
+- position: 9
+  title: Level 9 — Literary Japanese & Long-form
+  grade_equivalent: Junior High 2-3 (Grade 8-9)
+  test_equivalent: N2
+  description: Literary analysis, persuasive writing, contrastive grammar, authentic materials, debate
+  teaching_band: advanced
+  units:
+  - position: 1
+    title: Unit 1 — Literary Analysis
+    description: Reading and analyzing literature
+    target_items:
+      characters: []
+      vocabulary:
+      - 主題
+      - 登場人物
+      - 比喩
+      - 暗示
+      - 註釈
+      grammar:
+      - である (literary copula)
+      - によれば
+      - によって
+    lessons:
+    - position: 1
+      title: Lesson 1 — Reading 走れメロス
+      skill_type: authentic_reading
+      objectives:
+      - Read excerpts from 太宰治
+      - Analyze themes and character motivation
+    - position: 2
+      title: Lesson 2 — Literary Vocabulary
+      skill_type: vocabulary
+      objectives:
+      - Learn 50 literary/academic vocabulary words
+  - position: 2
+    title: Unit 2 — Extended Writing
+    description: Long-form essay composition
+    target_items:
+      characters: []
+      vocabulary:
+      - 序論
+      - 本論
+      - '結論 (review: essay structure)'
+      - 根拠
+      - 論点
+      grammar:
+      - にもかかわらず
+    lessons:
+    - position: 1
+      title: Lesson 1 — Essay Structure
+      skill_type: writing
+      objectives:
+      - Write a 5-paragraph essay with 序論・本論・結論 structure
+    - position: 2
+      title: Lesson 2 — Persuasive Writing
+      skill_type: writing
+      objectives:
+      - Write a 1000+ character persuasive essay
+      - Use evidence and counterarguments
+    - position: 3
+      title: 'Lesson 3 — 漢文: 故事成語'
+      skill_type: authentic_reading
+      objectives:
+      - Read 漢文 proverbs (矛盾, 五十歩百歩, etc.)
+      - Understand the 故事成語 and their modern usage
+  - position: 3
+    title: Unit 3 — Debate & Discussion
+    description: Formal debate and panel discussion
+    target_items:
+      characters: []
+      vocabulary:
+      - 賛成です
+      - 反対です
+      - 確かに〜ですが
+      - しかしながら
+      grammar:
+      - 〜というわけではない
+      - むしろ〜ではないか
+    lessons:
+    - position: 1
+      title: Lesson 1 — Debate Techniques
+      skill_type: speaking
+      objectives:
+      - Present arguments for and against a topic
+      - Respond to counterarguments politely
+    - position: 2
+      title: 'Lesson 2 — Listening: Formal Debate'
+      skill_type: listening
+      objectives:
+      - Listen to a recorded debate and identify arguments for/against
+      - Note formal discourse markers (確かに〜ですが, しかしながら)
+  - position: 4
+    title: Unit 4 — 古文入門 (Introduction to Classical Japanese)
+    description: Historical kana usage, simple classical texts, basic classical grammar
+    target_items:
+      characters: []
+      vocabulary:
+      - あはれ
+      - をかし
+      - いとをかし
+      - いみじ
+      - やむごとなし
+      grammar:
+      - 歴史的仮名遣い (historical kana usage)
+      - 係り結び (kakari-musubi binding)
+      - なり (classical copula, introduction)
+    lessons:
+    - position: 1
+      title: Lesson 1 — 歴史的仮名遣い
+      skill_type: grammar_intro
+      objectives:
+      - Understand how classical kana differs from modern (ゐ→い, ゑ→え, を→お)
+      - Read simple classical sentences using historical kana
+      - Recognize common classical words (あはれ, をかし)
+    - position: 2
+      title: Lesson 2 — Reading 竹取物語 (excerpt)
+      skill_type: authentic_reading
+      objectives:
+      - Read the opening of 竹取物語 with glossary support
+      - Identify classical vs modern word forms
+      - Understand 係り結び in context
+  - position: 5
+    title: Unit 5 — JLPT N2 Mock Exam
+    description: 'Practice test in JLPT N2 format: vocabulary, grammar, reading, listening sections'
+    target_items:
+      characters: []
+      vocabulary: []
+      grammar:
+      - JLPT N2 cumulative review
+    lessons:
+    - position: 1
+      title: Lesson 1 — N2 語彙・文法 (Vocab & Grammar Section)
+      skill_type: review
+      objectives:
+      - Complete JLPT N2-format vocabulary questions
+      - Complete JLPT N2-format grammar questions
+      - Score 60%+ on N2 vocabulary and grammar sections
+    - position: 2
+      title: Lesson 2 — N2 読解 (Reading Section)
+      skill_type: authentic_reading
+      objectives:
+      - Complete JLPT N2-format reading comprehension passages
+      - Answer questions within time limit (N2 pace)
+      - Score 60%+ on N2 reading section
+    - position: 3
+      title: Lesson 3 — N2 聴解 (Listening Section)
+      skill_type: listening
+      objectives:
+      - Complete JLPT N2-format listening comprehension
+      - Answer questions from single-play audio at natural speed
+      - Score 60%+ on N2 listening section
+  generation_targets:
+    target_lessons: 80
+    target_vocab: 700
+    target_grammar: 60
+- position: 10
+  title: Level 10 — Business & Technical Japanese
+  grade_equivalent: High School 1
+  test_equivalent: N2–N1
+  description: Business communication, technical writing, advanced keigo in professional contexts
+  teaching_band: advanced
+  units:
+  - position: 1
+    title: Unit 1 — Business Communication
+    description: Professional emails, meetings, presentations
+    target_items:
+      characters: []
+      vocabulary:
+      - 担当者
+      - 企画書
+      - 議事録
+      - 報告書
+      - 納期
+      - 見積もり
+      grammar:
+      - 〜させていただきます
+      - 〜の件でございますが
+      - お手数をおかけしますが
+      - '敬語 (review: business application of 尊敬語/謙譲語)'
+    lessons:
+    - position: 1
+      title: Lesson 1 — Meeting Japanese
+      skill_type: speaking
+      objectives:
+      - Lead and participate in formal meetings
+      - Take and distribute meeting minutes
+    - position: 2
+      title: Lesson 2 — Business Proposals
+      skill_type: writing
+      objectives:
+      - Write a business proposal in Japanese
+      - Use appropriate business document format
+    - position: 3
+      title: 'Lesson 3 — Listening: Business Presentation'
+      skill_type: listening
+      objectives:
+      - Comprehend a formal business presentation in Japanese
+      - Identify key points, proposals, and action items
+  - position: 2
+    title: Unit 2 — Technical Reading
+    description: Reading technical documents and manuals
+    target_items:
+      characters: []
+      vocabulary:
+      - 仕様
+      - 実装
+      - 設計
+      - 検証
+      - 運用
+      grammar:
+      - 〜ものとする (formal definition)
+      - 〜について述べる
+    lessons:
+    - position: 1
+      title: Lesson 1 — Reading a Manual
+      skill_type: authentic_reading
+      objectives:
+      - Read a technical manual excerpt
+      - Identify procedural language patterns
+    - position: 2
+      title: Lesson 2 — Writing Instructions
+      skill_type: writing
+      objectives:
+      - Write clear technical instructions
+  generation_targets:
+    target_lessons: 240
+    target_vocab: 1500
+    target_grammar: 100
+- position: 11
+  title: Level 11 — Academic Writing & Classical Japanese
+  grade_equivalent: High School 2
+  test_equivalent: N1
+  description: Classical Japanese (古文), academic papers, literary criticism, 漢文 reading
+  teaching_band: advanced
+  units:
+  - position: 1
+    title: Unit 1 — Classical Japanese (古文)
+    description: Introduction to classical Japanese grammar and texts
+    target_items:
+      characters: []
+      vocabulary:
+      - 'いとをかし (deepening: literary analysis)'
+      - 'あはれ (deepening: literary analysis)'
+      - あやし
+      - なり
+      - けり
+      grammar:
+      - なり (classical copula)
+      - けり (classical past)
+      - る/らる (classical passive)
+      - む (classical volitional)
+      - べし (classical obligation)
+      - まじ (classical negative conjecture)
+      - たり (classical perfective)
+      - り (classical perfective)
+    lessons:
+    - position: 1
+      title: Lesson 1 — 竹取物語
+      skill_type: authentic_reading
+      objectives:
+      - Read opening passage of Taketori Monogatari
+      - Parse classical verb conjugations
+    - position: 2
+      title: Lesson 2 — 枕草子
+      skill_type: authentic_reading
+      objectives:
+      - Read selected passages from Makura no Soushi
+      - Understand classical adjective forms
+    - position: 3
+      title: Lesson 3 — Classical Grammar Drill
+      skill_type: grammar_intro
+      objectives:
+      - Conjugate classical verb forms
+      - Translate classical to modern Japanese
+    - position: 4
+      title: 'Lesson 4 — Listening: Classical Text Recitation'
+      skill_type: listening
+      objectives:
+      - Listen to recitation of 竹取物語 and 枕草子 passages
+      - Distinguish classical pronunciation patterns from modern Japanese
+  - position: 2
+    title: Unit 2 — Academic Writing
+    description: Research papers and academic essays
+    target_items:
+      characters: []
+      vocabulary:
+      - 論文
+      - 仮説
+      - 検証
+      - 先行研究
+      - 参考文献
+      grammar:
+      - 〜という仮説を立てる
+      - 〜によって検証する
+      - 〜であることが明らかになった
+      - であるがゆえに (precisely because)
+    lessons:
+    - position: 1
+      title: Lesson 1 — Research Paper Structure
+      skill_type: writing
+      objectives:
+      - Write an academic abstract in Japanese
+      - Use academic register consistently
+    - position: 2
+      title: Lesson 2 — Citation & References
+      skill_type: writing
+      objectives:
+      - Cite sources in Japanese academic format
+      - Write a literature review section
+  - position: 3
+    title: Unit 3 — Literary Criticism
+    description: Critical analysis of Japanese literature
+    target_items:
+      characters: []
+      vocabulary:
+      - 批評
+      - 解釈
+      - 象徴
+      - 素材
+      - 表現技法
+      grammar:
+      - 〜と解釈できる
+      - 〜の象徴として
+    lessons:
+    - position: 1
+      title: Lesson 1 — Analyzing 夏目漱石
+      skill_type: authentic_reading
+      objectives:
+      - Read and analyze excerpt from こころ
+      - Write a critical response
+  - position: 4
+    title: Unit 4 — JLPT N1 Mock Exam
+    description: 'Practice test in JLPT N1 format: vocabulary, grammar, reading, listening sections'
+    target_items:
+      characters: []
+      vocabulary: []
+      grammar:
+      - JLPT N1 cumulative review
+    lessons:
+    - position: 1
+      title: Lesson 1 — N1 語彙・文法 (Vocab & Grammar Section)
+      skill_type: review
+      objectives:
+      - Complete JLPT N1-format vocabulary questions
+      - Complete JLPT N1-format grammar questions
+      - Score 60%+ on N1 vocabulary and grammar sections
+    - position: 2
+      title: Lesson 2 — N1 読解 (Reading Section)
+      skill_type: authentic_reading
+      objectives:
+      - Complete JLPT N1-format reading comprehension passages
+      - Answer questions within time limit (N1 pace)
+      - Score 60%+ on N1 reading section
+    - position: 3
+      title: Lesson 3 — N1 聴解 (Listening Section)
+      skill_type: listening
+      objectives:
+      - Complete JLPT N1-format listening comprehension
+      - Answer questions from single-play audio at natural speed
+      - Score 60%+ on N1 listening section
+  generation_targets:
+    target_lessons: 320
+    target_vocab: 2000
+    target_grammar: 120
+- position: 12
+  title: Level 12 — Native-Level Fluency
+  grade_equivalent: High School 3+
+  test_equivalent: N1+
+  description: Native-level fluency, contemporary media, classical poetry, dialect awareness, 四字熟語 mastery
+  teaching_band: mastery
+  units:
+  - position: 1
+    title: Unit 1 — Contemporary Media
+    description: Understanding TV, radio, podcasts, social media
+    target_items:
+      characters: []
+      vocabulary:
+      - 略語
+      - 俗語
+      - 若者言葉
+      - 方言
+      - 流行語
+      grammar:
+      - 「っす」(abbreviation)
+      - 「なまら」(北海道 very/really)
+      - sentence-final particles
+    lessons:
+    - position: 1
+      title: Lesson 1 — Variety Show Japanese
+      skill_type: listening
+      objectives:
+      - Understand rapid casual Japanese from TV
+      - Recognize slang and abbreviations
+    - position: 2
+      title: Lesson 2 — Social Media Japanese
+      skill_type: authentic_reading
+      objectives:
+      - Read tweets and blog posts
+      - Understand internet slang and emoji usage
+  - position: 2
+    title: Unit 2 — Classical Poetry
+    description: Haiku, tanka, and classical poetry
+    target_items:
+      characters: []
+      vocabulary:
+      - 季語
+      - 字余り
+      - 字足らず
+      - 五七五
+      - 臥薪嘗胆
+      - 温故知新
+      - 画竜点睛
+      grammar:
+      - 古典の助詞
+      - 切れ字
+    lessons:
+    - position: 1
+      title: Lesson 1 — Reading Haiku
+      skill_type: authentic_reading
+      objectives:
+      - Read and interpret haiku by Basho, Issa, Buson
+      - Identify seasonal words and cutting words
+    - position: 2
+      title: Lesson 2 — Writing Haiku
+      skill_type: writing
+      objectives:
+      - Compose original haiku
+      - Apply 5-7-5 syllable structure
+  - position: 3
+    title: Unit 3 — Dialect Awareness
+    description: Understanding regional Japanese dialects
+    target_items:
+      characters: []
+      vocabulary:
+      - おおきに (関西)
+      - ばってん (九州)
+      - だっちゃ (仙台)
+      - なまら (北海道)
+      grammar:
+      - 〜やん (関西)
+      - 〜ばい (九州)
+      - 〜だべ (東北)
+    lessons:
+    - position: 1
+      title: Lesson 1 — Kansai Dialect
+      skill_type: listening
+      objectives:
+      - Understand basic Kansai dialect features
+      - Distinguish from standard Japanese
+    - position: 2
+      title: Lesson 2 — Regional Variety Overview
+      skill_type: authentic_reading
+      objectives:
+      - Read texts featuring different dialects
+      - Identify 3+ regional dialect features and explain how they differ from standard Japanese
+  generation_targets:
+    target_lessons: 200
+    target_vocab: 1000
+    target_grammar: 80

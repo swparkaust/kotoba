@@ -18,7 +18,7 @@ RSpec.describe Lesson, type: :model do
   end
   it { is_expected.to validate_presence_of(:title) }
   it { is_expected.to validate_presence_of(:skill_type) }
-  it { is_expected.to validate_inclusion_of(:skill_type).in_array(%w[character_intro vocabulary grammar reading listening review writing speaking authentic_reading pragmatics contrastive_grammar classical_japanese]) }
+  it { is_expected.to validate_inclusion_of(:skill_type).in_array(%w[character_intro drill kanji_intro grammar_intro vocabulary grammar reading listening review writing speaking authentic_reading pragmatics contrastive_grammar classical_japanese]) }
   it { is_expected.to validate_inclusion_of(:content_status).in_array(%w[pending building qa_review ready failed qa_failed]) }
 
   describe ".ready" do

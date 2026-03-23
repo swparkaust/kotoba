@@ -1,0 +1,14 @@
+source "https://rubygems.org"
+
+gem "sidekiq", "~> 7.0"
+gem "redis", "~> 5.0"
+gem "image_processing", "~> 1.13"
+gem "ruby-vips", "~> 2.2"
+gem "anthropic", "~> 0.3"
+gem "pg", "~> 1.1"
+gem "activerecord", "~> 7.2"
+
+group :test do
+  gem "rspec", "~> 3.13"
+  gem "webmock", "~> 3.23"
+end

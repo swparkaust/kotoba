@@ -1,0 +1,230 @@
+yuki:
+  name: ゆき
+  full_name: 田中ゆき
+  role: protagonist
+  age_start: 6
+  age_end: 20
+  gender: female
+  description: Elementary school student who grows through the curriculum into a university student. Curious, cheerful, loves reading.
+  personality_traits:
+  - curious
+  - cheerful
+  - bookish
+  - determined
+  appears_in_levels:
+  - 1
+  - 2
+  - 3
+  - 4
+  - 5
+  - 6
+  - 7
+  - 8
+  - 9
+  - 10
+  - 11
+  - 12
+  age_at_level:
+    1: 6
+    2: 7
+    3: 8
+    4: 9
+    5: 10
+    6: 11
+    7: 12
+    8: 13
+    9: 14
+    10: 16
+    11: 18
+    12: 20
+  speech_style: Uses わたし throughout. Polite but casual with friends. Grows more sophisticated as levels increase — simple です/ます at early levels, keigo-aware by level 7, academic register by level 11.
+mother:
+  name: おかあさん
+  full_name: 田中みどり
+  role: family
+  age_range: 30s-40s
+  gender: female
+  description: Yuki's mother. Patient, warm, teaches Yuki about daily life, manners, and community involvement.
+  personality_traits:
+  - patient
+  - warm
+  - organized
+  - encouraging
+  appears_in_levels:
+  - 1
+  - 2
+  - 3
+  - 4
+  - 5
+  - 6
+  speech_style: Gentle, uses simple vocabulary when speaking to Yuki. Polite and gentle standard Japanese.
+father:
+  name: おとうさん
+  full_name: 田中けんいち
+  role: family
+  age_range: 30s-40s
+  gender: male
+  description: Yuki's father. Works at a company, introduces business and society topics, also shares cooking and household skills.
+  personality_traits:
+  - hardworking
+  - funny
+  - knowledgeable
+  appears_in_levels:
+  - 1
+  - 2
+  - 3
+  - 4
+  - 5
+  - 6
+  - 7
+  - 8
+  - 10
+  speech_style: Mix of casual at home (おれ, だよ) and formal when discussing work. Models register switching.
+sensei:
+  name: 佐藤先生
+  full_name: 佐藤まなみ
+  role: teacher
+  gender: female
+  description: Yuki's homeroom teacher in elementary school. Models proper Japanese and grammar. Students address her as 佐藤先生.
+  personality_traits:
+  - strict_but_fair
+  - encouraging
+  - knowledgeable
+  appears_in_levels:
+  - 1
+  - 2
+  - 3
+  - 4
+  - 5
+  - 6
+  speech_style: Standard polite Japanese, clear pronunciation, models correct grammar. Uses ですます consistently.
+  age_range: 30s-40s
+kenji:
+  name: けんじ
+  full_name: 山田けんじ
+  role: classmate
+  age_start: 6
+  age_end: 14
+  gender: male
+  description: Yuki's best friend since first grade. Loves sports, energetic, sometimes struggles with kanji.
+  personality_traits:
+  - energetic
+  - loyal
+  - athletic
+  - impatient
+  appears_in_levels:
+  - 1
+  - 2
+  - 3
+  - 4
+  - 5
+  - 6
+  - 7
+  - 8
+  speech_style: Casual. Uses ぼく in early levels (1-4), transitions to おれ from level 5. Masculine endings (だよ → だぜ) as he ages.
+mei:
+  name: めい
+  full_name: 李めい
+  role: classmate
+  age_start: 7
+  age_end: 12
+  gender: female
+  description: Transfer student from China. Provides perspective on kanji differences (simplified vs. Japanese) and cultural contrast. Surname 李 (り) is Chinese.
+  personality_traits:
+  - studious
+  - shy_at_first
+  - bilingual
+  - observant
+  appears_in_levels:
+  - 2
+  - 3
+  - 4
+  - 5
+  - 6
+  speech_style: Very polite, sometimes uses slightly unusual expressions or word order. Occasionally explains Chinese character meanings.
+grandma:
+  name: おばあちゃん
+  full_name: 田中はな
+  role: family
+  age_range: 60s-70s
+  gender: female
+  description: Yuki's paternal grandmother. Lives in the countryside (Kansai region). Tells folk tales and introduces traditional culture.
+  personality_traits:
+  - wise
+  - storytelling
+  - traditional
+  - loving
+  appears_in_levels:
+  - 3
+  - 4
+  - 5
+  - 9
+  - 12
+  speech_style: Uses light Kansai dialect (〜や instead of だ, 〜やん, 〜へん instead of ない). Traditional vocabulary. Speaks slowly and warmly.
+yamamoto_sensei:
+  name: 山本先生
+  full_name: 山本あきこ
+  role: professor
+  gender: female
+  description: University professor of Japanese literature. Guides academic writing and research. Yuki's advisor at university (levels 11-12).
+  personality_traits:
+  - scholarly
+  - precise
+  - supportive
+  - demanding_of_quality
+  appears_in_levels:
+  - 11
+  - 12
+  speech_style: Academic register, uses specialized literary terminology. Mixes formal ですます with academic であるstyle.
+  age_range: 50s
+nakamura_buchou:
+  name: 中村部長
+  full_name: 中村ひろし
+  role: boss
+  gender: male
+  description: Department manager at the company where Yuki does 職場体験 (workplace experience, level 9) and later interns (levels 10-11). Models business Japanese.
+  personality_traits:
+  - professional
+  - demanding
+  - fair
+  - experienced
+  appears_in_levels:
+  - 9
+  - 10
+  - 11
+  speech_style: Full business keigo. Expects proper honorific usage. Uses させていただく and お/ご〜になる patterns.
+  age_range: 40s-50s
+takahashi_sensei:
+  name: 高橋先生
+  full_name: 高橋たけし
+  role: teacher
+  gender: male
+  description: Junior high school Japanese teacher (国語教師). Introduces classical Japanese and literary analysis. Students address him as 高橋先生.
+  personality_traits:
+  - intellectual
+  - passionate_about_literature
+  - dry_humor
+  appears_in_levels:
+  - 7
+  - 8
+  - 9
+  speech_style: Formal, uses literary vocabulary, sometimes quotes classical texts. Mixes standard Japanese with occasional 古文 examples.
+  age_range: 30s-40s
+rina:
+  name: りな
+  full_name: 木村りな
+  role: high_school_friend
+  age_start: 16
+  age_end: 20
+  gender: female
+  description: Yuki's high school classmate and debate partner. Introduces peer discussion, study groups, and university preparation topics.
+  personality_traits:
+  - ambitious
+  - analytical
+  - supportive
+  - competitive
+  appears_in_levels:
+  - 10
+  - 11
+  - 12
+  speech_style: Casual with friends (あたし, ～じゃない？), switches to formal in class discussions and debates. Uses academic vocabulary naturally.
