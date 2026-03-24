@@ -1,0 +1,56 @@
+services:
+  db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: kotoba_test
+      POSTGRES_USER: kotoba
+      POSTGRES_PASSWORD: test_password
+    ports:
+      - "5432:5432"
+
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+
+  backend:
+    build:
+      context: ./backend
+    depends_on: [db, redis]
+    environment:
+      DATABASE_URL: postgres://kotoba:test_password@db/kotoba_test
+      REDIS_URL: redis://redis:6379/0
+      RAILS_ENV: test
+      AI_PROVIDER: ollama
+      OLLAMA_HOST: http://host.docker.internal:11434
+      VAPID_SUBJECT: mailto:test@example.com
+      VAPID_PUBLIC_KEY: ${VAPID_PUBLIC_KEY}
+      VAPID_PRIVATE_KEY: ${VAPID_PRIVATE_KEY}
+    ports:
+      - "3000:3000"
+
+  sidekiq:
+    build:
+      context: ./backend
+    command: bundle exec sidekiq
+    depends_on: [db, redis]
+    environment:
+      DATABASE_URL: postgres://kotoba:test_password@db/kotoba_test
+      REDIS_URL: redis://redis:6379/0
+      RAILS_ENV: test
+      AI_PROVIDER: ollama
+      OLLAMA_HOST: http://host.docker.internal:11434
+      VAPID_SUBJECT: mailto:test@example.com
+      VAPID_PUBLIC_KEY: ${VAPID_PUBLIC_KEY}
+      VAPID_PRIVATE_KEY: ${VAPID_PRIVATE_KEY}
+
+  frontend:
+    build:
+      context: ./frontend
+    depends_on: [backend]
+    environment:
+      RAILS_API_URL: http://backend:3000
+      NEXT_PUBLIC_CABLE_URL: ws://backend:3000/cable
+      NEXT_PUBLIC_VAPID_PUBLIC_KEY: ${VAPID_PUBLIC_KEY}
+    ports:
+      - "8080:3000"
