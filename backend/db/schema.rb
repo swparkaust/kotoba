@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2026_04_01_000020) do
+ActiveRecord::Schema[7.2].define(version: 2026_04_01_000021) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -160,6 +160,7 @@ ActiveRecord::Schema[7.2].define(version: 2026_04_01_000020) do
     t.integer "content_version", default: 0, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "qa_retry_count", default: 0, null: false
     t.index ["content_status"], name: "index_lessons_on_content_status"
     t.index ["curriculum_unit_id", "position"], name: "index_lessons_on_curriculum_unit_id_and_position", unique: true
     t.index ["curriculum_unit_id"], name: "index_lessons_on_curriculum_unit_id"

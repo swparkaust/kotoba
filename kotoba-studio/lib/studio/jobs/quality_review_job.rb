@@ -21,9 +21,16 @@ module Studio
       result = reviewer.review(lesson: lesson)
 
       if result.passed?
+        lesson.update!(qa_retry_count: 0)
         log_info("QA passed for lesson #{lesson_id} (score: #{result.score})")
       else
-        log_warn("QA failed for lesson #{lesson_id}: #{result.issues.join('; ')}")
+        if lesson.qa_retry_count < Studio::QA::ContentQualityReviewer::MAX_RETRIES
+          lesson.update!(content_status: "building", qa_retry_count: lesson.qa_retry_count + 1)
+          Studio::ContentBuildJob.perform_async(lesson_id, language_code)
+          log_warn("QA failed for lesson #{lesson_id}, retry #{lesson.qa_retry_count}")
+        else
+          log_error("QA permanently failed for lesson #{lesson_id} after #{lesson.qa_retry_count} retries")
+        end
       end
     rescue StandardError => e
       log_error("QualityReviewJob failed for lesson #{lesson_id}: #{e.message}")
