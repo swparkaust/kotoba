@@ -65,6 +65,15 @@ RSpec.describe ExerciseGenerator do
   end
 
   describe "error handling" do
+    it "raises when AI returns nil text" do
+      allow(router).to receive(:call).and_return(OpenStruct.new(text: nil))
+      expect { service.generate(lesson: lesson) }.to raise_error(RuntimeError, /empty response/)
+    end
+
+    it "raises when AI returns blank text" do
+      allow(router).to receive(:call).and_return(OpenStruct.new(text: "   "))
+      expect { service.generate(lesson: lesson) }.to raise_error(RuntimeError, /empty response/)
+    end
     it "handles malformed JSON gracefully" do
       allow(router).to receive(:call).and_return(OpenStruct.new(text: "not valid json"))
       result = service.generate(lesson: lesson)
@@ -77,15 +86,39 @@ RSpec.describe ExerciseGenerator do
       expect(result).to eq([])
     end
 
-    it "raises when AI returns nil text" do
-      allow(router).to receive(:call).and_return(OpenStruct.new(text: nil))
-      expect { service.generate(lesson: lesson) }.to raise_error(RuntimeError, /empty response/)
-    end
-
-    it "raises when AI returns blank text" do
-      allow(router).to receive(:call).and_return(OpenStruct.new(text: "   "))
-      expect { service.generate(lesson: lesson) }.to raise_error(RuntimeError, /empty response/)
-    end
   end
 
+    let(:corrected_json) do
+      '{"prompt":"のみものはどれですか？","target_text":"のむ","choices":["のむ","たべる","のむ","みる"],"correct_answer":"のむ","audio_cue":"のみもの"}'
+    end
+
+    let(:level1_lesson) do
+      double("Lesson",
+        id: 1,
+        curriculum_unit: double(
+          curriculum_level: double(title: "Level 1", mext_grade: "Pre-Grade 1", jlpt_approx: "Pre-N5", position: 1),
+          title: "Unit 1 — Vowels",
+          target_items: { "characters" => ["あ", "い", "う", "え", "お"] }
+        ),
+        title: "Lesson 1 — あ",
+        skill_type: "character_intro",
+        objectives: ["Recognize あ by sight"]
+      )
+    end
+
+    let(:level8_lesson) do
+      double("Lesson",
+        id: 8,
+        curriculum_unit: double(
+          curriculum_level: double(title: "Level 8", mext_grade: "Grade 6", jlpt_approx: "N3", position: 8),
+          title: "Unit 8 — Advanced",
+          target_items: { "vocabulary" => ["飲む"] }
+        ),
+        title: "Lesson 8 — Advanced",
+        skill_type: "vocabulary",
+        objectives: ["Learn advanced vocab"]
+      )
+    end
+
+  end
 end

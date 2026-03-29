@@ -12,7 +12,7 @@
 /secrets/
 
 # Logs
-/backend/log/*.log
+/backend/log/
 /backend/tmp/
 
 # IDE
