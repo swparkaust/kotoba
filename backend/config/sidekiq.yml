@@ -1,5 +1,7 @@
 :concurrency: 5
 :queues:
   - default
-  - content_generation
+  - content
+  - audio
+  - qa
   - notifications

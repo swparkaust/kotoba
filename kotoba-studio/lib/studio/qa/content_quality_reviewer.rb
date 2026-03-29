@@ -79,7 +79,7 @@ module Studio
       # ═══════════════════════════════════════════════════════════════
 
       def structural_review_exercises(lesson, content)
-        exercises = content.exercises
+        exercises = extract_exercises(content, lesson)
         return fail_result("No exercises generated") if exercises.empty?
 
         issues = []
@@ -92,17 +92,17 @@ module Studio
 
       def check_exercise_structure(exercise, idx, lesson)
         issues = []
-        prompt = exercise["prompt"]
-        choices = exercise["options"]
-        correct = exercise["correct_answer"]
-        ex_type = exercise["exercise_type"]
+        prompt = field(exercise, :prompt, "content", "prompt")
+        choices = field(exercise, :choices, "content", "options")
+        correct = field(exercise, :correct_answer, "content", "correct_answer")
+        ex_type = field(exercise, :exercise_type)
 
         issues << "Exercise #{idx + 1}: missing prompt" if prompt.to_s.strip.empty?
 
         if %w[multiple_choice picture_match listening pragmatic_choice contrastive_grammar].include?(ex_type)
           issues << "Exercise #{idx + 1}: needs at least 2 choices" if choices.nil? || choices.length < 2
           issues << "Exercise #{idx + 1}: missing correct answer" if correct.to_s.strip.empty?
-          issues << "Exercise #{idx + 1}: correct answer not in choices" if choices&.any? && !correct.to_s.strip.empty? && !choices.include?(correct)
+          issues << "Exercise #{idx + 1}: correct answer not in choices" if choices&.any? && correct.present? && !choices.include?(correct)
         end
 
         # No-English rule
@@ -134,15 +134,15 @@ module Studio
       end
 
       def structural_review_illustrations(content)
-        illustrations = content.illustrations
+        illustrations = content.respond_to?(:illustrations) ? content.illustrations : []
         return pass_result if illustrations.empty?
 
         issues = []
         illustrations.each_with_index do |ill, idx|
-          url = ill["url"]
-          local = ill["local_path"]
-          data = ill["data"]
-          size = ill["file_size"]
+          url = field(ill, :url)
+          local = field(ill, :local_path)
+          data = field(ill, :data)
+          size = field(ill, :file_size)
 
           issues << "Illustration #{idx + 1}: missing image" if url.nil? && local.nil? && data.nil?
           issues << "Illustration #{idx + 1}: too small (#{size} bytes)" if size && size < 50_000
@@ -151,21 +151,21 @@ module Studio
       end
 
       def structural_review_audio(content)
-        clips = content.audio_scripts
+        clips = content.respond_to?(:audio_scripts) ? content.audio_scripts : []
         return pass_result if clips.empty?
 
         issues = []
         clips.each_with_index do |clip, idx|
-          issues << "Audio #{idx + 1}: missing file" if clip["url"].nil? && clip["local_path"].nil?
-          issues << "Audio #{idx + 1}: missing text" if clip["text"].to_s.strip.empty?
-          size = clip["file_size"]
+          issues << "Audio #{idx + 1}: missing file" if field(clip, :url).nil? && field(clip, :local_path).nil?
+          issues << "Audio #{idx + 1}: missing text" if field(clip, :text).to_s.strip.empty?
+          size = field(clip, :file_size)
           issues << "Audio #{idx + 1}: too small (#{size} bytes)" if size && size < 5_000
         end
         build_result(issues)
       end
 
       def structural_review_alignment(lesson, content)
-        exercises = content.exercises
+        exercises = extract_exercises(content, lesson)
         issues = []
         issues << "Too few exercises: #{exercises.length} (minimum 4)" if exercises.length < 4
         build_result(issues)
@@ -176,8 +176,8 @@ module Studio
       # ═══════════════════════════════════════════════════════════════
 
       def multi_agent_review_exercises(lesson, content)
-        exercises = content.exercises
-        records = content.exercise_records || []
+        exercises = extract_exercises(content, lesson)
+        records = content.respond_to?(:exercise_records) ? (content.exercise_records || []) : []
         level = lesson.curriculum_unit&.curriculum_level
         return pass_result unless level
 
@@ -186,6 +186,7 @@ module Studio
 
         exercises.each_with_index do |exercise, idx|
           record = records[idx]
+          content_json = exercise_content_json(exercise)
           exercise_context = build_exercise_context(exercise, level, lesson)
 
           # Agent 1: Accuracy Specialist (Advanced tier — Opus)
@@ -316,16 +317,16 @@ module Studio
       # ═══════════════════════════════════════════════════════════════
 
       def ai_review_all_illustrations(lesson, content)
-        illustrations = content.illustrations
+        illustrations = content.respond_to?(:illustrations) ? content.illustrations : []
         return pass_result if illustrations.empty?
 
         issues = []
         illustrations.each_with_index do |ill, idx|
-          key = ill["asset_key"] || "illustration_#{idx}"
+          key = field(ill, :asset_key) || "illustration_#{idx}"
           result = call_agent(
             task: :qa_visual_inspection,
             system: illustration_review_prompt,
-            prompt: "Asset key: #{key}, file_size: #{ill["file_size"] || 'unknown'}",
+            prompt: "Asset key: #{key}, file_size: #{field(ill, :file_size) || 'unknown'}",
             label: "Visual Inspector"
           )
           issues << "Illustration '#{key}': #{result[:notes]}" unless result[:pass]
@@ -346,12 +347,12 @@ module Studio
       end
 
       def ai_review_all_audio(lesson, content)
-        clips = content.audio_scripts
+        clips = content.respond_to?(:audio_scripts) ? content.audio_scripts : []
         return pass_result if clips.empty?
 
         issues = []
         clips.each_with_index do |clip, idx|
-          text = clip["text"]
+          text = field(clip, :text)
           next if text.to_s.strip.empty?
 
           result = call_agent(
@@ -374,12 +375,12 @@ module Studio
       end
 
       def ai_review_curriculum_alignment(lesson, content)
-        exercises = content.exercises
+        exercises = extract_exercises(content, lesson)
         level = lesson.curriculum_unit&.curriculum_level
         return pass_result unless level
 
         exercise_summary = exercises.map { |e|
-          "#{e['exercise_type'] || 'unknown'} (#{e['difficulty'] || 'unknown'})"
+          "#{field(e, :exercise_type) || 'unknown'} (#{field(e, :difficulty) || 'unknown'})"
         }.join(", ")
 
         result = call_agent(
@@ -414,7 +415,7 @@ module Studio
       # ═══════════════════════════════════════════════════════════════
 
       def adversarial_review(lesson, content, agent_results)
-        exercises = content.exercises
+        exercises = extract_exercises(content, lesson)
         level = lesson.curriculum_unit&.curriculum_level
         return pass_result unless level
         return pass_result if exercises.empty?
@@ -486,22 +487,36 @@ module Studio
 
         if passed
           lesson.update!(content_status: "ready", content_version: lesson.content_version + 1)
-          lesson.exercises.update_all(qa_status: "passed")
+          lesson.exercises.update_all(qa_status: "passed") if lesson.respond_to?(:exercises)
         else
           lesson.update!(content_status: "qa_failed")
-          lesson.exercises.update_all(qa_status: "failed")
+          lesson.exercises.update_all(qa_status: "failed") if lesson.respond_to?(:exercises)
         end
 
         ReviewResult.new(passed: passed, score: overall_score, issues: all_issues, suggestions: all_suggestions)
       end
 
+      def extract_exercises(content, lesson)
+        if content.respond_to?(:exercises)
+          content.exercises
+        else
+          (lesson.exercises.to_a rescue [])
+        end
+      end
+
       def exercise_content_json(exercise)
-        exercise.to_json
+        if exercise.respond_to?(:content) && exercise.content.is_a?(Hash)
+          exercise.content.to_json
+        elsif exercise.respond_to?(:to_json)
+          exercise.to_json
+        else
+          exercise.to_s
+        end
       end
 
       def build_exercise_context(exercise, level, lesson)
         <<~CTX
-          Exercise type: #{exercise['exercise_type'] || 'unknown'}
+          Exercise type: #{field(exercise, :exercise_type) || 'unknown'}
           Content: #{exercise_content_json(exercise)}
           Grade: #{level.mext_grade} | JLPT: #{level.jlpt_approx}
           Objectives: #{lesson.objectives.to_json}
@@ -509,41 +524,30 @@ module Studio
         CTX
       end
 
-      def update_exercise_status(record, status, notes)
-        return unless record.is_a?(ActiveRecord::Base)
-
-        record.update!(qa_status: status, qa_notes: notes)
+      def update_exercise_status(exercise, status, notes)
+        exercise.update!(qa_status: status, qa_notes: notes) if exercise.respond_to?(:update!)
+      rescue StandardError => e
+        log_warn("Failed to update exercise status: #{e.message}")
       end
 
-      def update_exercise_content(record, corrected)
-        return unless record.is_a?(ActiveRecord::Base) && corrected
-
-        record.update!(content: corrected)
+      def update_exercise_content(exercise, corrected)
+        exercise.update!(content: corrected) if exercise.respond_to?(:update!) && corrected
+      rescue StandardError => e
+        log_warn("Failed to auto-correct exercise: #{e.message}")
       end
 
-      def normalize_exercise(exercise)
-        if exercise.respond_to?(:content) && exercise.content.is_a?(Hash)
-          exercise.content.merge(
-            "exercise_type" => exercise.exercise_type,
-            "position" => exercise.position,
-            "difficulty" => exercise.difficulty,
-            "qa_status" => exercise.qa_status
-          )
-        elsif exercise.is_a?(Hash)
-          exercise.transform_keys(&:to_s)
-        else
-          {}
+      def field(obj, *keys)
+        keys.each do |key|
+          return obj.send(key) if obj.respond_to?(key)
         end
-      end
-
-      def normalize_asset(asset)
-        if asset.respond_to?(:attributes)
-          asset.attributes
-        elsif asset.is_a?(Hash)
-          asset.transform_keys(&:to_s)
-        else
-          {}
+        # Try hash access for nested keys
+        keys.each do |key|
+          val = obj.dig(key) rescue nil
+          return val if val
+          val = obj.dig(key.to_s) rescue nil
+          return val if val
         end
+        nil
       end
 
       def permitted_kanji_for_level(level_pos)
@@ -592,16 +596,16 @@ module Studio
         )
       end
 
+      def handle_rejections(lesson, issues)
+        log_warn("QA rejection for lesson #{lesson.respond_to?(:id) ? lesson.id : 'unknown'}: #{issues.join('; ')}")
+      end
+
       def load_content(lesson)
         exercise_records = lesson.exercises.order(:position).to_a
         exercises = exercise_records.map { |e| normalize_exercise(e) }
         illustrations = lesson.content_assets.where(asset_type: %w[illustration_webp illustration_png scene_webp character_sheet_png]).map { |a| normalize_asset(a) }
         audio = lesson.content_assets.where(asset_type: %w[audio_mp3 audio_ogg]).map { |a| normalize_asset(a) }
         NormalizedContent.new(exercises: exercises, illustrations: illustrations, audio_scripts: audio, exercise_records: exercise_records)
-      end
-
-      def handle_rejections(lesson, issues)
-        log_warn("QA rejection for lesson #{lesson.id}: #{issues.join('; ')}")
       end
 
       def log_warn(msg)
