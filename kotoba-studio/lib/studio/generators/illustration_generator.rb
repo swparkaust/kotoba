@@ -10,6 +10,8 @@ class IllustrationGenerator
   end
 
   def generate(lesson:, exercises:)
+    return [] if IMAGE_PROVIDER == "none"
+
     image_cues = exercises.select { |ex| ex.image_cue }.map.with_index do |ex, idx|
       { exercise: ex, index: idx }
     end
@@ -24,6 +26,8 @@ class IllustrationGenerator
               generate_dalle(prompt, dims)
             when "stable_diffusion"
               generate_stable_diffusion(prompt, dims)
+            when "none"
+              nil
             else
               generate_dalle(prompt, dims)
             end

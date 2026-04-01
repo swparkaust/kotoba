@@ -8,6 +8,8 @@ class AudioGenerator
   end
 
   def generate(lesson:, exercises:)
+    return [] if ENV.fetch("TTS_PROVIDER", "piper") == "none"
+
     level = lesson.curriculum_unit&.curriculum_level&.position || 1
     voices = voices_for_level(level)
 
