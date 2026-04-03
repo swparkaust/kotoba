@@ -113,12 +113,12 @@ module Studio
           end
         end
 
-        # MEXT kanji grade check
-        all_text = "#{prompt} #{correct} #{choices&.join(' ')}".to_s
-        kanji_chars = all_text.scan(/\p{Han}/).uniq
-        if kanji_chars.any?
-          level_pos = lesson.curriculum_unit&.curriculum_level&.position
-          if level_pos
+        # MEXT kanji grade check (Levels 1-7 only — Levels 8+ use the full Jouyou set)
+        level_pos = lesson.curriculum_unit&.curriculum_level&.position
+        if level_pos && level_pos <= 7
+          all_text = "#{prompt} #{correct} #{choices&.join(' ')}".to_s
+          kanji_chars = all_text.scan(/\p{Han}/).uniq
+          if kanji_chars.any?
             permitted = permitted_kanji_for_level(level_pos)
             if permitted.any?
               kanji_chars.each do |k|
@@ -560,8 +560,7 @@ module Studio
                     when 2 then 1
                     when 3..4 then 2
                     when 5 then 3
-                    when 6 then 4
-                    when 7 then 6
+                    when 6..7 then 6
                     else 6
                     end
 
