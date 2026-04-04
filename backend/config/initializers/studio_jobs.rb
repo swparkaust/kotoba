@@ -5,6 +5,7 @@ if File.directory?(studio_root)
   require_relative "../../../kotoba-studio/lib/studio/content_builder"
   require_relative "../../../kotoba-studio/lib/studio/curriculum_parser"
   require_relative "../../../kotoba-studio/lib/studio/content_pack_exporter"
+  require_relative "../../../kotoba-studio/lib/studio/generators/kanji_constraint"
   require_relative "../../../kotoba-studio/lib/studio/generators/exercise_generator"
   require_relative "../../../kotoba-studio/lib/studio/generators/illustration_generator"
   require_relative "../../../kotoba-studio/lib/studio/generators/audio_generator"

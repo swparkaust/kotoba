@@ -122,9 +122,11 @@ module Studio
             permitted = permitted_kanji_for_level(level_pos)
             if permitted.any?
               kanji_chars.each do |k|
-                unless permitted.include?(k)
-                  issues << "Exercise #{idx + 1}: kanji '#{k}' is Grade #{kanji_grade_for(k) || '?'}, not permitted at Level #{level_pos}"
-                end
+                next if permitted.include?(k)
+                grade = kanji_grade_for(k)
+                # Non-Kyouiku kanji (Jouyou-only) are acceptable at Levels 6+
+                next if grade.nil? && level_pos >= 6
+                issues << "Exercise #{idx + 1}: kanji '#{k}' is Grade #{grade || '?'}, not permitted at Level #{level_pos}"
               end
             end
           end
@@ -560,7 +562,8 @@ module Studio
                     when 2 then 1
                     when 3..4 then 2
                     when 5 then 3
-                    when 6..7 then 6
+                    when 6 then 4
+                    when 7 then 6
                     else 6
                     end
 

@@ -1,4 +1,6 @@
 class ExerciseGenerator
+  include KanjiConstraint
+
   Exercise = Struct.new(:exercise_type, :skill_type, :prompt, :target_text,
                         :choices, :correct_answer, :audio_cue, :image_cue,
                         :metadata, :position, keyword_init: true)
@@ -44,6 +46,7 @@ class ExerciseGenerator
     unit = lesson.curriculum_unit
     level = unit&.curriculum_level
     target_items = unit&.target_items || {}
+    kanji_constraint = kanji_constraint_for_level(level&.position)
 
     <<~PROMPT
       Generate #{skill_types.length * 2} exercises for this lesson:
@@ -60,6 +63,12 @@ class ExerciseGenerator
       Target characters: #{(target_items["characters"] || []).join(", ")}
 
       Exercise types to include: #{skill_types.join(", ")}
+
+      #{kanji_constraint}
+      NOTE: The target vocabulary above may contain kanji not yet taught at this level.
+      You MUST rewrite any word containing untaught kanji using hiragana instead,
+      exactly as MEXT Kokugo textbooks do at this grade. For example, if 飲 is not
+      in the permitted list, write のむ instead of 飲む.
 
       Return JSON array:
       [

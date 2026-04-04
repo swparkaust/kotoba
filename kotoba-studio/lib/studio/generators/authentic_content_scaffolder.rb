@@ -1,4 +1,6 @@
 class AuthenticContentScaffolder
+  include KanjiConstraint
+
   ScaffoldedContent = Struct.new(:source_text, :translated_text, :vocabulary_notes,
                                  :grammar_notes, :comprehension_questions, :metadata,
                                  keyword_init: true)
@@ -49,10 +51,14 @@ class AuthenticContentScaffolder
   def build_prompt(source, level)
     source_text = source.is_a?(String) ? source : source.to_s
 
+    kanji_rule = kanji_constraint_for_level(level)
+
     if source_text.strip.empty?
       <<~PROMPT
         Generate an authentic #{@lang.name} reading passage for level #{level} learners.
         The text should be appropriate for #{@lang.official_curriculum} grade equivalent.
+
+        #{kanji_rule}
 
         Return JSON:
         {
@@ -74,6 +80,8 @@ class AuthenticContentScaffolder
         Scaffold this authentic #{@lang.name} content for level #{level} learners:
 
         Source text: #{source_text}
+
+        #{kanji_rule}
 
         Return JSON:
         {

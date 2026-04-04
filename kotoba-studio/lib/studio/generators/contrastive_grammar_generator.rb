@@ -1,4 +1,6 @@
 class ContrastiveGrammarGenerator
+  include KanjiConstraint
+
   GrammarSet = Struct.new(:pattern_a, :pattern_b, :contrast_explanation,
                           :examples, :common_errors, :exercises, :metadata,
                           keyword_init: true)
@@ -40,6 +42,8 @@ class ContrastiveGrammarGenerator
 
       Pattern A: #{pattern_a}
       Pattern B: #{pattern_b}
+
+      #{kanji_constraint_for_level(level)}
 
       Return JSON:
       {

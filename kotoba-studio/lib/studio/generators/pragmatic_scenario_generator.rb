@@ -1,4 +1,6 @@
 class PragmaticScenarioGenerator
+  include KanjiConstraint
+
   Scenario = Struct.new(:title, :context, :dialogue, :vocabulary, :grammar_focus,
                         :cultural_notes, :variations, :metadata, keyword_init: true)
 
@@ -40,6 +42,8 @@ class PragmaticScenarioGenerator
 
       Theme: #{theme}
       Situation: #{situation}
+
+      #{kanji_constraint_for_level(level)}
 
       Return JSON:
       {

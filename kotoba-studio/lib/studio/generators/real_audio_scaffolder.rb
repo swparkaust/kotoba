@@ -1,4 +1,6 @@
 class RealAudioScaffolder
+  include KanjiConstraint
+
   ScaffoldedAudio = Struct.new(:transcript, :annotated_transcript, :vocabulary,
                                :listening_tasks, :cultural_notes, :difficulty_rating,
                                :metadata, keyword_init: true)
@@ -63,6 +65,8 @@ class RealAudioScaffolder
       Speed: #{metadata["speed"] || "natural"}
 
       Target level: #{level}
+
+      #{kanji_constraint_for_level(level)}
 
       Return JSON:
       {
