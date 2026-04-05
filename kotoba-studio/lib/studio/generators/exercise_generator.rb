@@ -23,7 +23,8 @@ class ExerciseGenerator
       raise "AI provider returned empty response for lesson #{lesson.id} (provider: #{response.provider}, model: #{response.model})"
     end
 
-    parse_exercises(response.text, lesson)
+    exercises = parse_exercises(response.text, lesson)
+    correct_kanji_violations(exercises, lesson)
   end
 
   private
@@ -85,6 +86,65 @@ class ExerciseGenerator
         }
       ]
     PROMPT
+  end
+
+  def correct_kanji_violations(exercises, lesson)
+    level_pos = lesson.curriculum_unit&.curriculum_level&.position
+    return exercises unless level_pos && level_pos <= 7
+
+    grade_chars = @lang.grade_characters || {}
+    max_grade = case level_pos
+                when 1 then 0
+                when 2 then 1
+                when 3..4 then 2
+                when 5 then 3
+                when 6 then 4
+                when 7 then 6
+                else return exercises
+                end
+
+    permitted = Set.new
+    (1..max_grade).each { |g| permitted.merge(grade_chars[g] || []) }
+
+    text_fields = %w[prompt target_text correct_answer audio_cue]
+    exercises.each do |ex|
+      all_kanji = text_fields.flat_map { |f| ex.send(f).to_s.scan(/\p{Han}/) }.uniq
+      bad_kanji = all_kanji.reject { |k| permitted.include?(k) }
+      next if bad_kanji.empty?
+
+      choices_kanji = (ex.choices || []).join.scan(/\p{Han}/).uniq
+      bad_in_choices = choices_kanji.reject { |k| permitted.include?(k) }
+      bad_kanji = (bad_kanji + bad_in_choices).uniq
+
+      response = @router.call(
+        task: :exercise_variation,
+        system: "You rewrite Japanese text to replace specific kanji with hiragana readings. Return valid JSON only.",
+        prompt: <<~PROMPT
+          Rewrite this exercise replacing these untaught kanji with their hiragana readings: #{bad_kanji.join(', ')}
+
+          Current exercise:
+          #{JSON.generate({ prompt: ex.prompt, target_text: ex.target_text, choices: ex.choices, correct_answer: ex.correct_answer, audio_cue: ex.audio_cue })}
+
+          Return the corrected exercise as JSON with the same keys. Only replace the listed kanji — keep all other text unchanged.
+        PROMPT
+      )
+
+      next if response.text.nil? || response.text.strip.empty?
+      begin
+        json_match = response.text.match(/\{[\s\S]*\}/)
+        next unless json_match
+        fix = JSON.parse(json_match[0])
+        ex.prompt = fix["prompt"] if fix["prompt"]
+        ex.target_text = fix["target_text"] if fix["target_text"]
+        ex.choices = fix["choices"] if fix["choices"]
+        ex.correct_answer = fix["correct_answer"] if fix["correct_answer"]
+        ex.audio_cue = fix["audio_cue"] if fix["audio_cue"]
+      rescue JSON::ParserError
+        next
+      end
+    end
+
+    exercises
   end
 
   def parse_exercises(text, lesson)

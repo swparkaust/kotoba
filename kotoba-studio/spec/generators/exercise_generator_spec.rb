@@ -65,15 +65,6 @@ RSpec.describe ExerciseGenerator do
   end
 
   describe "error handling" do
-    it "raises when AI returns nil text" do
-      allow(router).to receive(:call).and_return(OpenStruct.new(text: nil))
-      expect { service.generate(lesson: lesson) }.to raise_error(RuntimeError, /empty response/)
-    end
-
-    it "raises when AI returns blank text" do
-      allow(router).to receive(:call).and_return(OpenStruct.new(text: "   "))
-      expect { service.generate(lesson: lesson) }.to raise_error(RuntimeError, /empty response/)
-    end
     it "handles malformed JSON gracefully" do
       allow(router).to receive(:call).and_return(OpenStruct.new(text: "not valid json"))
       result = service.generate(lesson: lesson)
@@ -86,7 +77,21 @@ RSpec.describe ExerciseGenerator do
       expect(result).to eq([])
     end
 
+    it "raises when AI returns nil text" do
+      allow(router).to receive(:call).and_return(OpenStruct.new(text: nil))
+      expect { service.generate(lesson: lesson) }.to raise_error(RuntimeError, /empty response/)
+    end
+
+    it "raises when AI returns blank text" do
+      allow(router).to receive(:call).and_return(OpenStruct.new(text: "   "))
+      expect { service.generate(lesson: lesson) }.to raise_error(RuntimeError, /empty response/)
+    end
   end
+
+  describe "#correct_kanji_violations" do
+    let(:kanji_exercise_response) do
+      '[{"exercise_type":"multiple_choice","skill_type":"character_intro","prompt":"飲み物はどれですか？","target_text":"飲む","choices":["飲む","たべる","のむ","みる"],"correct_answer":"飲む","audio_cue":"飲み物","image_cue":null,"metadata":{"difficulty":1,"tags":[]}}]'
+    end
 
     let(:corrected_json) do
       '{"prompt":"のみものはどれですか？","target_text":"のむ","choices":["のむ","たべる","のむ","みる"],"correct_answer":"のむ","audio_cue":"のみもの"}'
@@ -120,5 +125,43 @@ RSpec.describe ExerciseGenerator do
       )
     end
 
+    it "triggers correction call with exercise_variation task at level 1" do
+      allow(router).to receive(:call)
+        .with(hash_including(task: :lesson_content_generation))
+        .and_return(OpenStruct.new(text: kanji_exercise_response))
+
+      allow(router).to receive(:call)
+        .with(hash_including(task: :exercise_variation))
+        .and_return(OpenStruct.new(text: corrected_json))
+
+      service.generate(lesson: level1_lesson)
+
+      expect(router).to have_received(:call).with(hash_including(task: :exercise_variation))
+    end
+
+    it "skips correction entirely at level 8+" do
+      allow(router).to receive(:call)
+        .with(hash_including(task: :lesson_content_generation))
+        .and_return(OpenStruct.new(text: kanji_exercise_response))
+
+      service.generate(lesson: level8_lesson)
+
+      expect(router).not_to have_received(:call).with(hash_including(task: :exercise_variation))
+    end
+
+    it "preserves original exercise when correction AI returns malformed JSON" do
+      allow(router).to receive(:call)
+        .with(hash_including(task: :lesson_content_generation))
+        .and_return(OpenStruct.new(text: kanji_exercise_response))
+
+      allow(router).to receive(:call)
+        .with(hash_including(task: :exercise_variation))
+        .and_return(OpenStruct.new(text: "not valid json at all"))
+
+      result = service.generate(lesson: level1_lesson)
+
+      expect(result.first.prompt).to eq("飲み物はどれですか？")
+      expect(result.first.target_text).to eq("飲む")
+    end
   end
 end
