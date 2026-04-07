@@ -3,9 +3,8 @@ module Api
     class PlacementController < ApplicationController
       # GET /placement/questions — fetch server-generated placement questions
       def questions
-        language = Language.find_by!(code: params[:language_code] || current_learner.active_language_code)
-        router = AiProviders.build_router
-        generator = PlacementQuestionGenerator.new(router: router)
+        language = current_language
+        generator = PlacementQuestionGenerator.new(router: ai_router)
 
         questions = generator.generate(language: language)
 
@@ -26,7 +25,7 @@ module Api
       # POST /placement — submit answers for server-side grading
       def create
         learner = current_learner
-        language = Language.find_by!(code: params[:language_code] || current_learner.active_language_code)
+        language = current_language
 
         session_key = params[:session_key]
         stored_questions = session_key ? Rails.cache.read(session_key) : nil
@@ -51,8 +50,7 @@ module Api
 
         Rails.cache.delete(session_key) if session_key
 
-        router = AiProviders.build_router
-        evaluator = PlacementEvaluator.new(router: router)
+        evaluator = PlacementEvaluator.new(router: ai_router)
 
         result = evaluator.evaluate(
           learner: learner,

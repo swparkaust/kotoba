@@ -1,11 +1,24 @@
 module KanjiConstraint
-  # Generates a prompt constraint instructing the AI to only use kanji that have
-  # been taught at the given MEXT curriculum level, matching Kokugo textbooks.
-  # Words with untaught kanji must be written in hiragana instead.
+  def permitted_kanji_set_for_level(level_pos)
+    grade_chars = @lang.grade_characters || {}
+    max_grade = case level_pos
+                when 1 then 0
+                when 2 then 1
+                when 3..4 then 2
+                when 5 then 3
+                when 6 then 4
+                when 7 then 6
+                else 6
+                end
+
+    permitted = Set.new
+    (1..max_grade).each { |g| permitted.merge(grade_chars[g] || []) }
+    permitted
+  end
+
   def kanji_constraint_for_level(level_pos)
     return "" unless level_pos
 
-    grade_chars = @lang.grade_characters || {}
     max_grade = case level_pos
                 when 1 then 0
                 when 2 then 1
@@ -18,8 +31,7 @@ module KanjiConstraint
 
     return "" if max_grade.nil?
 
-    permitted = Set.new
-    (1..max_grade).each { |g| permitted.merge(grade_chars[g] || []) }
+    permitted = permitted_kanji_set_for_level(level_pos)
 
     if permitted.empty? && max_grade == 0
       <<~CONSTRAINT

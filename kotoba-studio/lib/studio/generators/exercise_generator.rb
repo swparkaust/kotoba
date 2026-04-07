@@ -92,19 +92,7 @@ class ExerciseGenerator
     level_pos = lesson.curriculum_unit&.curriculum_level&.position
     return exercises unless level_pos && level_pos <= 7
 
-    grade_chars = @lang.grade_characters || {}
-    max_grade = case level_pos
-                when 1 then 0
-                when 2 then 1
-                when 3..4 then 2
-                when 5 then 3
-                when 6 then 4
-                when 7 then 6
-                else return exercises
-                end
-
-    permitted = Set.new
-    (1..max_grade).each { |g| permitted.merge(grade_chars[g] || []) }
+    permitted = permitted_kanji_set_for_level(level_pos)
 
     text_fields = %w[prompt target_text correct_answer audio_cue]
     exercises.each do |ex|

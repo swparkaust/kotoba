@@ -2,6 +2,7 @@ require "ostruct"
 require "json"
 
 require_relative "../lib/studio"
+require_relative "../lib/studio/logging"
 require_relative "../lib/studio/content_builder"
 require_relative "../lib/studio/curriculum_parser"
 require_relative "../lib/studio/content_pack_exporter"

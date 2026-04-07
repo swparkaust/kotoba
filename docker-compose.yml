@@ -19,10 +19,11 @@ services:
     build:
       context: ./backend
     depends_on: [db, redis]
-    environment:
+    environment: &backend-env
       DATABASE_URL: postgres://kotoba:kotoba_password@db/kotoba
       REDIS_URL: redis://redis:6379/0
       RAILS_ENV: production
+      SECRET_KEY_BASE: ${SECRET_KEY_BASE}
       AI_PROVIDER: ${AI_PROVIDER:-anthropic}
       OLLAMA_HOST: ${OLLAMA_HOST:-http://host.docker.internal:11434}
     ports:
@@ -34,11 +35,7 @@ services:
     command: bundle exec sidekiq
     depends_on: [db, redis]
     environment:
-      DATABASE_URL: postgres://kotoba:kotoba_password@db/kotoba
-      REDIS_URL: redis://redis:6379/0
-      RAILS_ENV: production
-      AI_PROVIDER: ${AI_PROVIDER:-anthropic}
-      OLLAMA_HOST: ${OLLAMA_HOST:-http://host.docker.internal:11434}
+      <<: *backend-env
 
   frontend:
     build:

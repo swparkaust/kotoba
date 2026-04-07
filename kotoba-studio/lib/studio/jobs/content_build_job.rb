@@ -1,6 +1,7 @@
 module Studio
   class ContentBuildJob
     include Sidekiq::Job
+    include Studio::Logging
 
     sidekiq_options queue: :content, retry: 3
 

@@ -2,7 +2,7 @@ module Api
   module V1
     class ContentPacksController < ApplicationController
       def latest
-        language = Language.find_by!(code: params[:language_code] || current_learner.active_language_code)
+        language = current_language
         pack = language.content_pack_versions.where(status: "ready").order(version: :desc).first
         if pack
           render json: pack
@@ -12,7 +12,7 @@ module Api
       end
 
       def check_update
-        language = Language.find_by!(code: params[:language_code] || current_learner.active_language_code)
+        language = current_language
         current_version = params[:current_version].to_i
         latest = language.content_pack_versions.where(status: "ready").order(version: :desc).first
 

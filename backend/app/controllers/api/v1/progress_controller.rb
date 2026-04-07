@@ -32,7 +32,7 @@ module Api
 
       def jlpt_comparison
         learner = current_learner
-        language = Language.find_by!(code: params[:language_code] || current_learner.active_language_code)
+        language = current_language
         mapper = JlptMapper.new
         render json: mapper.current_jlpt(learner: learner, language: language)
       end

@@ -2,6 +2,7 @@ studio_root = File.expand_path("../../../kotoba-studio/lib/studio", __dir__)
 
 if File.directory?(studio_root)
   require_relative "../../../kotoba-studio/lib/studio"
+  require_relative "../../../kotoba-studio/lib/studio/logging"
   require_relative "../../../kotoba-studio/lib/studio/content_builder"
   require_relative "../../../kotoba-studio/lib/studio/curriculum_parser"
   require_relative "../../../kotoba-studio/lib/studio/content_pack_exporter"

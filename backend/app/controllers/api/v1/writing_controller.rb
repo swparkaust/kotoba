@@ -4,8 +4,7 @@ module Api
       def submit
         learner = current_learner
         exercise = Exercise.find(params[:exercise_id])
-        router = AiProviders.build_router
-        evaluator = WritingEvaluator.new(router: router)
+        evaluator = WritingEvaluator.new(router: ai_router)
 
         result = evaluator.evaluate(
           learner: learner,

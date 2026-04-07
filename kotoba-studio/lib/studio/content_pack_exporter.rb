@@ -1,5 +1,6 @@
 module Studio
   class ContentPackExporter
+    include Studio::Logging
     def initialize(language_config:, curriculum_parser: nil)
       @lang = language_config
       @parser = curriculum_parser
@@ -14,7 +15,7 @@ module Studio
       export_exercises(output_path)
       export_assets(output_path)
 
-      puts "Content pack exported to #{output_path}"
+      log_info "Content pack exported to #{output_path}"
       { path: output_path, lessons: lesson_count, assets: asset_count }
     end
 
@@ -68,6 +69,7 @@ module Studio
     def export_assets(path)
       assets = ContentAsset.joins(lesson: { curriculum_unit: { curriculum_level: :language } })
                            .where(languages: { code: @lang.code })
+                           .to_a
 
       assets.each do |asset|
         next unless asset.url.present? || asset.data.present?

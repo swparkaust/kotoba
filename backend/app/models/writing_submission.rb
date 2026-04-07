@@ -44,13 +44,11 @@ class WritingSubmission < ApplicationRecord
     key = exercise.content&.dig("srs_key")
     return unless key
 
-    SrsCard.find_or_create_by!(learner: learner, card_key: key, card_type: "writing") do |card|
-      card.card_data = { front: key, back: submitted_text, source_level: level }
-      card.interval_days = 1
-      card.ease_factor = 2.5
-      card.repetitions = 0
-      card.next_review_at = Time.current
-      card.last_reviewed_at = Time.current
-    end
+    SrsCard.seed_for(
+      learner: learner,
+      card_type: "writing",
+      card_key: key,
+      card_data: { front: key, back: submitted_text, source_level: level }
+    )
   end
 end

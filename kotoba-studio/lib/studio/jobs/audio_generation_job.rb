@@ -1,6 +1,7 @@
 module Studio
   class AudioGenerationJob
     include Sidekiq::Job
+    include Studio::Logging
 
     sidekiq_options queue: :audio, retry: 2
 
@@ -32,12 +33,13 @@ module Studio
             asset_type: "audio_mp3",
             asset_key: asset_key,
             url: clip.url || clip.local_path,
-            file_size: clip.local_path && File.exist?(clip.local_path) ? File.size(clip.local_path) : 0
+            file_size: clip.local_path && File.exist?(clip.local_path) ? File.size(clip.local_path) : 0,
+            qa_status: "pending"
           )
         end
       end
     rescue StandardError => e
-      Rails.logger.error("AudioGenerationJob failed for lesson #{lesson_id}: #{e.message}") if defined?(Rails)
+      log_error("AudioGenerationJob failed for lesson #{lesson_id}: #{e.message}")
       raise e
     end
   end

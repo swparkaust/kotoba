@@ -16,6 +16,7 @@ export function useReadingSession(itemId: string) {
   useEffect(() => { newCardsRef.current = newCards; }, [newCards]);
 
   const start = useCallback(() => {
+    if (timerRef.current) clearInterval(timerRef.current);
     timerRef.current = setInterval(() => setElapsed((e) => e + 1), 1000);
   }, []);
 
@@ -24,7 +25,7 @@ export function useReadingSession(itemId: string) {
   }, []);
 
   const addGlossCard = useCallback((word: string, definitionJa: string) => {
-    setNewCards((prev) => [...prev, { word, definition_ja: definitionJa }]);
+    setNewCards((prev) => prev.some(c => c.word === word) ? prev : [...prev, { word, definition_ja: definitionJa }]);
   }, []);
 
   const saveSession = useCallback(async (sessionType: "reading" | "listening", progressPct: number) => {

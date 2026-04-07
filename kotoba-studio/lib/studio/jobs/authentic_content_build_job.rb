@@ -1,6 +1,7 @@
 module Studio
   class AuthenticContentBuildJob
     include Sidekiq::Job
+    include Studio::Logging
 
     sidekiq_options queue: :content, retry: 2
 
@@ -50,14 +51,5 @@ module Studio
       raise e
     end
 
-    private
-
-    def log_info(msg)
-      defined?(Rails) ? Rails.logger.info(msg) : puts(msg)
-    end
-
-    def log_error(msg)
-      defined?(Rails) ? Rails.logger.error(msg) : warn(msg)
-    end
   end
 end

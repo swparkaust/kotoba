@@ -72,6 +72,7 @@ RSpec.describe Studio::ContentPackExporter do
     assets_query = double("AssetsQuery")
     allow(ContentAsset).to receive(:joins).and_return(assets_query)
     allow(assets_query).to receive(:where).and_return(assets_query)
+    allow(assets_query).to receive(:to_a).and_return([asset_double])
     allow(assets_query).to receive(:each) { |&block| [asset_double].each(&block) }
     allow(assets_query).to receive(:map) { |&block| [asset_double].map(&block) }
     allow(assets_query).to receive(:count).and_return(1)

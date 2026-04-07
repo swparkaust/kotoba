@@ -1,4 +1,6 @@
 class IllustrationGenerator
+  include Studio::Logging
+
   IMAGE_PROVIDER = ENV.fetch("IMAGE_PROVIDER", "dalle")
 
   Illustration = Struct.new(:asset_type, :prompt, :url, :local_path,
@@ -72,7 +74,7 @@ class IllustrationGenerator
 
     response.dig("data", 0, "url")
   rescue StandardError => e
-    Rails.logger.error("DALL-E generation failed: #{e.message}") if defined?(Rails)
+    log_error("DALL-E generation failed: #{e.message}")
     nil
   end
 
@@ -100,11 +102,8 @@ class IllustrationGenerator
     File.binwrite(path, Base64.decode64(image_b64))
     path
   rescue StandardError => e
+    log_error("Stable Diffusion generation failed: #{e.message}")
     nil
-  end
-
-  def post_process(url_or_path)
-    url_or_path
   end
 
   def dimensions_for(exercise_type)

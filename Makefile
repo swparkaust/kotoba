@@ -21,8 +21,8 @@ test-e2e:
 	docker compose -f docker-compose.test.yml up -d --build
 	sleep 15
 	docker compose -f docker-compose.test.yml exec -T backend bin/rails db:seed
-	cd frontend && npx playwright test
-	docker compose -f docker-compose.test.yml down
+	cd frontend && npx playwright test; ret=$$?; \
+	docker compose -f docker-compose.test.yml down; exit $$ret
 
 test-manual:
 	@echo "Ensuring Ollama is running with required models..."
@@ -33,9 +33,8 @@ test-manual:
 	docker compose -f docker-compose.test.yml up -d --build
 	sleep 15
 	docker compose -f docker-compose.test.yml exec -T backend bin/rails db:seed
-	bash scripts/manual_test.sh
-	cd frontend && npx ts-node ../scripts/manual_e2e.ts
-	docker compose -f docker-compose.test.yml down
+	bash scripts/manual_test.sh && cd frontend && npx ts-node ../scripts/manual_e2e.ts; ret=$$?; \
+	docker compose -f docker-compose.test.yml down; exit $$ret
 
 test-all: test test-e2e test-manual
 

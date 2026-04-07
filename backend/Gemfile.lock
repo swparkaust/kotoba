@@ -379,7 +379,7 @@ DEPENDENCIES
   rubocop-rspec
   ruby-openai
   shoulda-matchers (~> 6.0)
-  sidekiq (~> 7.2.0, ~> 7.0)
+  sidekiq (~> 7.0)
   tzinfo-data
   vcr (~> 6.3)
   web-push (~> 3.0)

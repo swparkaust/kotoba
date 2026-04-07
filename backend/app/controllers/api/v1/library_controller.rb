@@ -3,7 +3,7 @@ module Api
     class LibraryController < ApplicationController
       def index
         learner = current_learner
-        language = Language.find_by!(code: params[:language_code] || current_learner.active_language_code)
+        language = current_language
 
         if params[:recommended]
           recommender = LibraryRecommender.new
@@ -38,14 +38,12 @@ module Api
         )
 
         (params[:new_srs_cards] || []).each do |card_data|
-          SrsCard.find_or_create_by!(
+          SrsCard.seed_for(
             learner: learner,
             card_type: "vocabulary",
-            card_key: card_data["word"]
-          ) do |card|
-            card.card_data = { front: card_data["word"], back: card_data["definition_ja"], source_level: item.difficulty_level }
-            card.next_review_at = Time.current + 1.day
-          end
+            card_key: card_data["word"],
+            card_data: { front: card_data["word"], back: card_data["definition_ja"], source_level: item.difficulty_level }
+          )
         end
 
         render json: session, status: :created

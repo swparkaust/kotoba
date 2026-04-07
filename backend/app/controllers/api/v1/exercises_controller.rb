@@ -37,26 +37,16 @@ module Api
         correct = evaluate_answer(exercise, answer)
 
         if exercise.content["srs_key"].present?
-          card = SrsCard.find_or_initialize_by(
+          card = SrsCard.seed_for(
             learner: current_learner,
             card_type: exercise.content["srs_type"] || "vocabulary",
-            card_key: exercise.content["srs_key"]
+            card_key: exercise.content["srs_key"],
+            card_data: exercise.content["srs_data"] || {
+              front: exercise.content["srs_key"],
+              back: exercise.content["correct_answer"],
+              source_level: exercise.lesson&.curriculum_unit&.curriculum_level&.position
+            }
           )
-          unless card.persisted?
-            card.assign_attributes(
-              card_data: exercise.content["srs_data"] || {
-                front: exercise.content["srs_key"],
-                back: exercise.content["correct_answer"],
-                source_level: exercise.lesson&.curriculum_unit&.curriculum_level&.position
-              },
-              interval_days: 1,
-              ease_factor: 2.5,
-              repetitions: 0,
-              next_review_at: Time.current,
-              last_reviewed_at: Time.current
-            )
-            card.save!
-          end
           SrsScheduler.new.record_review(card: card, correct: correct)
         end
 

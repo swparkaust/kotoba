@@ -30,12 +30,15 @@ module Api
                 }
               }
             }
-          ).merge(
-            lesson_count: level.curriculum_units.flat_map(&:lessons).size,
-            completed_count: level.curriculum_units.flat_map(&:lessons).count { |l|
-              progress_by_lesson[l.id]&.status == "completed"
-            }
-          )
+          ).tap do |json|
+            all_lessons = level.curriculum_units.flat_map(&:lessons)
+            json.merge!(
+              lesson_count: all_lessons.size,
+              completed_count: all_lessons.count { |l|
+                progress_by_lesson[l.id]&.status == "completed"
+              }
+            )
+          end
         }
       end
 

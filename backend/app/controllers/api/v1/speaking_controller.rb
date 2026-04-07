@@ -9,8 +9,7 @@ module Api
           return
         end
 
-        router = AiProviders.build_router
-        evaluator = SpeechEvaluator.new(router: router)
+        evaluator = SpeechEvaluator.new(router: ai_router)
 
         result = evaluator.evaluate(
           learner: current_learner,

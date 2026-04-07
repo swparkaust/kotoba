@@ -38,7 +38,7 @@ export function ExerciseRenderer({ exercise, onAnswer }: ExerciseRendererProps) 
             options={content.options || []}
             imageUrl={content.image_url}
             correctIndex={content.options?.indexOf(content.correct_answer || "") ?? -1}
-            onAnswer={(answer) => onAnswer(answer)}
+            onAnswer={onAnswer}
           />
         );
 
@@ -46,7 +46,7 @@ export function ExerciseRenderer({ exercise, onAnswer }: ExerciseRendererProps) 
         return (
           <FillInBlank
             prompt={content.prompt || ""}
-            onSubmit={(answer) => onAnswer(answer)}
+            onSubmit={onAnswer}
           />
         );
 
@@ -102,7 +102,7 @@ export function ExerciseRenderer({ exercise, onAnswer }: ExerciseRendererProps) 
         return (
           <FillInBlank
             prompt={content.prompt || ""}
-            onSubmit={(answer) => onAnswer(answer)}
+            onSubmit={onAnswer}
           />
         );
     }

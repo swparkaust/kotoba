@@ -1,6 +1,9 @@
 module Studio
   module QA
     class ContentQualityReviewer
+      include KanjiConstraint
+      include Studio::Logging
+
       MAX_RETRIES = 3
 
       ReviewResult = Struct.new(:passed, :score, :issues, :suggestions, keyword_init: true) do
@@ -494,7 +497,7 @@ module Studio
           lesson.exercises.update_all(qa_status: "passed")
         else
           lesson.update!(content_status: "qa_failed")
-          lesson.exercises.update_all(qa_status: "failed")
+          lesson.exercises.update_all(qa_status: "rejected")
         end
 
         ReviewResult.new(passed: passed, score: overall_score, issues: all_issues, suggestions: all_suggestions)
@@ -555,20 +558,7 @@ module Studio
         @permitted_kanji_cache ||= {}
         return @permitted_kanji_cache[level_pos] if @permitted_kanji_cache.key?(level_pos)
 
-        grade_chars = @lang.grade_characters || {}
-        max_grade = case level_pos
-                    when 1 then 0
-                    when 2 then 1
-                    when 3..4 then 2
-                    when 5 then 3
-                    when 6 then 4
-                    when 7 then 6
-                    else 6
-                    end
-
-        permitted = Set.new
-        (1..max_grade).each { |g| permitted.merge(grade_chars[g] || []) }
-        @permitted_kanji_cache[level_pos] = permitted
+        @permitted_kanji_cache[level_pos] = permitted_kanji_set_for_level(level_pos)
       end
 
       def kanji_grade_for(char)
@@ -607,18 +597,6 @@ module Studio
 
       def handle_rejections(lesson, issues)
         log_warn("QA rejection for lesson #{lesson.id}: #{issues.join('; ')}")
-      end
-
-      def load_content(lesson)
-        exercise_records = lesson.exercises.order(:position).to_a
-        exercises = exercise_records.map { |e| normalize_exercise(e) }
-        illustrations = lesson.content_assets.where(asset_type: %w[illustration_webp illustration_png scene_webp character_sheet_png]).map { |a| normalize_asset(a) }
-        audio = lesson.content_assets.where(asset_type: %w[audio_mp3 audio_ogg]).map { |a| normalize_asset(a) }
-        NormalizedContent.new(exercises: exercises, illustrations: illustrations, audio_scripts: audio, exercise_records: exercise_records)
-      end
-
-      def log_warn(msg)
-        defined?(Rails) ? Rails.logger.warn(msg) : warn(msg)
       end
     end
   end

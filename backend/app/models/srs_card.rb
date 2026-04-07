@@ -15,4 +15,15 @@ class SrsCard < ApplicationRecord
     where("card_data->>'source_level' IS NOT NULL")
       .where("(card_data->>'source_level')::int BETWEEN ? AND ?", min, max)
   }
+
+  def self.seed_for(learner:, card_type:, card_key:, card_data:)
+    find_or_create_by!(learner: learner, card_type: card_type, card_key: card_key) do |card|
+      card.card_data = card_data
+      card.interval_days = 1
+      card.ease_factor = 2.5
+      card.repetitions = 0
+      card.next_review_at = Time.current
+      card.last_reviewed_at = Time.current
+    end
+  end
 end
