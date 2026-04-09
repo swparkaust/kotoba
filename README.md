@@ -16,11 +16,11 @@ make start
 | Layer | Technology |
 |-------|-----------|
 | Backend API | Ruby on Rails 7.2 (API mode), PostgreSQL, Sidekiq, Redis |
-| Frontend | Next.js 15 (App Router), TypeScript, Tailwind CSS |
-| AI Engine | Anthropic Claude (cloud) or Ollama (local) |
+| Frontend | Next.js 16 (App Router), TypeScript, Tailwind CSS |
+| AI Engine | Anthropic Claude, OpenAI GPT (cloud) or Ollama (local) |
 | Content Studio | Standalone Ruby project for offline content generation |
 
-The app consists of two projects:
+The app consists of three projects:
 
 - **`backend/`** — Rails API serving learner data, progress, SRS, and AI-powered evaluation (writing, speaking, placement)
 - **`frontend/`** — Next.js PWA with 33 components, 14 hooks, and 13 pages
@@ -65,6 +65,7 @@ Switch between cloud and local AI with one environment variable:
 
 ```bash
 AI_PROVIDER=anthropic  # Claude Opus/Sonnet (cloud)
+AI_PROVIDER=openai     # GPT-4o/o3 (cloud)
 AI_PROVIDER=ollama     # Qwen/DeepSeek/Llama (local, free)
 ```
 
@@ -82,7 +83,7 @@ ollama pull qwen3:8b
 ```bash
 make test             # RSpec + Jest
 make test-e2e         # Playwright against live services
-make test-manual      # 30-check integration test + browser verification
+make test-manual      # Integration test + browser verification
 make test-all         # Everything
 ```
 
