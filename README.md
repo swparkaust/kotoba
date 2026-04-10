@@ -61,12 +61,12 @@ The pipeline: `ContentBuildJob` generates exercises and assets, `QualityReviewJo
 
 ## AI Provider
 
-Switch between cloud and local AI with one environment variable:
+The default is Ollama (local, free). Set `AI_PROVIDER` to switch:
 
 ```bash
+AI_PROVIDER=ollama     # Qwen/DeepSeek/Llama (local, free) — default
 AI_PROVIDER=anthropic  # Claude Opus/Sonnet (cloud)
 AI_PROVIDER=openai     # GPT-4o/o3 (cloud)
-AI_PROVIDER=ollama     # Qwen/DeepSeek/Llama (local, free)
 ```
 
 For local development on a Mac with 36GB+ RAM:

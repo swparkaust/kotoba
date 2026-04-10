@@ -193,9 +193,9 @@ RSpec.describe AiProviders, ".build" do
     ENV.delete("OPENAI_API_KEY")
   end
 
-  it "defaults to AnthropicAdapter" do
+  it "defaults to OllamaAdapter" do
     ENV.delete("AI_PROVIDER")
-    expect(described_class.build).to be_a(AiProviders::AnthropicAdapter)
+    expect(described_class.build).to be_a(AiProviders::OllamaAdapter)
   end
 
   it "raises on unknown provider" do

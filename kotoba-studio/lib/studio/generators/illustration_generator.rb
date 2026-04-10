@@ -1,7 +1,7 @@
 class IllustrationGenerator
   include Studio::Logging
 
-  IMAGE_PROVIDER = ENV.fetch("IMAGE_PROVIDER", "dalle")
+  IMAGE_PROVIDER = ENV.fetch("IMAGE_PROVIDER", "none")
 
   Illustration = Struct.new(:asset_type, :prompt, :url, :local_path,
                             :width, :height, :metadata, keyword_init: true)

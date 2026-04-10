@@ -1,6 +1,6 @@
 module AiProviders
   def self.build
-    case ENV.fetch("AI_PROVIDER", "anthropic")
+    case ENV.fetch("AI_PROVIDER", "ollama")
     when "anthropic"
       api_key = Rails.application.credentials.dig(:claude_api_key) || ENV["ANTHROPIC_API_KEY"]
       raise "ANTHROPIC_API_KEY not configured" if api_key.blank?

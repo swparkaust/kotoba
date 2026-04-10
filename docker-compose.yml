@@ -24,7 +24,7 @@ services:
       REDIS_URL: redis://redis:6379/0
       RAILS_ENV: production
       SECRET_KEY_BASE: ${SECRET_KEY_BASE}
-      AI_PROVIDER: ${AI_PROVIDER:-anthropic}
+      AI_PROVIDER: ${AI_PROVIDER:-ollama}
       OLLAMA_HOST: ${OLLAMA_HOST:-http://host.docker.internal:11434}
     ports:
       - "3000:3000"
