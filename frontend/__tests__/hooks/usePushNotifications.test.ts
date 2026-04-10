@@ -80,7 +80,7 @@ describe("usePushNotifications", () => {
 
     expect(mockPushManager.subscribe).toHaveBeenCalledWith({
       userVisibleOnly: true,
-      applicationServerKey: expect.any(Uint8Array),
+      applicationServerKey: process.env.NEXT_PUBLIC_VAPID_PUBLIC_KEY,
     });
   });
 
