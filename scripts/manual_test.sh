@@ -31,7 +31,8 @@ LOGIN_RESPONSE=$(curl -s -X POST -H "Content-Type: application/json" -d '{"email
 LOGIN_STATUS=$(echo "$LOGIN_RESPONSE" | python3 -c "import sys,json;print('ok' if 'auth_token' in json.load(sys.stdin) else 'fail')" 2>/dev/null)
 check "Login returns auth token" "$([ "$LOGIN_STATUS" = "ok" ] && echo true || echo false)"
 
-SIGNUP_STATUS=$(curl -s -o /dev/null -w "%{http_code}" -X POST -H "Content-Type: application/json" -d '{"display_name":"New","email":"new_test@example.com","password":"password123"}' "$API_URL/api/v1/sessions/signup")
+SIGNUP_EMAIL="manual_test_$(date +%s)@example.com"
+SIGNUP_STATUS=$(curl -s -o /dev/null -w "%{http_code}" -X POST -H "Content-Type: application/json" -d "{\"display_name\":\"New\",\"email\":\"$SIGNUP_EMAIL\",\"password\":\"password123\"}" "$API_URL/api/v1/sessions/signup")
 check "Signup creates new learner" "$([ "$SIGNUP_STATUS" = "201" ] && echo true || echo false)"
 
 BAD_LOGIN=$(curl -s -o /dev/null -w "%{http_code}" -X POST -H "Content-Type: application/json" -d '{"email":"test@example.com","password":"wrong"}' "$API_URL/api/v1/sessions")
@@ -48,7 +49,8 @@ echo "1. Backend Health"
 HEALTH=$(curl -s -H "$AUTH_HEADER" -o /dev/null -w "%{http_code}" "$API_URL/api/v1/curriculum?language_code=ja")
 check "Curriculum endpoint responds 200" "$([ "$HEALTH" = "200" ] && echo true || echo false)"
 
-LESSONS=$(curl -s -H "$AUTH_HEADER" -o /dev/null -w "%{http_code}" "$API_URL/api/v1/lessons/1")
+FIRST_LESSON_ID=$(curl -s -H "$AUTH_HEADER" "$API_URL/api/v1/curriculum?language_code=ja" | python3 -c "import sys,json;levels=json.load(sys.stdin);print(levels[0]['curriculum_units'][0]['lessons'][0]['id'])" 2>/dev/null)
+LESSONS=$(curl -s -H "$AUTH_HEADER" -o /dev/null -w "%{http_code}" "$API_URL/api/v1/lessons/$FIRST_LESSON_ID")
 check "Lessons endpoint responds 200" "$([ "$LESSONS" = "200" ] && echo true || echo false)"
 
 PROGRESS=$(curl -s -H "$AUTH_HEADER" -o /dev/null -w "%{http_code}" "$API_URL/api/v1/progress")
@@ -135,10 +137,10 @@ LEVEL_COUNT=$(echo "$CURRICULUM_DATA" | python3 -c "import sys,json;print(len(js
 check "At least 4 curriculum levels seeded" "$([ "$LEVEL_COUNT" -ge 4 ] 2>/dev/null && echo true || echo false)"
 
 REVIEW_DATA=$(curl -s -H "$AUTH_HEADER" "$API_URL/api/v1/reviews")
-check "Due SRS cards returned" "$(echo "$REVIEW_DATA" | python3 -c "import sys,json;d=json.load(sys.stdin);print(len(d)>0)" 2>/dev/null)"
+check "Due SRS cards returned" "$(echo "$REVIEW_DATA" | python3 -c "import sys,json;d=json.load(sys.stdin);print(str(len(d)>0).lower())" 2>/dev/null)"
 
 STATS_DATA=$(curl -s -H "$AUTH_HEADER" "$API_URL/api/v1/reviews/stats")
-check "Stats include burned count" "$(echo "$STATS_DATA" | python3 -c "import sys,json;d=json.load(sys.stdin);print('burned' in d)" 2>/dev/null)"
+check "Stats include burned count" "$(echo "$STATS_DATA" | python3 -c "import sys,json;d=json.load(sys.stdin);print(str('burned' in d).lower())" 2>/dev/null)"
 
 JLPT_DATA=$(curl -s -H "$AUTH_HEADER" "$API_URL/api/v1/progress/jlpt_comparison?language_code=ja")
 TOTAL=$(echo "$JLPT_DATA" | python3 -c "import sys,json;print(json.load(sys.stdin).get('total_levels',0))" 2>/dev/null)
