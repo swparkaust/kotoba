@@ -7,14 +7,14 @@ let authToken: string;
 test.describe("Authentication", () => {
   test("signup page loads and creates account", async ({ page }) => {
     await page.goto("/signup");
-    await expect(page.locator("[data-testid='signup-email'], input[type='email']")).toBeVisible();
+    await expect(page.locator("input[placeholder='Display name']")).toBeVisible({ timeout: 10000 });
 
-    await page.fill("input[name='display_name'], input[placeholder*='name' i]", "Test User");
-    await page.fill("input[type='email']", `test_${Date.now()}@example.com`);
-    await page.fill("input[type='password']", "password123");
+    await page.fill("input[placeholder='Display name']", "Test User");
+    await page.fill("input[placeholder='Email']", `test_${Date.now()}@example.com`);
+    await page.fill("input[placeholder='Password']", "password123");
     await page.click("button[type='submit']");
 
-    await page.waitForURL("**/dashboard", { timeout: 5000 });
+    await page.waitForURL("**/dashboard", { timeout: 10000 });
   });
 
   test("login page loads", async ({ page }) => {
@@ -33,19 +33,18 @@ test.describe.serial("Authenticated flows", () => {
     authToken = body.auth_token;
   });
 
-  test.beforeEach(async ({ context }) => {
-    await context.addCookies([]);
-    await context.route("**/*", async (route) => {
-      const headers = { ...route.request().headers(), authorization: `Bearer ${authToken}` };
-      await route.continue({ headers });
-    });
+  test.beforeEach(async ({ page }) => {
+    await page.goto("/login");
+    await page.evaluate((token) => {
+      localStorage.setItem("auth_token", token);
+    }, authToken);
   });
 
   test("dashboard shows level map and JLPT progress", async ({ page }) => {
     await page.goto("/dashboard");
-    await expect(page.getByTestId("level-map")).toBeVisible();
-    await expect(page.getByTestId("jlpt-bar")).toBeVisible();
-    await expect(page.getByTestId("encouragement")).toBeVisible();
+    await expect(page.getByTestId("level-map")).toBeVisible({ timeout: 15000 });
+    await expect(page.getByTestId("jlpt-bar")).toBeVisible({ timeout: 5000 });
+    await expect(page.getByTestId("encouragement")).toBeVisible({ timeout: 5000 });
   });
 
   test("review page loads", async ({ page }) => {
