@@ -13,6 +13,7 @@ gem "anthropic", "~> 0.3"
 gem "image_processing", "~> 1.13"
 gem "connection_pool", "~> 2.4"
 gem "ruby-openai"
+gem "dotenv-rails"
 gem "tzinfo-data", platforms: %i[windows jruby]
 
 group :development, :test do
