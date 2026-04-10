@@ -7,12 +7,5 @@ const withPWA = require("next-pwa")({
 });
 
 module.exports = withPWA({
-  async rewrites() {
-    return [
-      {
-        source: "/api/v1/:path*",
-        destination: `${process.env.RAILS_API_URL || "http://localhost:3000"}/api/v1/:path*`,
-      },
-    ];
-  },
+  turbopack: {},
 });
