@@ -1,8 +1,8 @@
 #!/bin/bash
 set -euo pipefail
 
-BASE_URL="http://localhost:8080"
-API_URL="http://localhost:3000"
+BASE_URL="http://localhost:3000"
+API_URL="http://localhost:3001"
 AUTH_HEADER="Authorization: Bearer test-token-123"
 PASS=0
 FAIL=0

@@ -18,7 +18,7 @@ class MockWebSocket {
 
 (global as any).WebSocket = MockWebSocket;
 
-const CABLE_URL = "ws://localhost:3000/cable";
+const CABLE_URL = "ws://localhost:3001/cable";
 process.env.NEXT_PUBLIC_CABLE_URL = CABLE_URL;
 
 import { useActionCable } from "@/hooks/useActionCable";

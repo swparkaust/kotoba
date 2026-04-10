@@ -7,5 +7,5 @@ COPY Gemfile Gemfile.lock ./
 RUN bundle config set --local without 'development test' && bundle install
 COPY . .
 
-EXPOSE 3000
-CMD ["bin/rails", "server", "-b", "0.0.0.0"]
+EXPOSE 3001
+CMD ["bundle", "exec", "puma"]

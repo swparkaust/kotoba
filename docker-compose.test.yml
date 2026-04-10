@@ -17,7 +17,7 @@ services:
     build:
       context: ./backend
     depends_on: [db, redis]
-    environment:
+    environment: &backend-env
       DATABASE_URL: postgres://kotoba:test_password@db/kotoba_test
       REDIS_URL: redis://redis:6379/0
       RAILS_ENV: test
@@ -27,7 +27,7 @@ services:
       VAPID_PUBLIC_KEY: ${VAPID_PUBLIC_KEY}
       VAPID_PRIVATE_KEY: ${VAPID_PRIVATE_KEY}
     ports:
-      - "3000:3000"
+      - "3001:3001"
 
   sidekiq:
     build:
@@ -35,22 +35,15 @@ services:
     command: bundle exec sidekiq
     depends_on: [db, redis]
     environment:
-      DATABASE_URL: postgres://kotoba:test_password@db/kotoba_test
-      REDIS_URL: redis://redis:6379/0
-      RAILS_ENV: test
-      AI_PROVIDER: ollama
-      OLLAMA_HOST: http://host.docker.internal:11434
-      VAPID_SUBJECT: mailto:test@example.com
-      VAPID_PUBLIC_KEY: ${VAPID_PUBLIC_KEY}
-      VAPID_PRIVATE_KEY: ${VAPID_PRIVATE_KEY}
+      <<: *backend-env
 
   frontend:
     build:
       context: ./frontend
     depends_on: [backend]
     environment:
-      RAILS_API_URL: http://backend:3000
-      NEXT_PUBLIC_CABLE_URL: ws://backend:3000/cable
+      RAILS_API_URL: http://backend:3001
+      NEXT_PUBLIC_CABLE_URL: ws://backend:3001/cable
       NEXT_PUBLIC_VAPID_PUBLIC_KEY: ${VAPID_PUBLIC_KEY}
     ports:
-      - "8080:3000"
+      - "3000:3000"

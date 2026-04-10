@@ -27,7 +27,7 @@ services:
       AI_PROVIDER: ${AI_PROVIDER:-ollama}
       OLLAMA_HOST: ${OLLAMA_HOST:-http://host.docker.internal:11434}
     ports:
-      - "3000:3000"
+      - "3001:3001"
 
   sidekiq:
     build:
@@ -42,11 +42,11 @@ services:
       context: ./frontend
     depends_on: [backend]
     environment:
-      RAILS_API_URL: http://backend:3000
-      NEXT_PUBLIC_CABLE_URL: ws://backend:3000/cable
+      RAILS_API_URL: http://backend:3001
+      NEXT_PUBLIC_CABLE_URL: ws://backend:3001/cable
       NEXT_PUBLIC_VAPID_PUBLIC_KEY: ${VAPID_PUBLIC_KEY:-}
     ports:
-      - "8080:3000"
+      - "3000:3000"
 
 volumes:
   pgdata:

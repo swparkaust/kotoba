@@ -5,10 +5,10 @@ A free, ad-free Japanese language learning PWA that teaches adults Japanese the 
 ## Quick Start
 
 ```bash
-# Prerequisites: Docker, Node.js 18+, Ruby 3.3+
+# Prerequisites: Docker, Node.js 20+, Ruby 3.3+
 make setup
 make start
-# App runs at http://localhost:8080
+# App runs at http://localhost:3000
 ```
 
 ## Architecture
@@ -23,7 +23,7 @@ make start
 The app consists of three projects:
 
 - **`backend/`** — Rails API serving learner data, progress, SRS, and AI-powered evaluation (writing, speaking, placement)
-- **`frontend/`** — Next.js PWA with 33 components, 14 hooks, and 13 pages
+- **`frontend/`** — Next.js PWA with 33 components, 14 hooks, and 14 pages
 - **`kotoba-studio/`** — Offline content generation pipeline that produces exercises, illustrations, and audio
 
 ## Curriculum
