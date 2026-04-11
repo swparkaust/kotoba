@@ -216,10 +216,14 @@ test.describe.serial("Authenticated flows", () => {
     await expect(page.getByTestId("writing-score")).toBeVisible();
   });
 
-  test("lesson player renders exercises and accepts answers", async ({ page, request }) => {
-    const lesson = await getAnyLesson(request);
+  test("lesson player: navigate from dashboard, render exercises, answer", async ({ page, request }) => {
+    await page.goto("/dashboard");
+    await expect(page.getByTestId("level-map")).toBeVisible({ timeout: 15000 });
 
-    await page.goto(`/learn/${lesson.levelId}/${lesson.unitId}/${lesson.lessonId}`);
+    const levelCard = page.locator("[data-testid^='level-card-']").first();
+    await expect(levelCard).toBeVisible();
+    await levelCard.click();
+
     await expect(page.getByTestId("lesson-player")).toBeVisible({ timeout: 15000 });
     await expect(page.getByTestId("exercise-progress")).toBeVisible();
 
@@ -229,7 +233,9 @@ test.describe.serial("Authenticated flows", () => {
     if (await choiceBtn.isVisible({ timeout: 2000 }).catch(() => false)) {
       await choiceBtn.click();
     } else if (await blankInput.isVisible({ timeout: 2000 }).catch(() => false)) {
-      const exercise = await getExercise(request, lesson.lessonId);
+      const lessonUrl = page.url();
+      const lessonId = lessonUrl.split("/").pop();
+      const exercise = await getExercise(request, Number(lessonId));
       const answer = exercise.content?.correct_answer || exercise.content?.options?.[0];
       expect(answer, "Exercise has no answer").toBeTruthy();
       await blankInput.fill(answer);
