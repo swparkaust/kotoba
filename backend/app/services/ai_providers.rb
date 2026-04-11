@@ -27,11 +27,11 @@ module AiProviders
   def self.build_router
     provider = build
     model_map = case provider.provider_name
-                when "ollama", "openai"
+    when "ollama", "openai"
                   { advanced: provider.advanced_model, standard: provider.standard_model }
-                else
+    else
                   AiModelRouter::DEFAULT_MODEL_MAP
-                end
+    end
 
     AiModelRouter.new(provider: provider, model_map: model_map)
   end

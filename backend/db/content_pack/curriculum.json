@@ -1,0 +1,317 @@
+{
+  "native_name": "日本語",
+  "levels": [
+    {
+      "position": 1,
+      "title": "ひらがな・あいさつ",
+      "grade_equivalent": "Grade 1 (first half)",
+      "test_equivalent": "Pre-N5",
+      "description": "46 hiragana, greetings, numbers",
+      "units": [
+        {
+          "position": 1,
+          "title": "ひらがな・あいさつ — 第1課",
+          "description": "Introduction",
+          "target_items": {},
+          "lessons": [
+            {
+              "position": 1,
+              "title": "ひらがなの基本",
+              "skill_type": "character_intro",
+              "objectives": [
+                "Learn basic hiragana"
+              ],
+              "content_status": "ready"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "position": 2,
+      "title": "カタカナ・漢字80",
+      "grade_equivalent": "Grade 1 (second half)",
+      "test_equivalent": "N5",
+      "description": "46 katakana, 80 Grade-1 kanji",
+      "units": [
+        {
+          "position": 1,
+          "title": "カタカナ・漢字80 — 第1課",
+          "description": "Introduction",
+          "target_items": {},
+          "lessons": [
+            {
+              "position": 1,
+              "title": "カタカナの基本",
+              "skill_type": "character_intro",
+              "objectives": [
+                "Learn basic katakana"
+              ],
+              "content_status": "ready"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "position": 3,
+      "title": "濁点・動詞・形容詞",
+      "grade_equivalent": "Grade 2 (first half)",
+      "test_equivalent": "N5-N4",
+      "description": "Dakuten, verb basics, adjectives",
+      "units": [
+        {
+          "position": 1,
+          "title": "濁点・動詞・形容詞 — 第1課",
+          "description": "Introduction",
+          "target_items": {},
+          "lessons": [
+            {
+              "position": 1,
+              "title": "濁点の基本",
+              "skill_type": "grammar_intro",
+              "objectives": [
+                "Learn dakuten"
+              ],
+              "content_status": "ready"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "position": 4,
+      "title": "て形・日常会話",
+      "grade_equivalent": "Grade 2 (second half)",
+      "test_equivalent": "N4",
+      "description": "Te-form, daily conversation",
+      "units": [
+        {
+          "position": 1,
+          "title": "て形・日常会話 — 第1課",
+          "description": "Introduction",
+          "target_items": {},
+          "lessons": [
+            {
+              "position": 1,
+              "title": "て形の基本",
+              "skill_type": "grammar_intro",
+              "objectives": [
+                "Learn te-form"
+              ],
+              "content_status": "ready"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "position": 5,
+      "title": "可能形・条件・読解",
+      "grade_equivalent": "Grade 3",
+      "test_equivalent": "N4-N3",
+      "description": "Potential/conditional, reading",
+      "units": [
+        {
+          "position": 1,
+          "title": "可能形・条件・読解 — 第1課",
+          "description": "Introduction",
+          "target_items": {},
+          "lessons": [
+            {
+              "position": 1,
+              "title": "可能形の基本",
+              "skill_type": "grammar_intro",
+              "objectives": [
+                "Learn potential form"
+              ],
+              "content_status": "ready"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "position": 6,
+      "title": "受身・使役・敬語入門",
+      "grade_equivalent": "Grade 4",
+      "test_equivalent": "N3",
+      "description": "Passive/causative, keigo basics",
+      "units": [
+        {
+          "position": 1,
+          "title": "受身・使役・敬語入門 — 第1課",
+          "description": "Introduction",
+          "target_items": {},
+          "lessons": [
+            {
+              "position": 1,
+              "title": "受身の基本",
+              "skill_type": "grammar_intro",
+              "objectives": [
+                "Learn passive voice"
+              ],
+              "content_status": "ready"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "position": 7,
+      "title": "敬語・公式文",
+      "grade_equivalent": "Grade 5-6",
+      "test_equivalent": "N3-N2",
+      "description": "Full keigo, formal writing",
+      "units": [
+        {
+          "position": 1,
+          "title": "敬語・公式文 — 第1課",
+          "description": "Introduction",
+          "target_items": {},
+          "lessons": [
+            {
+              "position": 1,
+              "title": "敬語の基本",
+              "skill_type": "grammar_intro",
+              "objectives": [
+                "Learn keigo"
+              ],
+              "content_status": "ready"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "position": 8,
+      "title": "作文・漢文入門",
+      "grade_equivalent": "Junior High 1",
+      "test_equivalent": "N2",
+      "description": "Essays, news, kanbun intro",
+      "units": [
+        {
+          "position": 1,
+          "title": "作文・漢文入門 — 第1課",
+          "description": "Introduction",
+          "target_items": {},
+          "lessons": [
+            {
+              "position": 1,
+              "title": "作文の基本",
+              "skill_type": "writing",
+              "objectives": [
+                "Learn essay structure"
+              ],
+              "content_status": "ready"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "position": 9,
+      "title": "文学・古文入門",
+      "grade_equivalent": "Junior High 2-3",
+      "test_equivalent": "N2",
+      "description": "Literary analysis, kobun intro",
+      "units": [
+        {
+          "position": 1,
+          "title": "文学・古文入門 — 第1課",
+          "description": "Introduction",
+          "target_items": {},
+          "lessons": [
+            {
+              "position": 1,
+              "title": "文学の基本",
+              "skill_type": "reading",
+              "objectives": [
+                "Read literary texts"
+              ],
+              "content_status": "ready"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "position": 10,
+      "title": "ビジネス・技術文",
+      "grade_equivalent": "High School 1",
+      "test_equivalent": "N2-N1",
+      "description": "Business, technical writing",
+      "units": [
+        {
+          "position": 1,
+          "title": "ビジネス・技術文 — 第1課",
+          "description": "Introduction",
+          "target_items": {},
+          "lessons": [
+            {
+              "position": 1,
+              "title": "ビジネスの基本",
+              "skill_type": "writing",
+              "objectives": [
+                "Business writing"
+              ],
+              "content_status": "ready"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "position": 11,
+      "title": "古典・学術文",
+      "grade_equivalent": "High School 2",
+      "test_equivalent": "N1",
+      "description": "Classical Japanese, academic writing",
+      "units": [
+        {
+          "position": 1,
+          "title": "古典・学術文 — 第1課",
+          "description": "Introduction",
+          "target_items": {},
+          "lessons": [
+            {
+              "position": 1,
+              "title": "古典の基本",
+              "skill_type": "reading",
+              "objectives": [
+                "Classical Japanese"
+              ],
+              "content_status": "ready"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "position": 12,
+      "title": "母語レベル",
+      "grade_equivalent": "High School 3+",
+      "test_equivalent": "N1+",
+      "description": "Native-level fluency, dialects",
+      "units": [
+        {
+          "position": 1,
+          "title": "母語レベル — 第1課",
+          "description": "Introduction",
+          "target_items": {},
+          "lessons": [
+            {
+              "position": 1,
+              "title": "母語レベルの基本",
+              "skill_type": "review",
+              "objectives": [
+                "Native fluency"
+              ],
+              "content_status": "ready"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

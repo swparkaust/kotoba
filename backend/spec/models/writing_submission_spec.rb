@@ -54,8 +54,8 @@ RSpec.describe WritingSubmission, type: :model do
 
   describe "#suggestions" do
     it "returns suggestions array from evaluation" do
-      sub = build(:writing_submission, evaluation: { "suggestions" => ["もっと丁寧に"] })
-      expect(sub.suggestions).to eq(["もっと丁寧に"])
+      sub = build(:writing_submission, evaluation: { "suggestions" => [ "もっと丁寧に" ] })
+      expect(sub.suggestions).to eq([ "もっと丁寧に" ])
     end
 
     it "returns empty array when no suggestions" do

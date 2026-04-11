@@ -28,7 +28,7 @@ RSpec.describe ReadingSession, type: :model do
 
   describe "#new_vocabulary_count" do
     it "counts items in new_srs_cards" do
-      session = build(:reading_session, new_srs_cards: ["word1", "word2"])
+      session = build(:reading_session, new_srs_cards: [ "word1", "word2" ])
       expect(session.new_vocabulary_count).to eq(2)
     end
 

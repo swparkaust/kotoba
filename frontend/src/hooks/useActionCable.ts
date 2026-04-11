@@ -5,6 +5,7 @@ export function useActionCable<T>(channel: string, onReceived: (data: T) => void
   const reconnectTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const mountedRef = useRef(true);
   const onReceivedRef = useRef(onReceived);
+  const connectRef = useRef<() => void>(() => {});
 
   useEffect(() => { onReceivedRef.current = onReceived; }, [onReceived]);
 
@@ -36,12 +37,14 @@ export function useActionCable<T>(channel: string, onReceived: (data: T) => void
     ws.onclose = () => {
       if (!mountedRef.current) return;
       reconnectTimer.current = setTimeout(() => {
-        if (mountedRef.current) connect();
+        if (mountedRef.current) connectRef.current();
       }, 3000);
     };
 
     wsRef.current = ws;
   }, [channel]);
+
+  useEffect(() => { connectRef.current = connect; }, [connect]);
 
   useEffect(() => {
     mountedRef.current = true;

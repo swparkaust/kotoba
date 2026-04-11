@@ -12,7 +12,7 @@ class SrsScheduler
 
     if time_budget_minutes
       estimated_cards = (time_budget_minutes * 60 / 15.0).floor
-      limit = [estimated_cards, limit].min
+      limit = [ estimated_cards, limit ].min
     end
 
     scope.limit(limit)
@@ -21,8 +21,8 @@ class SrsScheduler
   def record_review(card:, correct:)
     if correct
       card.repetitions += 1
-      card.interval_days = [(card.interval_days * card.ease_factor).round, MAX_INTERVAL].min
-      card.ease_factor = [card.ease_factor + 0.1, 3.0].min
+      card.interval_days = [ (card.interval_days * card.ease_factor).round, MAX_INTERVAL ].min
+      card.ease_factor = [ card.ease_factor + 0.1, 3.0 ].min
 
       if card.repetitions >= BURN_THRESHOLD && card.interval_days >= MAX_INTERVAL
         card.burned = true
@@ -30,7 +30,7 @@ class SrsScheduler
     else
       card.repetitions = 0
       card.interval_days = 1
-      card.ease_factor = [card.ease_factor - 0.2, 1.3].max
+      card.ease_factor = [ card.ease_factor - 0.2, 1.3 ].max
     end
 
     card.last_reviewed_at = Time.current

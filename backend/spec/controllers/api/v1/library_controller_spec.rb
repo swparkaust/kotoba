@@ -58,7 +58,7 @@ RSpec.describe Api::V1::LibraryController, type: :controller do
           duration_seconds: 600,
           words_read: 200,
           progress_pct: 0.5,
-          new_srs_cards: [{ "word" => "桜", "definition_ja" => "春に咲く花" }]
+          new_srs_cards: [ { "word" => "桜", "definition_ja" => "春に咲く花" } ]
         }
       }.to change(ReadingSession, :count).by(1)
         .and change(SrsCard, :count).by(1)

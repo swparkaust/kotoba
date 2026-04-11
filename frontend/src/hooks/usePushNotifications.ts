@@ -15,8 +15,8 @@ export function usePushNotifications() {
       });
       await api.post("/push_subscriptions", subscription.toJSON());
       setIsSubscribed(true);
-    } catch (e: any) {
-      setError(e?.message || "Failed to subscribe to notifications");
+    } catch (e: unknown) {
+      setError(e instanceof Error ? e.message : "Failed to subscribe to notifications");
     }
   }, []);
 

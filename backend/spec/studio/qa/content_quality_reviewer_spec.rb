@@ -10,7 +10,7 @@ RSpec.describe Studio::QA::ContentQualityReviewer do
       "exercise_type" => "multiple_choice",
       "prompt" => "「あ」はどれですか？",
       "target_text" => "あ",
-      "options" => ["あ", "い", "う", "え"],
+      "options" => [ "あ", "い", "う", "え" ],
       "correct_answer" => "あ",
       "audio_cue" => nil,
       "difficulty" => "easy"
@@ -19,7 +19,7 @@ RSpec.describe Studio::QA::ContentQualityReviewer do
 
   let(:content) do
     Studio::QA::ContentQualityReviewer::NormalizedContent.new(
-      exercises: [exercise_hash] * 4,
+      exercises: [ exercise_hash ] * 4,
       illustrations: [],
       audio_scripts: [],
       exercise_records: []
@@ -29,7 +29,7 @@ RSpec.describe Studio::QA::ContentQualityReviewer do
   let(:lesson) do
     double("Lesson", id: 1, exercises: double(update_all: true, to_a: []),
       content_assets: double(where: []), content_version: 0,
-      title: "Lesson 1", skill_type: "character_intro", objectives: ["Recognize あ"])
+      title: "Lesson 1", skill_type: "character_intro", objectives: [ "Recognize あ" ])
   end
 
   let(:level) { double(position: 1, mext_grade: "Grade 1 (first half)", jlpt_approx: "Pre-N5", title: "Level 1") }
@@ -37,7 +37,7 @@ RSpec.describe Studio::QA::ContentQualityReviewer do
   before do
     allow(lesson).to receive(:update!)
     allow(lesson).to receive_message_chain(:curriculum_unit, :curriculum_level).and_return(level)
-    allow(lesson).to receive_message_chain(:curriculum_unit, :target_items).and_return({ "characters" => ["あ"] })
+    allow(lesson).to receive_message_chain(:curriculum_unit, :target_items).and_return({ "characters" => [ "あ" ] })
 
     # Default: all agents pass
     allow(router).to receive(:call).and_return(
@@ -107,7 +107,7 @@ RSpec.describe Studio::QA::ContentQualityReviewer do
     it "rejects exercises with missing prompts" do
       bad_exercise = exercise_hash.merge("prompt" => "")
       bad_content = Studio::QA::ContentQualityReviewer::NormalizedContent.new(
-        exercises: [bad_exercise] * 4, illustrations: [], audio_scripts: [], exercise_records: []
+        exercises: [ bad_exercise ] * 4, illustrations: [], audio_scripts: [], exercise_records: []
       )
 
       result = reviewer.review(lesson: lesson, content: bad_content)
@@ -117,7 +117,7 @@ RSpec.describe Studio::QA::ContentQualityReviewer do
     it "flags English text when no-English rule applies" do
       eng_exercise = exercise_hash.merge("prompt" => "Select the correct answer")
       eng_content = Studio::QA::ContentQualityReviewer::NormalizedContent.new(
-        exercises: [eng_exercise] * 4, illustrations: [], audio_scripts: [], exercise_records: []
+        exercises: [ eng_exercise ] * 4, illustrations: [], audio_scripts: [], exercise_records: []
       )
 
       result = reviewer.review(lesson: lesson, content: eng_content)
@@ -129,7 +129,7 @@ RSpec.describe Studio::QA::ContentQualityReviewer do
     it "rejects multiple_choice with missing correct_answer" do
       bad_exercise = exercise_hash.merge("correct_answer" => "")
       bad_content = Studio::QA::ContentQualityReviewer::NormalizedContent.new(
-        exercises: [bad_exercise] * 4, illustrations: [], audio_scripts: [], exercise_records: []
+        exercises: [ bad_exercise ] * 4, illustrations: [], audio_scripts: [], exercise_records: []
       )
 
       result = reviewer.review(lesson: lesson, content: bad_content)
@@ -139,7 +139,7 @@ RSpec.describe Studio::QA::ContentQualityReviewer do
     it "rejects when correct_answer is not in options" do
       bad_exercise = exercise_hash.merge("correct_answer" => "お")
       bad_content = Studio::QA::ContentQualityReviewer::NormalizedContent.new(
-        exercises: [bad_exercise] * 4, illustrations: [], audio_scripts: [], exercise_records: []
+        exercises: [ bad_exercise ] * 4, illustrations: [], audio_scripts: [], exercise_records: []
       )
 
       result = reviewer.review(lesson: lesson, content: bad_content)
@@ -148,7 +148,7 @@ RSpec.describe Studio::QA::ContentQualityReviewer do
 
     it "rejects when fewer than 4 exercises" do
       short_content = Studio::QA::ContentQualityReviewer::NormalizedContent.new(
-        exercises: [exercise_hash] * 3, illustrations: [], audio_scripts: [], exercise_records: []
+        exercises: [ exercise_hash ] * 3, illustrations: [], audio_scripts: [], exercise_records: []
       )
 
       result = reviewer.review(lesson: lesson, content: short_content)
@@ -161,7 +161,7 @@ RSpec.describe Studio::QA::ContentQualityReviewer do
 
       kanji_exercise = exercise_hash.merge("prompt" => "世の中", "target_text" => "世")
       kanji_content = Studio::QA::ContentQualityReviewer::NormalizedContent.new(
-        exercises: [kanji_exercise] * 4, illustrations: [], audio_scripts: [], exercise_records: []
+        exercises: [ kanji_exercise ] * 4, illustrations: [], audio_scripts: [], exercise_records: []
       )
 
       result = reviewer.review(lesson: lesson, content: kanji_content)
@@ -245,8 +245,8 @@ RSpec.describe Studio::QA::ContentQualityReviewer do
   describe "structural checks — illustration missing image" do
     it "rejects an illustration with no url, local_path, or data" do
       ill_content = Studio::QA::ContentQualityReviewer::NormalizedContent.new(
-        exercises: [exercise_hash] * 4,
-        illustrations: [{ "url" => nil, "local_path" => nil, "data" => nil }],
+        exercises: [ exercise_hash ] * 4,
+        illustrations: [ { "url" => nil, "local_path" => nil, "data" => nil } ],
         audio_scripts: [],
         exercise_records: []
       )
@@ -259,9 +259,9 @@ RSpec.describe Studio::QA::ContentQualityReviewer do
   describe "structural checks — audio missing file" do
     it "rejects an audio clip with no url or local_path" do
       audio_content = Studio::QA::ContentQualityReviewer::NormalizedContent.new(
-        exercises: [exercise_hash] * 4,
+        exercises: [ exercise_hash ] * 4,
         illustrations: [],
-        audio_scripts: [{ "url" => nil, "local_path" => nil, "text" => "あ" }],
+        audio_scripts: [ { "url" => nil, "local_path" => nil, "text" => "あ" } ],
         exercise_records: []
       )
 
@@ -273,8 +273,8 @@ RSpec.describe Studio::QA::ContentQualityReviewer do
   describe "Phase 3 AI illustration review" do
     it "calls the :qa_visual_inspection task for illustrations" do
       ill_content = Studio::QA::ContentQualityReviewer::NormalizedContent.new(
-        exercises: [exercise_hash] * 4,
-        illustrations: [{ "url" => "https://example.com/img.webp", "asset_key" => "scene_1", "file_size" => 100_000 }],
+        exercises: [ exercise_hash ] * 4,
+        illustrations: [ { "url" => "https://example.com/img.webp", "asset_key" => "scene_1", "file_size" => 100_000 } ],
         audio_scripts: [],
         exercise_records: []
       )
@@ -293,9 +293,9 @@ RSpec.describe Studio::QA::ContentQualityReviewer do
   describe "Phase 3 AI audio review" do
     it "calls the :qa_audio_verification task for audio clips" do
       audio_content = Studio::QA::ContentQualityReviewer::NormalizedContent.new(
-        exercises: [exercise_hash] * 4,
+        exercises: [ exercise_hash ] * 4,
         illustrations: [],
-        audio_scripts: [{ "url" => "https://example.com/audio.mp3", "text" => "あいうえお" }],
+        audio_scripts: [ { "url" => "https://example.com/audio.mp3", "text" => "あいうえお" } ],
         exercise_records: []
       )
 
@@ -318,10 +318,10 @@ RSpec.describe Studio::QA::ContentQualityReviewer do
 
       corrected = { "prompt" => "corrected prompt", "correct_answer" => "あ" }
       content_with_records = Studio::QA::ContentQualityReviewer::NormalizedContent.new(
-        exercises: [exercise_hash] * 4,
+        exercises: [ exercise_hash ] * 4,
         illustrations: [],
         audio_scripts: [],
-        exercise_records: [record] * 4
+        exercise_records: [ record ] * 4
       )
 
       call_count = 0

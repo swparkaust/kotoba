@@ -4,11 +4,12 @@ import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import { api } from "@/lib/api";
 import { RealAudioPlayer } from "@/components/RealAudioPlayer";
+import { LibraryItem } from "@/hooks/useLibrary";
 
 export default function ListenPage() {
   const params = useParams();
   const itemId = params.itemId as string;
-  const [item, setItem] = useState<any>(null);
+  const [item, setItem] = useState<LibraryItem | null>(null);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {

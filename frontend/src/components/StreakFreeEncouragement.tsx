@@ -26,6 +26,7 @@ export function StreakFreeEncouragement({ lessonsCompleted }: StreakFreeEncourag
   const [message, setMessage] = useState(messages[0]);
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- selecting a random message on prop change is intentional
     setMessage(messages[Math.floor(Math.random() * messages.length)]);
   }, [lessonsCompleted, messages]);
 

@@ -10,6 +10,6 @@ class CreateReadingSessions < ActiveRecord::Migration[7.2]
       t.jsonb :new_srs_cards, null: false, default: []
       t.timestamps
     end
-    add_index :reading_sessions, [:learner_id, :library_item_id]
+    add_index :reading_sessions, [ :learner_id, :library_item_id ]
   end
 end

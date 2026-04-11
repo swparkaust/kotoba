@@ -4,10 +4,10 @@ import { LevelMap } from "@/components/LevelMap";
 describe("LevelMap", () => {
   const defaultProps = {
     levels: [
-      { id: 1, position: 1, title: "Beginner", jlpt_approx: "N5", curriculum_units: [] },
-      { id: 2, position: 2, title: "Elementary", jlpt_approx: "N4", curriculum_units: [] },
-      { id: 3, position: 3, title: "Intermediate", jlpt_approx: "N3", curriculum_units: [] },
-      { id: 4, position: 4, title: "Advanced", jlpt_approx: "N2", curriculum_units: [] },
+      { id: 1, position: 1, title: "Beginner", jlpt_approx: "N5", curriculum_units: [], lesson_count: 10, completed_count: 0 },
+      { id: 2, position: 2, title: "Elementary", jlpt_approx: "N4", curriculum_units: [], lesson_count: 12, completed_count: 0 },
+      { id: 3, position: 3, title: "Intermediate", jlpt_approx: "N3", curriculum_units: [], lesson_count: 15, completed_count: 0 },
+      { id: 4, position: 4, title: "Advanced", jlpt_approx: "N2", curriculum_units: [], lesson_count: 20, completed_count: 0 },
     ],
     currentLevel: 2,
     onSelectLevel: jest.fn(),

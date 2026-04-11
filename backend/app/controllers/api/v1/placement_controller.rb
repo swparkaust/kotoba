@@ -43,10 +43,10 @@ module Api
                           "skill_tested" => q[:skill_tested]
                         }
                       end.compact
-                    else
+        else
                       # Fallback: trust client-provided responses (backward compat)
                       Array(params[:responses])
-                    end
+        end
 
         Rails.cache.delete(session_key) if session_key
 

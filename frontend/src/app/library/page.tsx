@@ -4,14 +4,16 @@ import { useEffect, useState } from "react";
 import { api } from "@/lib/api";
 import { useLanguage } from "@/hooks/useLanguage";
 import { LibraryBrowser } from "@/components/LibraryBrowser";
+import { LibraryItem } from "@/hooks/useLibrary";
 
 export default function LibraryPage() {
   const { languageCode } = useLanguage();
-  const [items, setItems] = useState<any[]>([]);
+  const [items, setItems] = useState<LibraryItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- synchronous setState before async fetch is standard loading-state pattern
     setLoading(true);
     api.get(`/library?language_code=${languageCode}`)
       .then((data) => setItems(Array.isArray(data) ? data : []))

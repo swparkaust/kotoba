@@ -14,7 +14,7 @@ RSpec.describe ContrastiveGrammarSet, type: :model do
         { "pattern" => "〜ても", "usage_ja" => "仮定的" },
         { "pattern" => "〜のに", "usage_ja" => "事実" }
       ])
-      expect(set.pattern_names).to eq(["〜ても", "〜のに"])
+      expect(set.pattern_names).to eq([ "〜ても", "〜のに" ])
     end
   end
 

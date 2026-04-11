@@ -93,18 +93,18 @@ class PlacementQuestionGenerator
   def fallback_question(level_position)
     # Static fallbacks per level in case AI generation fails
     fallbacks = {
-      1 => { prompt: "「あ」はどれですか？", options: ["あ", "い", "う", "え"], correct_answer: "あ" },
-      2 => { prompt: "「学校」の読み方は？", options: ["がっこう", "がくこう", "がっこ", "がこう"], correct_answer: "がっこう" },
-      3 => { prompt: "「食べ___」（丁寧形）", options: ["ます", "る", "て", "た"], correct_answer: "ます" },
-      4 => { prompt: "「友達___会いました。」", options: ["に", "を", "で", "が"], correct_answer: "に" },
-      5 => { prompt: "「泳ぐ」の可能形は？", options: ["泳げる", "泳がれる", "泳ぎれる", "泳ごう"], correct_answer: "泳げる" },
-      6 => { prompt: "「先生に叱___。」", options: ["られた", "れた", "させた", "った"], correct_answer: "られた" },
-      7 => { prompt: "「いらっしゃる」は何語ですか？", options: ["尊敬語", "謙譲語", "丁寧語", "普通語"], correct_answer: "尊敬語" },
-      8 => { prompt: "「にもかかわらず」の意味は？", options: ["〜のに", "〜ので", "〜から", "〜まで"], correct_answer: "〜のに" },
-      9 => { prompt: "「であるがゆえに」の意味は？", options: ["だから", "しかし", "つまり", "けれど"], correct_answer: "だから" },
-      10 => { prompt: "「ご査収ください」はどの場面？", options: ["ビジネス文書", "友人への手紙", "日記", "SNS"], correct_answer: "ビジネス文書" },
-      11 => { prompt: "「いとをかし」の現代語は？", options: ["とても趣がある", "とても怖い", "とても悲しい", "とても遠い"], correct_answer: "とても趣がある" },
-      12 => { prompt: "「なまら」はどの地方の方言？", options: ["北海道", "関西", "九州", "東北"], correct_answer: "北海道" },
+      1 => { prompt: "「あ」はどれですか？", options: [ "あ", "い", "う", "え" ], correct_answer: "あ" },
+      2 => { prompt: "「学校」の読み方は？", options: [ "がっこう", "がくこう", "がっこ", "がこう" ], correct_answer: "がっこう" },
+      3 => { prompt: "「食べ___」（丁寧形）", options: [ "ます", "る", "て", "た" ], correct_answer: "ます" },
+      4 => { prompt: "「友達___会いました。」", options: [ "に", "を", "で", "が" ], correct_answer: "に" },
+      5 => { prompt: "「泳ぐ」の可能形は？", options: [ "泳げる", "泳がれる", "泳ぎれる", "泳ごう" ], correct_answer: "泳げる" },
+      6 => { prompt: "「先生に叱___。」", options: [ "られた", "れた", "させた", "った" ], correct_answer: "られた" },
+      7 => { prompt: "「いらっしゃる」は何語ですか？", options: [ "尊敬語", "謙譲語", "丁寧語", "普通語" ], correct_answer: "尊敬語" },
+      8 => { prompt: "「にもかかわらず」の意味は？", options: [ "〜のに", "〜ので", "〜から", "〜まで" ], correct_answer: "〜のに" },
+      9 => { prompt: "「であるがゆえに」の意味は？", options: [ "だから", "しかし", "つまり", "けれど" ], correct_answer: "だから" },
+      10 => { prompt: "「ご査収ください」はどの場面？", options: [ "ビジネス文書", "友人への手紙", "日記", "SNS" ], correct_answer: "ビジネス文書" },
+      11 => { prompt: "「いとをかし」の現代語は？", options: [ "とても趣がある", "とても怖い", "とても悲しい", "とても遠い" ], correct_answer: "とても趣がある" },
+      12 => { prompt: "「なまら」はどの地方の方言？", options: [ "北海道", "関西", "九州", "東北" ], correct_answer: "北海道" }
     }
 
     fb = fallbacks[level_position] || fallbacks[1]

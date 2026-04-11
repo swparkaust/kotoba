@@ -10,7 +10,7 @@ class CreateLessons < ActiveRecord::Migration[7.2]
       t.integer :content_version, null: false, default: 0
       t.timestamps
     end
-    add_index :lessons, [:curriculum_unit_id, :position], unique: true
+    add_index :lessons, [ :curriculum_unit_id, :position ], unique: true
     add_index :lessons, :content_status
   end
 end

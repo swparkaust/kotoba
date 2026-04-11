@@ -1,11 +1,30 @@
 "use client";
 
+interface CurriculumLesson {
+  id: number;
+  position: number;
+  title: string;
+  skill_type: string;
+  content_status: string;
+}
+
+interface CurriculumUnit {
+  id: number;
+  position: number;
+  title: string;
+  description: string;
+  target_items: string[];
+  lessons: CurriculumLesson[];
+}
+
 interface Level {
   id: number;
   position: number;
   title: string;
   jlpt_approx: string;
-  curriculum_units: any[];
+  curriculum_units: CurriculumUnit[];
+  lesson_count: number;
+  completed_count: number;
 }
 
 interface LevelMapProps {

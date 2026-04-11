@@ -83,9 +83,25 @@ ollama pull qwen3:8b
 ```bash
 make test             # RSpec + Jest
 make test-e2e         # Playwright against live services
-make test-manual      # Integration test + browser verification
+make test-smoke       # API smoke tests
 make test-all         # Everything
 ```
+
+## CI/CD
+
+All changes require a pull request with passing checks:
+
+| Check | Purpose |
+|-------|---------|
+| backend-lint | RuboCop (omakase style) |
+| backend-security | Brakeman + bundler-audit |
+| backend-test | RSpec (100% coverage enforced) |
+| frontend-lint | ESLint + TypeScript |
+| frontend-test | Jest (coverage thresholds enforced) |
+| studio-test | Content Studio RSpec |
+| e2e-test | Playwright with Ollama AI |
+| docker-build | Backend + frontend images |
+| GitGuardian | Secrets scanning |
 
 ## Key Design Principles
 

@@ -7,7 +7,7 @@ module Api
         learner = Learner.find_by(email: params[:email])
         if learner&.authenticate(params[:password])
           learner.update!(auth_token: SecureRandom.hex(32)) unless learner.auth_token
-          render json: { auth_token: learner.auth_token, learner: learner.as_json(only: [:id, :display_name, :email]) }
+          render json: { auth_token: learner.auth_token, learner: learner.as_json(only: [ :id, :display_name, :email ]) }
         else
           render json: { error: "Invalid email or password" }, status: :unauthorized
         end
@@ -22,7 +22,7 @@ module Api
         )
 
         if learner.save
-          render json: { auth_token: learner.auth_token, learner: learner.as_json(only: [:id, :display_name, :email]) }, status: :created
+          render json: { auth_token: learner.auth_token, learner: learner.as_json(only: [ :id, :display_name, :email ]) }, status: :created
         else
           render json: { errors: learner.errors.full_messages }, status: :unprocessable_entity
         end

@@ -10,7 +10,7 @@ RSpec.describe LibraryRecommender, type: :service do
     unit = create(:curriculum_unit, curriculum_level: level)
     lesson = create(:lesson, curriculum_unit: unit)
     create(:learner_progress, learner: learner, lesson: lesson, status: "completed")
-    create(:library_item, language: language, difficulty_level: 1, glosses: [{ "word" => "犬" }])
+    create(:library_item, language: language, difficulty_level: 1, glosses: [ { "word" => "犬" } ])
 
     results = service.recommend(learner: learner, language: language, limit: 5)
     expect(results).to be_an(Array)
@@ -20,7 +20,7 @@ RSpec.describe LibraryRecommender, type: :service do
   end
 
   it "returns empty array for learner with no progress" do
-    create(:library_item, language: language, difficulty_level: 5, glosses: [{ "word" => "犬" }])
+    create(:library_item, language: language, difficulty_level: 5, glosses: [ { "word" => "犬" } ])
     results = service.recommend(learner: learner, language: language, limit: 5)
     expect(results).to be_an(Array)
     results.each do |r|
@@ -38,7 +38,7 @@ RSpec.describe LibraryRecommender, type: :service do
     create(:srs_card, learner: learner, card_key: "猫", card_type: "vocabulary", burned: false)
 
     create(:library_item, language: language, difficulty_level: 1,
-           glosses: [{ "word" => "犬" }, { "word" => "猫" }, { "word" => "鳥" }, { "word" => "魚" }])
+           glosses: [ { "word" => "犬" }, { "word" => "猫" }, { "word" => "鳥" }, { "word" => "魚" } ])
 
     results = service.recommend(learner: learner, language: language, limit: 5)
     expect(results.length).to eq(1)
@@ -55,7 +55,7 @@ RSpec.describe LibraryRecommender, type: :service do
     create(:srs_card, learner: learner, card_key: "猫", card_type: "vocabulary", burned: false)
 
     create(:library_item, language: language, difficulty_level: 1,
-           glosses: [{ "word" => "犬" }, { "word" => "猫" }])
+           glosses: [ { "word" => "犬" }, { "word" => "猫" } ])
 
     results = service.recommend(learner: learner, language: language, limit: 5)
     expect(results.first[:estimated_comprehension]).to eq(100)
@@ -68,7 +68,7 @@ RSpec.describe LibraryRecommender, type: :service do
     create(:learner_progress, learner: learner, lesson: lesson, status: "completed")
 
     create(:library_item, language: language, difficulty_level: 1,
-           glosses: [{ "word" => "犬" }, { "word" => "猫" }])
+           glosses: [ { "word" => "犬" }, { "word" => "猫" } ])
 
     results = service.recommend(learner: learner, language: language, limit: 5)
     expect(results.first[:estimated_comprehension]).to eq(0)
@@ -83,7 +83,7 @@ RSpec.describe LibraryRecommender, type: :service do
     create(:srs_card, learner: learner, card_key: "犬", card_type: "vocabulary", burned: true)
 
     create(:library_item, language: language, difficulty_level: 1,
-           glosses: [{ "word" => "犬" }, { "word" => "猫" }])
+           glosses: [ { "word" => "犬" }, { "word" => "猫" } ])
 
     results = service.recommend(learner: learner, language: language, limit: 5)
     expect(results.first[:estimated_comprehension]).to eq(0)

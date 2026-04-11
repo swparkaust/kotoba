@@ -11,6 +11,6 @@ class CreateContentAssets < ActiveRecord::Migration[7.2]
       t.text :qa_notes
       t.timestamps
     end
-    add_index :content_assets, [:lesson_id, :asset_key], unique: true
+    add_index :content_assets, [ :lesson_id, :asset_key ], unique: true
   end
 end

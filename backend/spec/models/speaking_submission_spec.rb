@@ -37,8 +37,8 @@ RSpec.describe SpeakingSubmission, type: :model do
 
   describe "#pronunciation_notes" do
     it "extracts notes from evaluation" do
-      sub = build(:speaking_submission, evaluation: { "pronunciation_notes" => ["r-sound"] })
-      expect(sub.pronunciation_notes).to eq(["r-sound"])
+      sub = build(:speaking_submission, evaluation: { "pronunciation_notes" => [ "r-sound" ] })
+      expect(sub.pronunciation_notes).to eq([ "r-sound" ])
     end
 
     it "returns empty string when no notes" do
@@ -83,8 +83,8 @@ RSpec.describe SpeakingSubmission, type: :model do
 
   describe "#problem_sounds" do
     it "extracts problem_sounds from evaluation" do
-      sub = build(:speaking_submission, evaluation: { "problem_sounds" => ["r", "l"] })
-      expect(sub.problem_sounds).to eq(["r", "l"])
+      sub = build(:speaking_submission, evaluation: { "problem_sounds" => [ "r", "l" ] })
+      expect(sub.problem_sounds).to eq([ "r", "l" ])
     end
 
     it "returns empty array when no problem_sounds" do

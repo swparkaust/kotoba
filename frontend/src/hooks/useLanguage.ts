@@ -1,9 +1,16 @@
 import { useState, useCallback, useEffect } from "react";
 import { api } from "@/lib/api";
 
+export interface Language {
+  id: number;
+  code: string;
+  name: string;
+  native_name: string;
+}
+
 export function useLanguage() {
   const [languageCode, setLanguageCode] = useState<string>("ja");
-  const [availableLanguages, setAvailableLanguages] = useState<any[]>([]);
+  const [availableLanguages, setAvailableLanguages] = useState<Language[]>([]);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
@@ -23,8 +30,8 @@ export function useLanguage() {
     try {
       await api.patch("/profile", { active_language_code: code });
       setLanguageCode(code);
-    } catch (e: any) {
-      setError(e?.message || "Failed to switch language");
+    } catch (e: unknown) {
+      setError(e instanceof Error ? e.message : "Failed to switch language");
     }
   }, []);
 

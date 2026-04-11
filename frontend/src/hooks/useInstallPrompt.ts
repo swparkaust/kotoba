@@ -15,6 +15,7 @@ export function useInstallPrompt() {
       setDeferredPrompt(e as BeforeInstallPromptEvent);
     };
     window.addEventListener("beforeinstallprompt", handler);
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- reading initial display mode on mount is intentional
     if (window.matchMedia("(display-mode: standalone)").matches) setIsInstalled(true);
     return () => window.removeEventListener("beforeinstallprompt", handler);
   }, []);

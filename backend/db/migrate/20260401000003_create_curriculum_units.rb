@@ -8,6 +8,6 @@ class CreateCurriculumUnits < ActiveRecord::Migration[7.2]
       t.jsonb :target_items, null: false, default: {}
       t.timestamps
     end
-    add_index :curriculum_units, [:curriculum_level_id, :position], unique: true
+    add_index :curriculum_units, [ :curriculum_level_id, :position ], unique: true
   end
 end

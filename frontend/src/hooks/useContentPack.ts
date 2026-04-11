@@ -13,8 +13,8 @@ export function useContentPack() {
       const data = await api.get(`/content_packs/check_update?language_code=${code}&current_version=${currentVersion}`);
       setUpdateAvailable(data.update_available);
       setLatestVersion(data.latest_version);
-    } catch (e: any) {
-      setError(e?.message || "Failed to check for updates");
+    } catch (e: unknown) {
+      setError(e instanceof Error ? e.message : "Failed to check for updates");
     }
   }, []);
 

@@ -77,6 +77,23 @@ describe("ImmersiveReader", () => {
     const glossedSpan = Array.from(spans).find((s) => s.textContent === "日本語")!;
     fireEvent.click(glossedSpan);
     expect(screen.getByTestId("reader-gloss-popup")).toBeInTheDocument();
+    fireEvent.click(screen.getByTestId("gloss-add-srs"));
+    expect(onAddSrs).toHaveBeenCalledWith("日本語");
+  });
+
+  it("closes gloss popup on close button click", () => {
+    const glosses = [
+      { word: "日本語", reading: "にほんご", definition_ja: "Japanese language" },
+    ];
+    render(
+      <ImmersiveReader {...defaultProps} text="日本語のテキスト" glosses={glosses} />
+    );
+    const readerText = screen.getByTestId("reader-text");
+    const glossedSpan = Array.from(readerText.querySelectorAll("span")).find((s) => s.textContent === "日本語")!;
+    fireEvent.click(glossedSpan);
+    expect(screen.getByTestId("reader-gloss-popup")).toBeInTheDocument();
+    fireEvent.click(screen.getByRole("button", { name: "×" }));
+    expect(screen.queryByTestId("reader-gloss-popup")).not.toBeInTheDocument();
   });
 
   it("formats elapsed time correctly", () => {

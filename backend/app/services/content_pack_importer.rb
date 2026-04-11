@@ -32,11 +32,59 @@ class ContentPackImporter
 
     ActiveRecord::Base.transaction do
       import_curriculum(curriculum, language)
+      import_exercises(language) if (@path / "exercises.json").exist?
+      import_library(language) if (@path / "library.json").exist?
       version.update!(status: "ready", published_at: Time.current)
     end
   end
 
   private
+
+  def import_exercises(language)
+    levels = CurriculumLevel.where(language: language).index_by(&:position)
+    units = CurriculumUnit.where(curriculum_level: levels.values)
+                          .index_by { |u| [ u.curriculum_level_id, u.position ] }
+    lessons = Lesson.where(curriculum_unit: units.values)
+                    .index_by { |l| [ l.curriculum_unit_id, l.position ] }
+
+    exercises = JSON.parse((@path / "exercises.json").read)
+    exercises.each do |ex_data|
+      level = levels[ex_data["level_position"]]
+      next unless level
+      unit = units[[ level.id, ex_data["unit_position"] ]]
+      next unless unit
+      lesson = lessons[[ unit.id, ex_data["lesson_position"] ]]
+      next unless lesson
+
+      Exercise.find_or_create_by!(
+        lesson: lesson, position: ex_data["position"]
+      ) do |e|
+        e.exercise_type = ex_data["exercise_type"]
+        e.content = ex_data["content"]
+        e.difficulty = ex_data["difficulty"] || "normal"
+        e.qa_status = "passed"
+      end
+      @stats[:exercises] += 1
+    end
+  end
+
+  def import_library(language)
+    items = JSON.parse((@path / "library.json").read)
+    items.each do |item_data|
+      LibraryItem.find_or_create_by!(
+        language: language, title: item_data["title"]
+      ) do |i|
+        i.item_type = item_data["item_type"]
+        i.body_text = item_data["body_text"]
+        i.audio_url = item_data["audio_url"]
+        i.attribution = item_data["attribution"]
+        i.license = item_data["license"]
+        i.difficulty_level = item_data["difficulty_level"]
+        i.word_count = item_data["word_count"]
+        i.glosses = item_data["glosses"] || []
+      end
+    end
+  end
 
   def import_curriculum(curriculum, language)
     (curriculum["levels"] || []).each do |level_data|

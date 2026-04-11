@@ -35,7 +35,7 @@ class SpeakingSubmission < ApplicationRecord
     target_chars = target_text.chars
     spoken_chars = transcription.chars
     matches = target_chars.zip(spoken_chars).count { |a, b| a == b }
-    matches.to_f / [target_chars.length, spoken_chars.length].max
+    matches.to_f / [ target_chars.length, spoken_chars.length ].max
   end
 
   private

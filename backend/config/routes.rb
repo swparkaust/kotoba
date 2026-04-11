@@ -3,7 +3,7 @@ Rails.application.routes.draw do
 
   namespace :api do
     namespace :v1 do
-      resources :push_subscriptions, only: [:create] do
+      resources :push_subscriptions, only: [ :create ] do
         collection do
           delete :destroy, action: :destroy
         end
@@ -12,15 +12,15 @@ Rails.application.routes.draw do
       post "sessions", to: "sessions#create"
       post "sessions/signup", to: "sessions#signup"
 
-      resource :profile, only: [:show, :update], controller: :profile
+      resource :profile, only: [ :show, :update ], controller: :profile
 
-      resources :languages, only: [:index, :show], param: :code
+      resources :languages, only: [ :index, :show ], param: :code
 
-      resources :curriculum, only: [:index, :show], param: :id
+      resources :curriculum, only: [ :index, :show ], param: :id
 
-      resources :lessons, only: [:index, :show]
+      resources :lessons, only: [ :index, :show ]
 
-      resources :exercises, only: [:index, :show] do
+      resources :exercises, only: [ :index, :show ] do
         member do
           post :submit
         end
@@ -46,7 +46,7 @@ Rails.application.routes.draw do
       get "speaking/history", to: "speaking#history"
 
       get "library/reading_stats", to: "library#reading_stats"
-      resources :library, only: [:index, :show] do
+      resources :library, only: [ :index, :show ] do
         member do
           post :record_session
         end

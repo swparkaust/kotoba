@@ -23,6 +23,7 @@ module AiProviders
           { role: "system", content: system },
           { role: "user", content: prompt }
         ],
+        think: false,
         stream: false,
         options: { num_predict: max_tokens }
       }

@@ -8,7 +8,7 @@ RSpec.describe PlacementQuestionGenerator, type: :service do
   let(:valid_ai_json) do
     {
       prompt: "「学校」の読み方は？",
-      options: ["がっこう", "がくこう", "がっこ", "がこう"],
+      options: [ "がっこう", "がくこう", "がっこ", "がこう" ],
       correct_answer: "がっこう",
       skill_tested: "kanji",
       level: 1
@@ -59,7 +59,7 @@ RSpec.describe PlacementQuestionGenerator, type: :service do
   end
 
   it "falls back when AI returns JSON with wrong number of options" do
-    bad_json = { prompt: "test", options: ["a", "b"], correct_answer: "a", skill_tested: "vocab", level: 1 }.to_json
+    bad_json = { prompt: "test", options: [ "a", "b" ], correct_answer: "a", skill_tested: "vocab", level: 1 }.to_json
     allow(router).to receive(:call).and_return(
       AiResponse.new(text: bad_json, model: "test", task: :placement_question_generation)
     )
@@ -71,7 +71,7 @@ RSpec.describe PlacementQuestionGenerator, type: :service do
   end
 
   it "falls back when correct_answer is not in options" do
-    bad_json = { prompt: "test", options: ["a", "b", "c", "d"], correct_answer: "z", skill_tested: "vocab", level: 1 }.to_json
+    bad_json = { prompt: "test", options: [ "a", "b", "c", "d" ], correct_answer: "z", skill_tested: "vocab", level: 1 }.to_json
     allow(router).to receive(:call).and_return(
       AiResponse.new(text: bad_json, model: "test", task: :placement_question_generation)
     )

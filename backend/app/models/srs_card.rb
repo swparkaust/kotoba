@@ -2,7 +2,7 @@ class SrsCard < ApplicationRecord
   belongs_to :learner
 
   validates :card_type, presence: true, inclusion: { in: %w[kanji vocabulary grammar writing speaking] }
-  validates :card_key, presence: true, uniqueness: { scope: [:learner_id, :card_type] }
+  validates :card_key, presence: true, uniqueness: { scope: [ :learner_id, :card_type ] }
   validates :interval_days, presence: true, numericality: { greater_than: 0 }
   validates :ease_factor, presence: true
   validates :next_review_at, presence: true

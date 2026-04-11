@@ -3,7 +3,7 @@ class LibraryRecommender
     known_keys = learner.srs_cards.active.pluck(:card_key).to_set
     highest_level = highest_completed_level(learner, language)
 
-    target_levels = [highest_level, highest_level + 1].select { |l| l.between?(1, 12) }
+    target_levels = [ highest_level, highest_level + 1 ].select { |l| l.between?(1, 12) }
     return [] if target_levels.empty?
 
     items = LibraryItem.where(language: language, active: true)
@@ -27,7 +27,7 @@ class LibraryRecommender
     levels = CurriculumLevel.where(language: language)
       .joins(curriculum_units: :lessons)
       .left_joins(curriculum_units: { lessons: :learner_progresses })
-      .where(learner_progresses: { learner_id: [learner.id, nil] })
+      .where(learner_progresses: { learner_id: [ learner.id, nil ] })
       .group("curriculum_levels.id", "curriculum_levels.position")
       .select(
         "curriculum_levels.position",
@@ -44,6 +44,6 @@ class LibraryRecommender
     end
 
     # Default to 1 (beginner) if no levels completed, not an arbitrary mid-level
-    [completed_position, 1].max
+    [ completed_position, 1 ].max
   end
 end

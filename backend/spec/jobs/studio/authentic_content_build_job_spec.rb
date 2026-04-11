@@ -19,7 +19,7 @@ RSpec.describe Studio::AuthenticContentBuildJob do
   let(:scaffold_result) do
     double("ScaffoldResult",
       source_text: "日本の文化について",
-      vocabulary_notes: [{ "word" => "文化" }],
+      vocabulary_notes: [ { "word" => "文化" } ],
       grammar_notes: [],
       comprehension_questions: []
     )
