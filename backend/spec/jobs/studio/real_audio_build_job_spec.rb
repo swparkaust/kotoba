@@ -18,8 +18,8 @@ RSpec.describe Studio::RealAudioBuildJob do
 
   let(:scaffold_result) do
     double("ScaffoldResult",
-      vocabulary: [{ "word" => "天気" }],
-      listening_tasks: [{ "task" => "Listen for weather words" }]
+      vocabulary: [ { "word" => "天気" } ],
+      listening_tasks: [ { "task" => "Listen for weather words" } ]
     )
   end
 

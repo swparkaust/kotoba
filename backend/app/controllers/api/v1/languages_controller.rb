@@ -11,14 +11,14 @@ module Api
           languages = languages.where("name ILIKE ? OR native_name ILIKE ? OR code ILIKE ?", query, query, query)
         end
 
-        render json: languages.as_json(only: [:id, :code, :name, :native_name])
+        render json: languages.as_json(only: [ :id, :code, :name, :native_name ])
       end
 
       def show
         language = Language.active.find_by!(code: params[:code])
 
         render json: language.as_json(
-          only: [:id, :code, :name, :native_name],
+          only: [ :id, :code, :name, :native_name ],
           methods: [],
           include: {}
         ).merge(

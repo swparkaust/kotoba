@@ -10,6 +10,6 @@ class CreateExercises < ActiveRecord::Migration[7.2]
       t.text :qa_notes
       t.timestamps
     end
-    add_index :exercises, [:lesson_id, :position]
+    add_index :exercises, [ :lesson_id, :position ]
   end
 end

@@ -9,6 +9,6 @@ class CreateContentPackVersions < ActiveRecord::Migration[7.2]
       t.datetime :published_at
       t.timestamps
     end
-    add_index :content_pack_versions, [:language_id, :version], unique: true
+    add_index :content_pack_versions, [ :language_id, :version ], unique: true
   end
 end

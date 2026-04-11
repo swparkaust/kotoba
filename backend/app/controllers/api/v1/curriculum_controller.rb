@@ -18,13 +18,13 @@ module Api
 
         render json: levels.map { |level|
           level.as_json(
-            only: [:id, :position, :title, :mext_grade, :jlpt_approx, :description],
+            only: [ :id, :position, :title, :mext_grade, :jlpt_approx, :description ],
             include: {
               curriculum_units: {
-                only: [:id, :position, :title, :description, :target_items],
+                only: [ :id, :position, :title, :description, :target_items ],
                 include: {
                   lessons: {
-                    only: [:id, :position, :title, :skill_type, :content_status],
+                    only: [ :id, :position, :title, :skill_type, :content_status ],
                     methods: []
                   }
                 }
@@ -46,13 +46,13 @@ module Api
         level = CurriculumLevel.find(params[:id])
 
         render json: level.as_json(
-          only: [:id, :position, :title, :mext_grade, :jlpt_approx, :description],
+          only: [ :id, :position, :title, :mext_grade, :jlpt_approx, :description ],
           include: {
             curriculum_units: {
-              only: [:id, :position, :title, :description, :target_items],
+              only: [ :id, :position, :title, :description, :target_items ],
               include: {
                 lessons: {
-                  only: [:id, :position, :title, :skill_type, :objectives, :content_status]
+                  only: [ :id, :position, :title, :skill_type, :objectives, :content_status ]
                 }
               }
             }

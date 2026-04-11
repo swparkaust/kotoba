@@ -9,6 +9,6 @@ class CreateCurriculumLevels < ActiveRecord::Migration[7.2]
       t.text :description, null: false
       t.timestamps
     end
-    add_index :curriculum_levels, [:language_id, :position], unique: true
+    add_index :curriculum_levels, [ :language_id, :position ], unique: true
   end
 end

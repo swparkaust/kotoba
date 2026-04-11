@@ -19,7 +19,7 @@ RSpec.describe Language, type: :model do
     it "returns only active languages" do
       active = create(:language, code: "ja", active: true)
       create(:language, code: "ko", active: false, name: "Korean", native_name: "한국어")
-      expect(Language.active).to eq([active])
+      expect(Language.active).to eq([ active ])
     end
   end
 

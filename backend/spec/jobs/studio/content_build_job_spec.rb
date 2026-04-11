@@ -70,8 +70,8 @@ RSpec.describe Studio::ContentBuildJob do
       double("PragmaticScenario",
         title: "Refusing Politely",
         context: "友達に誘われた場面",
-        dialogue: [{ "speaker" => "A", "text" => "明日遊ばない？", "notes" => nil, "register" => "casual" }],
-        variations: [{ "dialogue_change" => "ちょっと用事があって…", "context" => "soft refusal" }],
+        dialogue: [ { "speaker" => "A", "text" => "明日遊ばない？", "notes" => nil, "register" => "casual" } ],
+        variations: [ { "dialogue_change" => "ちょっと用事があって…", "context" => "soft refusal" } ],
         cultural_notes: "Indirect refusal is preferred",
         grammar_focus: "〜て form"
       )
@@ -112,16 +112,16 @@ RSpec.describe Studio::ContentBuildJob do
         contrast_explanation: "は marks topic, が marks subject",
         pattern_a: { "name" => "は", "usage_context" => "topic marker" },
         pattern_b: { "name" => "が", "usage_context" => "subject marker" },
-        exercises: [{ "text" => "___が好きです", "answer" => "が", "options" => ["は", "が"] }],
-        examples: [{ "pattern" => "a", "text" => "私は学生です" }],
-        common_errors: ["Using は when が is required"]
+        exercises: [ { "text" => "___が好きです", "answer" => "が", "options" => [ "は", "が" ] } ],
+        examples: [ { "pattern" => "a", "text" => "私は学生です" } ],
+        common_errors: [ "Using は when が is required" ]
       )
     end
 
     let(:contrastive_gen) { double("ContrastiveGrammarGenerator") }
 
     before do
-      allow(curriculum_unit).to receive(:target_items).and_return({ "grammar" => ["は", "が"] })
+      allow(curriculum_unit).to receive(:target_items).and_return({ "grammar" => [ "は", "が" ] })
       allow(ContrastiveGrammarGenerator).to receive(:new).and_return(contrastive_gen)
       allow(contrastive_gen).to receive(:generate).and_return(grammar_set)
       allow(ContrastiveGrammarSet).to receive(:find_or_create_by!).and_yield(double("ContrastiveGrammarSet").as_null_object)

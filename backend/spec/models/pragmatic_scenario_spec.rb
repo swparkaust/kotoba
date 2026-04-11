@@ -25,7 +25,7 @@ RSpec.describe PragmaticScenario, type: :model do
         { "speaker" => "部下", "text" => "ちょっと..." },
         { "speaker" => "上司", "text" => "そう？" }
       ])
-      expect(scenario.speakers).to eq(["上司", "部下"])
+      expect(scenario.speakers).to eq([ "上司", "部下" ])
     end
   end
 

@@ -10,7 +10,7 @@ RSpec.describe LessonContentGenerator do
       position: 1,
       prompt: "「あ」はどれですか？",
       target_text: "あ",
-      choices: ["あ", "い", "う", "え"],
+      choices: [ "あ", "い", "う", "え" ],
       correct_answer: "あ",
       audio_cue: "あ",
       image_cue: "a rain scene",
@@ -42,9 +42,9 @@ RSpec.describe LessonContentGenerator do
     allow(IllustrationGenerator).to receive(:new).and_return(illustration_generator)
     allow(AudioGenerator).to receive(:new).and_return(audio_generator)
 
-    allow(exercise_generator).to receive(:generate).with(lesson: lesson).and_return([exercise_result])
-    allow(illustration_generator).to receive(:generate).with(lesson: lesson, exercises: [exercise_result]).and_return([illustration_result])
-    allow(audio_generator).to receive(:generate).with(lesson: lesson, exercises: [exercise_result]).and_return([audio_result])
+    allow(exercise_generator).to receive(:generate).with(lesson: lesson).and_return([ exercise_result ])
+    allow(illustration_generator).to receive(:generate).with(lesson: lesson, exercises: [ exercise_result ]).and_return([ illustration_result ])
+    allow(audio_generator).to receive(:generate).with(lesson: lesson, exercises: [ exercise_result ]).and_return([ audio_result ])
 
     allow(lesson).to receive(:update!)
     allow(exercises_relation).to receive(:destroy_all)
@@ -79,12 +79,12 @@ RSpec.describe LessonContentGenerator do
 
     it "calls generate on the illustration generator with exercises" do
       generator.generate(lesson: lesson)
-      expect(illustration_generator).to have_received(:generate).with(lesson: lesson, exercises: [exercise_result])
+      expect(illustration_generator).to have_received(:generate).with(lesson: lesson, exercises: [ exercise_result ])
     end
 
     it "calls generate on the audio generator with exercises" do
       generator.generate(lesson: lesson)
-      expect(audio_generator).to have_received(:generate).with(lesson: lesson, exercises: [exercise_result])
+      expect(audio_generator).to have_received(:generate).with(lesson: lesson, exercises: [ exercise_result ])
     end
 
     it "creates exercise records in the transaction" do
@@ -133,9 +133,9 @@ RSpec.describe LessonContentGenerator do
 
     it "returns a LessonContent with exercises, illustrations, and audio" do
       result = generator.generate(lesson: lesson)
-      expect(result.exercises).to eq([exercise_result])
-      expect(result.illustrations).to eq([illustration_result])
-      expect(result.audio_scripts).to eq([audio_result])
+      expect(result.exercises).to eq([ exercise_result ])
+      expect(result.illustrations).to eq([ illustration_result ])
+      expect(result.audio_scripts).to eq([ audio_result ])
     end
 
     context "when exercise generation returns no exercises" do
@@ -169,7 +169,7 @@ RSpec.describe LessonContentGenerator do
       expect(exercises_relation).to have_received(:create!).with(
         hash_including(
           content: hash_including(
-            "illustration_specs" => [{ "key" => "ex_1", "description" => "a rain scene" }]
+            "illustration_specs" => [ { "key" => "ex_1", "description" => "a rain scene" } ]
           )
         )
       )
@@ -180,7 +180,7 @@ RSpec.describe LessonContentGenerator do
       expect(exercises_relation).to have_received(:create!).with(
         hash_including(
           content: hash_including(
-            "audio_scripts" => [{ "key" => "audio_1", "text" => "あ" }]
+            "audio_scripts" => [ { "key" => "audio_1", "text" => "あ" } ]
           )
         )
       )

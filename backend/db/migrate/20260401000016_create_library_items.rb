@@ -15,7 +15,7 @@ class CreateLibraryItems < ActiveRecord::Migration[7.2]
       t.boolean :active, null: false, default: true
       t.timestamps
     end
-    add_index :library_items, [:language_id, :difficulty_level]
+    add_index :library_items, [ :language_id, :difficulty_level ]
     add_index :library_items, :item_type
   end
 end

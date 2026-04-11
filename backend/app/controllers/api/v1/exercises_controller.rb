@@ -10,7 +10,7 @@ module Api
         end
 
         render json: exercises.as_json(
-          only: [:id, :position, :exercise_type, :content, :difficulty, :qa_status]
+          only: [ :id, :position, :exercise_type, :content, :difficulty, :qa_status ]
         )
       rescue ActiveRecord::RecordNotFound
         render json: { error: "Lesson not found" }, status: :not_found
@@ -19,7 +19,7 @@ module Api
       def show
         exercise = Exercise.find(params[:id])
         render json: exercise.as_json(
-          only: [:id, :position, :exercise_type, :content, :difficulty, :qa_status]
+          only: [ :id, :position, :exercise_type, :content, :difficulty, :qa_status ]
         )
       rescue ActiveRecord::RecordNotFound
         render json: { error: "Exercise not found" }, status: :not_found

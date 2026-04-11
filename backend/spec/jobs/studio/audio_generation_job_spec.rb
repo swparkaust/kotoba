@@ -15,7 +15,7 @@ RSpec.describe Studio::AudioGenerationJob do
       id: 10,
       exercise_type: "listening",
       content: {
-        "audio_scripts" => [{ "text" => "こんにちは" }],
+        "audio_scripts" => [ { "text" => "こんにちは" } ],
         "audio_cue" => "こんにちは",
         "target_text" => "hello",
         "image_cue" => nil
@@ -43,11 +43,11 @@ RSpec.describe Studio::AudioGenerationJob do
     allow(Lesson).to receive(:find).with(1).and_return(lesson)
     allow(AudioGenerator).to receive(:new).and_return(generator)
     allow(exercises_relation).to receive(:where).and_return(exercises_relation)
-    allow(exercises_relation).to receive(:not).and_return([exercise_with_audio, exercise_without_audio])
+    allow(exercises_relation).to receive(:not).and_return([ exercise_with_audio, exercise_without_audio ])
   end
 
   it "skips exercises with empty audio_scripts" do
-    allow(exercises_relation).to receive(:not).and_return([exercise_without_audio])
+    allow(exercises_relation).to receive(:not).and_return([ exercise_without_audio ])
 
     described_class.new.perform(1, "ja")
 
@@ -55,7 +55,7 @@ RSpec.describe Studio::AudioGenerationJob do
   end
 
   it "creates ContentAsset for exercises with audio content" do
-    allow(generator).to receive(:generate).and_return([clip])
+    allow(generator).to receive(:generate).and_return([ clip ])
     allow(ContentAsset).to receive(:exists?).and_return(false)
     allow(ContentAsset).to receive(:create!)
 
@@ -72,7 +72,7 @@ RSpec.describe Studio::AudioGenerationJob do
   end
 
   it "skips duplicate asset_keys" do
-    allow(generator).to receive(:generate).and_return([clip])
+    allow(generator).to receive(:generate).and_return([ clip ])
     allow(ContentAsset).to receive(:exists?).and_return(true)
     allow(ContentAsset).to receive(:create!)
 

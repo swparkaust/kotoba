@@ -46,8 +46,8 @@ RSpec.describe Api::V1::PlacementController, type: :controller do
         create(:language, code: "ja")
 
         stored_questions = [
-          { prompt: "What is あ?", options: ["a", "b", "c", "d"], correct_answer: "a", level: 1, skill_tested: "hiragana" },
-          { prompt: "What is い?", options: ["a", "b", "c", "d"], correct_answer: "b", level: 1, skill_tested: "hiragana" }
+          { prompt: "What is あ?", options: [ "a", "b", "c", "d" ], correct_answer: "a", level: 1, skill_tested: "hiragana" },
+          { prompt: "What is い?", options: [ "a", "b", "c", "d" ], correct_answer: "b", level: 1, skill_tested: "hiragana" }
         ]
         session_key = "placement_#{learner.id}_#{Time.current.to_i}"
         Rails.cache.write(session_key, stored_questions, expires_in: 1.hour)
@@ -58,7 +58,7 @@ RSpec.describe Api::V1::PlacementController, type: :controller do
           AiResponse.new(text: '{"recommended_level":1,"overall_score":0.5,"scores_by_level":{"1":0.5}}', task: :placement_evaluation)
         )
 
-        post :create, params: { language_code: "ja", session_key: session_key, answers: ["a", "c"] }
+        post :create, params: { language_code: "ja", session_key: session_key, answers: [ "a", "c" ] }
         expect(response).to have_http_status(:ok)
         data = JSON.parse(response.body)
         expect(data["recommended_level"]).to eq(1)
@@ -69,7 +69,7 @@ RSpec.describe Api::V1::PlacementController, type: :controller do
         create(:language, code: "ja")
 
         stored_questions = [
-          { prompt: "Q1", options: ["a", "b", "c", "d"], correct_answer: "a", level: 1, skill_tested: "vocabulary" }
+          { prompt: "Q1", options: [ "a", "b", "c", "d" ], correct_answer: "a", level: 1, skill_tested: "vocabulary" }
         ]
         session_key = "placement_#{learner.id}_#{Time.current.to_i}"
         Rails.cache.write(session_key, stored_questions, expires_in: 1.hour)
@@ -81,7 +81,7 @@ RSpec.describe Api::V1::PlacementController, type: :controller do
         )
 
         # Send 3 answers but only 1 stored question -- indices 1 and 2 should be compacted out
-        post :create, params: { language_code: "ja", session_key: session_key, answers: ["a", "b", "c"] }
+        post :create, params: { language_code: "ja", session_key: session_key, answers: [ "a", "b", "c" ] }
         expect(response).to have_http_status(:ok)
       end
     end
@@ -97,7 +97,7 @@ RSpec.describe Api::V1::PlacementController, type: :controller do
 
       post :create, params: {
         language_code: "ja",
-        responses: [{ "answer" => "a", "correct" => true, "level" => 1, "skill_tested" => "vocabulary" }]
+        responses: [ { "answer" => "a", "correct" => true, "level" => 1, "skill_tested" => "vocabulary" } ]
       }
       expect(response).to have_http_status(:ok)
     end
@@ -159,7 +159,7 @@ RSpec.describe Api::V1::PlacementController, type: :controller do
       allow(AiProviders).to receive(:build_router).and_return(router)
       allow(router).to receive(:call).and_return(
         AiResponse.new(
-          text: { prompt: "テスト", options: ["a", "b", "c", "d"], correct_answer: "a", skill_tested: "vocab", level: 1 }.to_json,
+          text: { prompt: "テスト", options: [ "a", "b", "c", "d" ], correct_answer: "a", skill_tested: "vocab", level: 1 }.to_json,
           model: "test",
           task: :placement_question_generation
         )

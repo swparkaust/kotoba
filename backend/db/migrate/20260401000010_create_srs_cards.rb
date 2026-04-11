@@ -13,7 +13,7 @@ class CreateSrsCards < ActiveRecord::Migration[7.2]
       t.datetime :last_reviewed_at
       t.timestamps
     end
-    add_index :srs_cards, [:learner_id, :card_type, :card_key], unique: true
-    add_index :srs_cards, [:learner_id, :next_review_at]
+    add_index :srs_cards, [ :learner_id, :card_type, :card_key ], unique: true
+    add_index :srs_cards, [ :learner_id, :next_review_at ]
   end
 end

@@ -25,7 +25,7 @@ RSpec.describe Lesson, type: :model do
     it "returns only lessons with ready content" do
       ready = create(:lesson, content_status: "ready")
       create(:lesson, content_status: "pending")
-      expect(Lesson.ready).to eq([ready])
+      expect(Lesson.ready).to eq([ ready ])
     end
   end
 end

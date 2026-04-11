@@ -33,7 +33,7 @@ RSpec.describe Api::V1::ExercisesController, type: :controller do
 
   describe "POST #submit" do
     it "evaluates a correct answer" do
-      exercise = create(:exercise, content: { "correct_answer" => "あ", "hints" => ["First hiragana"] })
+      exercise = create(:exercise, content: { "correct_answer" => "あ", "hints" => [ "First hiragana" ] })
       post :submit, params: { id: exercise.id, answer: "あ" }
       expect(response).to have_http_status(:ok)
       data = JSON.parse(response.body)
@@ -86,5 +86,4 @@ RSpec.describe Api::V1::ExercisesController, type: :controller do
       expect(response).to have_http_status(:not_found)
     end
   end
-
 end

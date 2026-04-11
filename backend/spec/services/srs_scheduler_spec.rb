@@ -8,7 +8,7 @@ RSpec.describe SrsScheduler, type: :service do
       learner = create(:learner)
       due = create(:srs_card, learner: learner, next_review_at: 1.hour.ago)
       create(:srs_card, learner: learner, next_review_at: 1.day.from_now, card_key: "future")
-      expect(scheduler.due_cards(learner: learner)).to eq([due])
+      expect(scheduler.due_cards(learner: learner)).to eq([ due ])
     end
 
     it "excludes burned cards" do
@@ -21,7 +21,7 @@ RSpec.describe SrsScheduler, type: :service do
       learner = create(:learner)
       kanji = create(:srs_card, learner: learner, next_review_at: 1.hour.ago, card_type: "kanji")
       create(:srs_card, learner: learner, next_review_at: 1.hour.ago, card_type: "vocabulary", card_key: "vocab1")
-      expect(scheduler.due_cards(learner: learner, card_type: "kanji")).to eq([kanji])
+      expect(scheduler.due_cards(learner: learner, card_type: "kanji")).to eq([ kanji ])
     end
 
     it "respects time_budget_minutes" do
@@ -38,7 +38,7 @@ RSpec.describe SrsScheduler, type: :service do
       create(:srs_card, learner: learner, next_review_at: 1.hour.ago,
              card_data: { "front" => "b", "source_level" => 8 }, card_key: "high")
       result = scheduler.due_cards(learner: learner, level_min: 1, level_max: 3)
-      expect(result).to eq([low])
+      expect(result).to eq([ low ])
     end
   end
 

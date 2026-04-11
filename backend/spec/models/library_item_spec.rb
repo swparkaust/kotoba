@@ -15,7 +15,7 @@ RSpec.describe LibraryItem, type: :model do
       language = create(:language, code: "ja")
       item7 = create(:library_item, language: language, difficulty_level: 7)
       create(:library_item, language: language, difficulty_level: 11, title: "Advanced")
-      expect(LibraryItem.for_level_range(5, 8)).to eq([item7])
+      expect(LibraryItem.for_level_range(5, 8)).to eq([ item7 ])
     end
   end
 
@@ -24,7 +24,7 @@ RSpec.describe LibraryItem, type: :model do
       language = create(:language, code: "ja")
       active_item = create(:library_item, language: language, active: true)
       create(:library_item, language: language, active: false, title: "Inactive")
-      expect(LibraryItem.active).to eq([active_item])
+      expect(LibraryItem.active).to eq([ active_item ])
     end
   end
 
@@ -33,7 +33,7 @@ RSpec.describe LibraryItem, type: :model do
       language = create(:language, code: "ja")
       item5 = create(:library_item, language: language, difficulty_level: 5)
       create(:library_item, language: language, difficulty_level: 8, title: "Higher")
-      expect(LibraryItem.for_level(5)).to eq([item5])
+      expect(LibraryItem.for_level(5)).to eq([ item5 ])
     end
   end
 

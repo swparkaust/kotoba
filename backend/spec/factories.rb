@@ -20,7 +20,7 @@ FactoryBot.define do
     sequence(:position) { |n| n }
     title { "Unit #{position}" }
     description { "Unit #{position} description" }
-    target_items { { characters: ["あ"] } }
+    target_items { { characters: [ "あ" ] } }
   end
 
   factory :lesson do
@@ -28,7 +28,7 @@ FactoryBot.define do
     sequence(:position) { |n| n }
     title { "Lesson #{position}" }
     skill_type { "character_intro" }
-    objectives { ["Learn character"] }
+    objectives { [ "Learn character" ] }
     content_status { "ready" }
     content_version { 1 }
   end
@@ -37,7 +37,7 @@ FactoryBot.define do
     lesson
     exercise_type { "multiple_choice" }
     sequence(:position) { |n| n }
-    content { { "prompt" => "あ", "options" => ["あ", "い"], "correct_answer" => "あ", "hints" => ["First hiragana"] } }
+    content { { "prompt" => "あ", "options" => [ "あ", "い" ], "correct_answer" => "あ", "hints" => [ "First hiragana" ] } }
     difficulty { "easy" }
     qa_status { "passed" }
   end
@@ -171,8 +171,8 @@ FactoryBot.define do
     lesson
     title { "Test Scenario" }
     situation_ja { "テストの状況" }
-    dialogue { [{ speaker: "A", text: "テスト" }] }
-    choices { [{ response: "はい", score: 100 }] }
+    dialogue { [ { speaker: "A", text: "テスト" } ] }
+    choices { [ { response: "はい", score: 100 } ] }
     analysis { { rule: "テストルール" } }
     cultural_topic { "refusal" }
     difficulty_level { 8 }
@@ -181,8 +181,8 @@ FactoryBot.define do
   factory :contrastive_grammar_set do
     lesson
     cluster_name { "〜ても vs 〜のに" }
-    patterns { [{ pattern: "〜ても", usage_ja: "テスト" }] }
-    exercises { [{ context: "テスト", correct: "ても" }] }
+    patterns { [ { pattern: "〜ても", usage_ja: "テスト" } ] }
+    exercises { [ { context: "テスト", correct: "ても" } ] }
     confusion_notes { { explanation: "テスト説明" } }
     difficulty_level { 8 }
   end

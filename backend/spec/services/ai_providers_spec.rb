@@ -31,7 +31,7 @@ RSpec.describe AiProviders::AnthropicAdapter do
 
   before do
     allow_any_instance_of(Anthropic::Client).to receive(:messages).and_return(
-      { "content" => [{ "type" => "text", "text" => "test response" }] }
+      { "content" => [ { "type" => "text", "text" => "test response" } ] }
     )
   end
 
@@ -63,7 +63,7 @@ RSpec.describe AiProviders::OllamaAdapter do
   let(:adapter) { described_class.new(host: "http://localhost:11434", advanced_model: "qwen3:32b", standard_model: "qwen3:8b") }
 
   let(:chat_response) { { "message" => { "role" => "assistant", "content" => "test response" } } }
-  let(:tags_response) { { "models" => [{ "name" => "qwen3:32b" }, { "name" => "qwen3:8b" }] } }
+  let(:tags_response) { { "models" => [ { "name" => "qwen3:32b" }, { "name" => "qwen3:8b" } ] } }
 
   before do
     stub_request(:post, "http://localhost:11434/api/chat")
@@ -84,7 +84,7 @@ RSpec.describe AiProviders::OllamaAdapter do
   end
 
   it "lists available models" do
-    expect(adapter.available_models).to eq(["qwen3:32b", "qwen3:8b"])
+    expect(adapter.available_models).to eq([ "qwen3:32b", "qwen3:8b" ])
   end
 
   it "returns empty array when unreachable" do
@@ -182,7 +182,7 @@ RSpec.describe AiProviders, ".build" do
   it "returns OllamaAdapter when AI_PROVIDER is 'ollama'" do
     ENV["AI_PROVIDER"] = "ollama"
     stub_request(:get, "http://localhost:11434/api/tags")
-      .to_return(status: 200, body: { models: [{ name: "qwen3:32b" }] }.to_json)
+      .to_return(status: 200, body: { models: [ { name: "qwen3:32b" } ] }.to_json)
     expect(described_class.build).to be_a(AiProviders::OllamaAdapter)
   end
 
@@ -236,7 +236,7 @@ RSpec.describe AiProviders, ".build_router" do
   it "uses provider-specific models for ollama" do
     ENV["AI_PROVIDER"] = "ollama"
     stub_request(:get, "http://localhost:11434/api/tags")
-      .to_return(status: 200, body: { models: [{ name: "qwen3:32b" }] }.to_json)
+      .to_return(status: 200, body: { models: [ { name: "qwen3:32b" } ] }.to_json)
     router = described_class.build_router
     expect(router).to be_a(AiModelRouter)
   end

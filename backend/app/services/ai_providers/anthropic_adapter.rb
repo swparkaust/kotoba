@@ -14,7 +14,7 @@ module AiProviders
         model: model,
         max_tokens: max_tokens,
         system: system,
-        messages: [{ role: "user", content: prompt }]
+        messages: [ { role: "user", content: prompt } ]
       )
 
       text = response.dig("content", 0, "text") if response.is_a?(Hash)

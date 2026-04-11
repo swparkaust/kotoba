@@ -16,7 +16,7 @@ module Api
         end
 
         render json: lessons.as_json(
-          only: [:id, :position, :title, :skill_type, :objectives, :content_status]
+          only: [ :id, :position, :title, :skill_type, :objectives, :content_status ]
         )
       rescue ActiveRecord::RecordNotFound
         render json: { error: "Unit not found" }, status: :not_found
@@ -27,10 +27,10 @@ module Api
         progress = LearnerProgress.find_by(learner: current_learner, lesson: lesson)
 
         render json: lesson.as_json(
-          only: [:id, :position, :title, :skill_type, :objectives, :content_status],
+          only: [ :id, :position, :title, :skill_type, :objectives, :content_status ],
           include: {
-            exercises: { only: [:id, :position, :exercise_type, :content, :difficulty] },
-            content_assets: { only: [:id, :asset_type, :url] }
+            exercises: { only: [ :id, :position, :exercise_type, :content, :difficulty ] },
+            content_assets: { only: [ :id, :asset_type, :url ] }
           }
         ).merge(
           progress_status: progress&.status || "locked",
