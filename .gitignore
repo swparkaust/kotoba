@@ -34,6 +34,9 @@ Thumbs.db
 coverage/
 test-results/
 
+# Data
+dump.rdb
+
 # Debug
 *.pem
 npm-debug.log*
