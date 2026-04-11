@@ -1,10 +1,16 @@
 "use client";
 
+import { useState } from "react";
 import { MultipleChoice } from "./MultipleChoice";
 import { FillInBlank } from "./FillInBlank";
 import { CharacterTracer } from "./CharacterTracer";
 import { ListeningExercise } from "./ListeningExercise";
 import { PictureMatchCard } from "./PictureMatchCard";
+import { ContrastiveGrammarExercise } from "./ContrastiveGrammarExercise";
+import { PragmaticScenario } from "./PragmaticScenario";
+import { AuthenticReader } from "./AuthenticReader";
+import { RealAudioPlayer } from "./RealAudioPlayer";
+import { WritingExercise } from "./WritingExercise";
 
 interface ExerciseRendererProps {
   exercise: {
@@ -20,6 +26,22 @@ interface ExerciseRendererProps {
       picture_options?: Array<{ imageUrl: string; label: string }>;
       correct_index?: number;
       hints?: string[];
+      cluster_name?: string;
+      patterns?: Array<{ pattern: string; usage_ja: string; example_sentences: string[] }>;
+      exercises?: Array<{ context: string; correct: string; options: string[] }>;
+      title?: string;
+      situation_ja?: string;
+      dialogue?: Array<{ speaker: string; text: string; implied_meaning: string; tone: string }>;
+      choices?: Array<{ response: string; consequence: string; score: number }>;
+      analysis?: { rule: string };
+      body_text?: string;
+      attribution?: string;
+      scaffolding?: {
+        glosses?: Array<{ word: string; reading: string; definition_ja: string; example_sentence: string }>;
+        comprehension_questions?: Array<{ question_ja: string; expected_answer_ja: string }>;
+        listening_tips?: string[];
+      };
+      transcription?: string;
     };
     difficulty?: string;
   };
@@ -28,8 +50,11 @@ interface ExerciseRendererProps {
 
 export function ExerciseRenderer({ exercise, onAnswer }: ExerciseRendererProps) {
   const { exercise_type, content } = exercise;
+  const [done, setDone] = useState(false);
 
   const renderExercise = () => {
+    const correctIndex = content.options?.indexOf(content.correct_answer || "") ?? -1;
+
     switch (exercise_type) {
       case "multiple_choice":
         return (
@@ -37,7 +62,7 @@ export function ExerciseRenderer({ exercise, onAnswer }: ExerciseRendererProps) 
             prompt={content.prompt || ""}
             options={content.options || []}
             imageUrl={content.image_url}
-            correctIndex={content.options?.indexOf(content.correct_answer || "") ?? -1}
+            correctIndex={correctIndex}
             onAnswer={onAnswer}
           />
         );
@@ -46,6 +71,7 @@ export function ExerciseRenderer({ exercise, onAnswer }: ExerciseRendererProps) 
         return (
           <FillInBlank
             prompt={content.prompt || ""}
+            correctAnswer={content.correct_answer}
             onSubmit={onAnswer}
           />
         );
@@ -63,6 +89,7 @@ export function ExerciseRenderer({ exercise, onAnswer }: ExerciseRendererProps) 
           <ListeningExercise
             audioSrc={content.audio_src || ""}
             options={content.options || []}
+            correctIndex={correctIndex}
             onAnswer={(index) => onAnswer((content.options || [])[index] || "")}
           />
         );
@@ -78,30 +105,106 @@ export function ExerciseRenderer({ exercise, onAnswer }: ExerciseRendererProps) 
           />
         );
 
+      case "contrastive_grammar":
+        return (
+          <ContrastiveGrammarExercise
+            set={{
+              cluster_name: content.cluster_name || "",
+              patterns: content.patterns || [],
+              exercises: content.exercises || [],
+            }}
+            onAnswer={onAnswer}
+          />
+        );
+
+      case "pragmatic_choice":
+        return (
+          <PragmaticScenario
+            scenario={{
+              title: content.title || "",
+              situation_ja: content.situation_ja || "",
+              dialogue: content.dialogue || [],
+              choices: content.choices || [],
+              analysis: content.analysis || { rule: "" },
+            }}
+            onChoice={(index) =>
+              onAnswer((content.choices || [])[index]?.response || "")
+            }
+          />
+        );
+
+      case "authentic_reading":
+        return (
+          <>
+            <AuthenticReader
+              source={{
+                title: content.title || "",
+                body_text: content.body_text || "",
+                attribution: content.attribution || "",
+                scaffolding: {
+                  glosses: content.scaffolding?.glosses || [],
+                  comprehension_questions: content.scaffolding?.comprehension_questions || [],
+                },
+              }}
+            />
+            <button
+              data-testid="reading-done"
+              disabled={done}
+              onClick={() => { setDone(true); onAnswer("done"); }}
+              className="mt-4 w-full rounded-xl bg-orange-500 py-3 text-white font-medium hover:bg-orange-600 transition-colors disabled:opacity-50"
+            >
+              Done Reading
+            </button>
+          </>
+        );
+
+      case "real_audio_comprehension":
+        return (
+          <>
+            <RealAudioPlayer
+              audioUrl={content.audio_src || ""}
+              transcription={content.transcription || ""}
+              scaffolding={{
+                glosses: content.scaffolding?.glosses,
+                comprehension_questions: content.scaffolding?.comprehension_questions?.map((q) => q.question_ja),
+                listening_tips: content.scaffolding?.listening_tips,
+              }}
+            />
+            <button
+              data-testid="listening-done"
+              disabled={done}
+              onClick={() => { setDone(true); onAnswer("done"); }}
+              className="mt-4 w-full rounded-xl bg-orange-500 py-3 text-white font-medium hover:bg-orange-600 transition-colors disabled:opacity-50"
+            >
+              Done Listening
+            </button>
+          </>
+        );
+
+      case "writing":
+        return (
+          <WritingExercise
+            prompt={content.prompt || ""}
+            onSubmit={onAnswer}
+          />
+        );
+
       default:
-        // Fallback: render as multiple choice if options exist, otherwise as prompt
         if (content.options && content.options.length > 0) {
           return (
-            <div className="space-y-4">
-              <p className="text-lg text-stone-700">{content.prompt}</p>
-              <div className="space-y-2">
-                {content.options.map((option, i) => (
-                  <button
-                    key={i}
-                    onClick={() => onAnswer(option)}
-                    className="block w-full text-left p-3 rounded-lg border border-stone-200 hover:bg-orange-50 hover:border-orange-200 transition-colors"
-                  >
-                    {option}
-                  </button>
-                ))}
-              </div>
-            </div>
+            <MultipleChoice
+              prompt={content.prompt || ""}
+              options={content.options}
+              correctIndex={correctIndex}
+              onAnswer={onAnswer}
+            />
           );
         }
 
         return (
           <FillInBlank
             prompt={content.prompt || ""}
+            correctAnswer={content.correct_answer}
             onSubmit={onAnswer}
           />
         );

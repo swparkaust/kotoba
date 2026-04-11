@@ -9,6 +9,7 @@ describe("ListeningExercise", () => {
   const defaultProps = {
     audioSrc: "/audio/test.mp3",
     options: ["おはよう", "こんにちは", "こんばんは", "さようなら"],
+    correctIndex: 1,
     onAnswer: jest.fn(),
   };
 
@@ -24,10 +25,29 @@ describe("ListeningExercise", () => {
     expect(screen.getByTestId("listen-option-3")).toBeInTheDocument();
   });
 
-  it("calls onAnswer when an option is clicked", () => {
+  it("does not call onAnswer until continue is clicked", () => {
     render(<ListeningExercise {...defaultProps} />);
     fireEvent.click(screen.getByTestId("listen-option-1"));
+    expect(defaultProps.onAnswer).not.toHaveBeenCalled();
+  });
+
+  it("calls onAnswer after clicking continue", () => {
+    render(<ListeningExercise {...defaultProps} />);
+    fireEvent.click(screen.getByTestId("listen-option-1"));
+    fireEvent.click(screen.getByTestId("listen-continue"));
     expect(defaultProps.onAnswer).toHaveBeenCalledWith(1);
+  });
+
+  it("shows correct feedback on right answer", () => {
+    render(<ListeningExercise {...defaultProps} />);
+    fireEvent.click(screen.getByTestId("listen-option-1"));
+    expect(screen.getByTestId("listen-feedback")).toHaveTextContent("正解");
+  });
+
+  it("shows correct answer on wrong selection", () => {
+    render(<ListeningExercise {...defaultProps} />);
+    fireEvent.click(screen.getByTestId("listen-option-0"));
+    expect(screen.getByTestId("listen-feedback")).toHaveTextContent("こんにちは");
   });
 
   it("disables options after a selection is made", () => {
@@ -37,18 +57,16 @@ describe("ListeningExercise", () => {
     expect(screen.getByTestId("listen-option-1")).toBeDisabled();
   });
 
-  it("disables all options after first selection preventing further answers", () => {
+  it("prevents double selection", () => {
     render(<ListeningExercise {...defaultProps} />);
     fireEvent.click(screen.getByTestId("listen-option-2"));
-    expect(screen.getByTestId("listen-option-0")).toBeDisabled();
-    expect(screen.getByTestId("listen-option-1")).toBeDisabled();
-    expect(screen.getByTestId("listen-option-2")).toBeDisabled();
-    expect(screen.getByTestId("listen-option-3")).toBeDisabled();
     fireEvent.click(screen.getByTestId("listen-option-1"));
+    fireEvent.click(screen.getByTestId("listen-continue"));
     expect(defaultProps.onAnswer).toHaveBeenCalledTimes(1);
+    expect(defaultProps.onAnswer).toHaveBeenCalledWith(2);
   });
 
-  it("shows listen-first hint when playCount is 0", () => {
+  it("shows listen-first hint when playCount is 0 and no selection", () => {
     render(<ListeningExercise {...defaultProps} />);
     expect(screen.getByText("Press listen to hear the audio before answering.")).toBeInTheDocument();
   });
@@ -56,6 +74,12 @@ describe("ListeningExercise", () => {
   it("hides listen-first hint after play button is clicked", () => {
     render(<ListeningExercise {...defaultProps} />);
     fireEvent.click(screen.getByTestId("listen-btn"));
+    expect(screen.queryByText("Press listen to hear the audio before answering.")).not.toBeInTheDocument();
+  });
+
+  it("hides listen-first hint after selection", () => {
+    render(<ListeningExercise {...defaultProps} />);
+    fireEvent.click(screen.getByTestId("listen-option-0"));
     expect(screen.queryByText("Press listen to hear the audio before answering.")).not.toBeInTheDocument();
   });
 
@@ -93,18 +117,18 @@ describe("ListeningExercise", () => {
 
     jest.useFakeTimers();
     render(<ListeningExercise {...defaultProps} />);
-    // Start playing
     fireEvent.click(screen.getByTestId("listen-btn"));
-    // Click again to stop while still playing (before 5s timeout)
     fireEvent.click(screen.getByTestId("listen-btn"));
     expect(mockStop).toHaveBeenCalled();
     jest.useRealTimers();
   });
 
-  it("highlights selected option after click", () => {
+  it("highlights correct option green and wrong option red after selection", () => {
     render(<ListeningExercise {...defaultProps} />);
-    fireEvent.click(screen.getByTestId("listen-option-1"));
-    const selectedBtn = screen.getByTestId("listen-option-1");
-    expect(selectedBtn.className).toContain("border-orange");
+    fireEvent.click(screen.getByTestId("listen-option-0"));
+    const wrongBtn = screen.getByTestId("listen-option-0");
+    const correctBtn = screen.getByTestId("listen-option-1");
+    expect(wrongBtn.className).toContain("border-red");
+    expect(correctBtn.className).toContain("border-green");
   });
 });

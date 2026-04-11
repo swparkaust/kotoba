@@ -15,17 +15,10 @@ interface MultipleChoiceProps {
 export function MultipleChoice({ prompt, options, correctIndex, onAnswer, imageUrl, audioUrl }: MultipleChoiceProps) {
   const { play } = useAudio();
   const [selected, setSelected] = useState<number | null>(null);
-  const [showFeedback, setShowFeedback] = useState(false);
 
-  const handleSelect = useCallback(
-    (index: number) => {
-      if (selected !== null) return;
-      setSelected(index);
-      setShowFeedback(true);
-      onAnswer(options[index]);
-    },
-    [selected, onAnswer, options]
-  );
+  const handleContinue = useCallback(() => {
+    onAnswer(options[selected!]);
+  }, [selected, onAnswer, options]);
 
   const handlePlayAudio = useCallback(() => {
     if (audioUrl) play(audioUrl);
@@ -52,7 +45,7 @@ export function MultipleChoice({ prompt, options, correctIndex, onAnswer, imageU
           <button
             key={index}
             data-testid={`choice-${index}`}
-            onClick={() => handleSelect(index)}
+            onClick={() => setSelected(index)}
             disabled={selected !== null}
             className={`rounded-xl border-2 bg-white p-4 text-lg transition-colors ${
               selected === null
@@ -68,15 +61,24 @@ export function MultipleChoice({ prompt, options, correctIndex, onAnswer, imageU
           </button>
         ))}
       </div>
-      {showFeedback && (
-        <div
-          data-testid="choice-feedback"
-          className={`rounded-xl p-3 text-center ${
-            selected === correctIndex ? "bg-green-50 text-green-700" : "bg-red-50 text-red-700"
-          }`}
-        >
-          {selected === correctIndex ? "正解！" : `正しい答えは「${options[correctIndex]}」です`}
-        </div>
+      {selected !== null && (
+        <>
+          <div
+            data-testid="choice-feedback"
+            className={`rounded-xl p-3 text-center ${
+              selected === correctIndex ? "bg-green-50 text-green-700" : "bg-red-50 text-red-700"
+            }`}
+          >
+            {selected === correctIndex ? "正解！" : `正しい答えは「${options[correctIndex]}」です`}
+          </div>
+          <button
+            data-testid="choice-continue"
+            onClick={handleContinue}
+            className="w-full rounded-xl bg-orange-500 py-3 text-white font-medium hover:bg-orange-600 transition-colors"
+          >
+            Continue
+          </button>
+        </>
       )}
     </div>
   );

@@ -15,21 +15,16 @@ interface PragmaticScenarioProps {
 
 export function PragmaticScenario({ scenario, onChoice }: PragmaticScenarioProps) {
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
-  const [showAnalysis, setShowAnalysis] = useState(false);
 
-  const handleChoice = useCallback(
-    (index: number) => {
-      if (selectedIndex !== null) return;
-      setSelectedIndex(index);
-      setShowAnalysis(true);
-      onChoice(index);
-    },
-    [selectedIndex, onChoice]
-  );
+  const handleContinue = useCallback(() => {
+    onChoice(selectedIndex!);
+  }, [selectedIndex, onChoice]);
 
   const selectedChoice = selectedIndex !== null ? scenario.choices[selectedIndex] : null;
-  const bestChoice = scenario.choices.reduce((a, b) => (a.score > b.score ? a : b));
-  const isOptimal = selectedChoice?.response === bestChoice.response;
+  const bestChoice = scenario.choices.length > 0
+    ? scenario.choices.reduce((a, b) => (a.score > b.score ? a : b))
+    : null;
+  const isOptimal = selectedChoice?.response === bestChoice?.response;
 
   return (
     <div data-testid="pragmatic-scenario" className="space-y-6">
@@ -45,7 +40,7 @@ export function PragmaticScenario({ scenario, onChoice }: PragmaticScenarioProps
               <span className="text-xs text-stone-400 italic">{line.tone}</span>
             </div>
             <p className="text-stone-700">{line.text}</p>
-            {showAnalysis && line.implied_meaning && (
+            {selectedIndex !== null && line.implied_meaning && (
               <p className="text-xs text-amber-600 mt-1">→ {line.implied_meaning}</p>
             )}
           </div>
@@ -55,13 +50,13 @@ export function PragmaticScenario({ scenario, onChoice }: PragmaticScenarioProps
         {scenario.choices.map((choice, i) => (
           <button
             key={i}
-            onClick={() => handleChoice(i)}
+            onClick={() => setSelectedIndex(i)}
             disabled={selectedIndex !== null}
             className={`w-full text-left rounded-xl border p-4 transition-colors ${
               selectedIndex === null
                 ? "border-stone-200 hover:border-orange-300"
                 : i === selectedIndex
-                ? choice.score >= bestChoice.score
+                ? choice.score >= (bestChoice?.score ?? Infinity)
                   ? "border-green-400 bg-green-50"
                   : "border-amber-400 bg-amber-50"
                 : "border-stone-200 opacity-50"
@@ -76,7 +71,7 @@ export function PragmaticScenario({ scenario, onChoice }: PragmaticScenarioProps
           </button>
         ))}
       </div>
-      {showAnalysis && (
+      {selectedIndex !== null && (
         <div
           data-testid="scenario-analysis"
           className={`rounded-xl p-4 ${isOptimal ? "bg-green-50" : "bg-amber-50"}`}
@@ -87,9 +82,16 @@ export function PragmaticScenario({ scenario, onChoice }: PragmaticScenarioProps
           <p className="text-sm text-stone-600">{scenario.analysis.rule}</p>
           {!isOptimal && (
             <p className="text-sm text-stone-600 mt-1">
-              Best response: 「{bestChoice.response}」
+              Best response: 「{bestChoice?.response}」
             </p>
           )}
+          <button
+            data-testid="scenario-continue"
+            onClick={handleContinue}
+            className="mt-3 w-full rounded-xl bg-orange-500 py-3 text-white font-medium hover:bg-orange-600 transition-colors"
+          >
+            Continue
+          </button>
         </div>
       )}
     </div>

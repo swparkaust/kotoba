@@ -28,11 +28,21 @@ describe("ContrastiveGrammarExercise", () => {
     expect(screen.getByText("雨が降っても行きます")).toBeInTheDocument();
   });
 
-  it("calls onAnswer when an option is clicked", () => {
+  it("does not call onAnswer on intermediate questions", () => {
     const onAnswer = jest.fn();
     render(<ContrastiveGrammarExercise set={mockSet} onAnswer={onAnswer} />);
     fireEvent.click(screen.getByText("のに"));
-    expect(onAnswer).toHaveBeenCalledWith("のに");
+    expect(onAnswer).not.toHaveBeenCalled();
+  });
+
+  it("calls onAnswer after answering last question and clicking continue", () => {
+    const onAnswer = jest.fn();
+    render(<ContrastiveGrammarExercise set={mockSet} onAnswer={onAnswer} />);
+    fireEvent.click(screen.getByText("のに"));
+    fireEvent.click(screen.getByText("Next question →"));
+    fireEvent.click(screen.getByText("ても"));
+    fireEvent.click(screen.getByTestId("contrastive-continue"));
+    expect(onAnswer).toHaveBeenCalledWith("ても");
   });
 
   it("shows feedback after answering correctly", () => {
@@ -61,15 +71,13 @@ describe("ContrastiveGrammarExercise", () => {
     expect(screen.getByText("Question 2 of 2")).toBeInTheDocument();
   });
 
-  it("does not show next button on last question", () => {
+  it("shows continue button instead of next on last question", () => {
     render(<ContrastiveGrammarExercise set={mockSet} onAnswer={jest.fn()} />);
-    // Answer first question and go to second
     fireEvent.click(screen.getByText("のに"));
     fireEvent.click(screen.getByText("Next question →"));
-    // Answer second question
     fireEvent.click(screen.getByText("ても"));
-    // No next button on last question
     expect(screen.queryByText("Next question →")).not.toBeInTheDocument();
+    expect(screen.getByTestId("contrastive-continue")).toBeInTheDocument();
   });
 
   it("prevents double selection on same question", () => {
@@ -77,7 +85,7 @@ describe("ContrastiveGrammarExercise", () => {
     render(<ContrastiveGrammarExercise set={mockSet} onAnswer={onAnswer} />);
     fireEvent.click(screen.getByText("のに"));
     fireEvent.click(screen.getByText("ても"));
-    expect(onAnswer).toHaveBeenCalledTimes(1);
+    expect(onAnswer).not.toHaveBeenCalled();
   });
 
   it("shows usage hint on incorrect answer", () => {
@@ -92,17 +100,21 @@ describe("ContrastiveGrammarExercise", () => {
     expect(screen.getByTestId("contrastive-feedback")).not.toHaveTextContent("仮定的にも使える");
   });
 
-  it("handles single-exercise set without next button", () => {
+  it("handles single-exercise set with continue button", () => {
     const singleSet = {
       ...mockSet,
       exercises: [
         { context: "早く起きた___遅刻した", correct: "のに", options: ["ても", "のに"] },
       ],
     };
-    render(<ContrastiveGrammarExercise set={singleSet} onAnswer={jest.fn()} />);
+    const onAnswer = jest.fn();
+    render(<ContrastiveGrammarExercise set={singleSet} onAnswer={onAnswer} />);
     expect(screen.getByText("Question 1 of 1")).toBeInTheDocument();
     fireEvent.click(screen.getByText("のに"));
     expect(screen.queryByText("Next question →")).not.toBeInTheDocument();
+    expect(screen.getByTestId("contrastive-continue")).toBeInTheDocument();
+    fireEvent.click(screen.getByTestId("contrastive-continue"));
+    expect(onAnswer).toHaveBeenCalledWith("のに");
   });
 
   it("handleNext does not advance past the last question", () => {
@@ -114,9 +126,7 @@ describe("ContrastiveGrammarExercise", () => {
     };
     render(<ContrastiveGrammarExercise set={singleSet} onAnswer={jest.fn()} />);
     fireEvent.click(screen.getByText("のに"));
-    // No next button exists
     expect(screen.queryByText("Next question →")).not.toBeInTheDocument();
-    // Still on question 1
     expect(screen.getByText("Question 1 of 1")).toBeInTheDocument();
   });
 
