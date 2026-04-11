@@ -99,7 +99,7 @@ describe("DashboardPage", () => {
       if (url.startsWith("/curriculum?")) return Promise.resolve([{ name: "Level 1", id: 1 }]);
       if (url.startsWith("/progress/jlpt")) return Promise.resolve({ jlpt_label: "N5", percentage: 42, completed_levels: 1 });
       if (url === "/progress") return Promise.resolve([{ status: "completed" }]);
-      if (url === "/curriculum/1") return Promise.resolve({ units: [{ id: 10, lessons: [{ id: 100 }] }] });
+      if (url === "/curriculum/1") return Promise.resolve({ curriculum_units: [{ id: 10, lessons: [{ id: 100 }] }] });
       return Promise.resolve(null);
     });
 
@@ -146,7 +146,7 @@ describe("DashboardPage", () => {
       if (url.startsWith("/curriculum?")) return Promise.resolve([{ name: "Level 1", id: 1 }]);
       if (url.startsWith("/progress/jlpt")) return Promise.resolve(null);
       if (url === "/progress") return Promise.resolve([]);
-      if (url === "/curriculum/1") return Promise.resolve({ units: [] });
+      if (url === "/curriculum/1") return Promise.resolve({ curriculum_units: [] });
       return Promise.resolve(null);
     });
 
@@ -172,7 +172,7 @@ describe("DashboardPage", () => {
       if (url.startsWith("/curriculum?")) return Promise.resolve([{ name: "Level 1", id: 1 }]);
       if (url.startsWith("/progress/jlpt")) return Promise.resolve(null);
       if (url === "/progress") return Promise.resolve([]);
-      if (url === "/curriculum/1") return Promise.resolve({ units: [{ id: 10 }] });
+      if (url === "/curriculum/1") return Promise.resolve({ curriculum_units: [{ id: 10 }] });
       return Promise.resolve(null);
     });
 

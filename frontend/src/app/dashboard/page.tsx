@@ -70,7 +70,7 @@ export default function DashboardPage() {
   const handleSelectLevel = async (levelId: number) => {
     try {
       const level = await api.get(`/curriculum/${levelId}`);
-      const units = level.units || [];
+      const units = level.curriculum_units || [];
       const firstUnit = units[0];
       const firstLesson = firstUnit?.lessons?.[0];
       if (firstLesson) {
