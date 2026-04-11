@@ -17,7 +17,8 @@ class AiModelRouter
     speech_evaluation: :standard,
     contrastive_grammar_generation: :standard,
     library_gloss_generation: :standard,
-    notification_copy: :standard
+    notification_copy: :standard,
+    learner_simulation: :standard
   }.freeze
 
   DEFAULT_MODEL_MAP = {

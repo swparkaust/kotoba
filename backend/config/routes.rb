@@ -54,6 +54,8 @@ Rails.application.routes.draw do
 
       get "content_packs/latest", to: "content_packs#latest"
       get "content_packs/check_update", to: "content_packs#check_update"
+
+      post "simulate", to: "simulate#create" if Rails.env.test?
     end
   end
 
