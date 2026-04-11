@@ -25,7 +25,9 @@ async function request(method: string, path: string, body?: unknown) {
   if (body) options.body = JSON.stringify(body);
   const response = await fetch(`${BASE}${path}`, options);
   if (response.status === 401) {
-    if (typeof window !== "undefined") {
+    const onAuthPage = typeof window !== "undefined" &&
+      (window.location.pathname === "/login" || window.location.pathname === "/signup");
+    if (typeof window !== "undefined" && !onAuthPage) {
       window.location.href = "/login";
     }
     throw new Error("Unauthorized");
