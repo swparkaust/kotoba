@@ -1,0 +1,890 @@
+[
+  {
+    "level_position": 1,
+    "unit_position": 1,
+    "lesson_position": 1,
+    "position": 1,
+    "exercise_type": "multiple_choice",
+    "content": {
+      "prompt": "「あ」の読み方は？",
+      "options": [
+        "a",
+        "i",
+        "u",
+        "e"
+      ],
+      "correct_answer": "a"
+    },
+    "difficulty": "normal"
+  },
+  {
+    "level_position": 1,
+    "unit_position": 1,
+    "lesson_position": 1,
+    "position": 2,
+    "exercise_type": "fill_blank",
+    "content": {
+      "prompt": "＿いうえお",
+      "target_text": "あいうえお",
+      "correct_answer": "あ"
+    },
+    "difficulty": "normal"
+  },
+  {
+    "level_position": 1,
+    "unit_position": 1,
+    "lesson_position": 1,
+    "position": 3,
+    "exercise_type": "writing",
+    "content": {
+      "prompt": "ひらがなで自己紹介を書いてください",
+      "target_text": "わたしはがくせいです"
+    },
+    "difficulty": "normal"
+  },
+  {
+    "level_position": 1,
+    "unit_position": 1,
+    "lesson_position": 1,
+    "position": 4,
+    "exercise_type": "speaking",
+    "content": {
+      "prompt": "次の文を読んでください",
+      "target_text": "おはようございます"
+    },
+    "difficulty": "normal"
+  },
+  {
+    "level_position": 1,
+    "unit_position": 1,
+    "lesson_position": 1,
+    "position": 5,
+    "exercise_type": "listening",
+    "content": {
+      "prompt": "聞いて正しいものを選んでください",
+      "options": [
+        "あ",
+        "い",
+        "う",
+        "え"
+      ],
+      "correct_answer": "あ",
+      "audio_src": "/audio/placeholder.mp3"
+    },
+    "difficulty": "normal"
+  },
+  {
+    "level_position": 2,
+    "unit_position": 1,
+    "lesson_position": 1,
+    "position": 1,
+    "exercise_type": "multiple_choice",
+    "content": {
+      "prompt": "「ア」の読み方は？",
+      "options": [
+        "a",
+        "i",
+        "u",
+        "e"
+      ],
+      "correct_answer": "a"
+    },
+    "difficulty": "normal"
+  },
+  {
+    "level_position": 2,
+    "unit_position": 1,
+    "lesson_position": 1,
+    "position": 2,
+    "exercise_type": "fill_blank",
+    "content": {
+      "prompt": "＿イウエオ",
+      "target_text": "アイウエオ",
+      "correct_answer": "ア"
+    },
+    "difficulty": "normal"
+  },
+  {
+    "level_position": 2,
+    "unit_position": 1,
+    "lesson_position": 1,
+    "position": 3,
+    "exercise_type": "writing",
+    "content": {
+      "prompt": "カタカナで外来語を書いてください",
+      "target_text": "コンピューター"
+    },
+    "difficulty": "normal"
+  },
+  {
+    "level_position": 2,
+    "unit_position": 1,
+    "lesson_position": 1,
+    "position": 4,
+    "exercise_type": "speaking",
+    "content": {
+      "prompt": "次の文を読んでください",
+      "target_text": "こんにちは"
+    },
+    "difficulty": "normal"
+  },
+  {
+    "level_position": 2,
+    "unit_position": 1,
+    "lesson_position": 1,
+    "position": 5,
+    "exercise_type": "listening",
+    "content": {
+      "prompt": "聞いて正しいものを選んでください",
+      "options": [
+        "ア",
+        "イ",
+        "ウ",
+        "エ"
+      ],
+      "correct_answer": "ア",
+      "audio_src": "/audio/placeholder.mp3"
+    },
+    "difficulty": "normal"
+  },
+  {
+    "level_position": 3,
+    "unit_position": 1,
+    "lesson_position": 1,
+    "position": 1,
+    "exercise_type": "multiple_choice",
+    "content": {
+      "prompt": "「が」はどの行？",
+      "options": [
+        "か行",
+        "さ行",
+        "た行",
+        "な行"
+      ],
+      "correct_answer": "か行"
+    },
+    "difficulty": "normal"
+  },
+  {
+    "level_position": 3,
+    "unit_position": 1,
+    "lesson_position": 1,
+    "position": 2,
+    "exercise_type": "fill_blank",
+    "content": {
+      "prompt": "わたし＿学生です",
+      "target_text": "わたしは学生です",
+      "correct_answer": "は"
+    },
+    "difficulty": "normal"
+  },
+  {
+    "level_position": 3,
+    "unit_position": 1,
+    "lesson_position": 1,
+    "position": 3,
+    "exercise_type": "writing",
+    "content": {
+      "prompt": "好きな食べ物について書いてください",
+      "target_text": "りんごがすきです"
+    },
+    "difficulty": "normal"
+  },
+  {
+    "level_position": 3,
+    "unit_position": 1,
+    "lesson_position": 1,
+    "position": 4,
+    "exercise_type": "speaking",
+    "content": {
+      "prompt": "次の文を読んでください",
+      "target_text": "がっこうにいきます"
+    },
+    "difficulty": "normal"
+  },
+  {
+    "level_position": 3,
+    "unit_position": 1,
+    "lesson_position": 1,
+    "position": 5,
+    "exercise_type": "listening",
+    "content": {
+      "prompt": "聞いて正しいものを選んでください",
+      "options": [
+        "が",
+        "か",
+        "だ",
+        "た"
+      ],
+      "correct_answer": "が",
+      "audio_src": "/audio/placeholder.mp3"
+    },
+    "difficulty": "normal"
+  },
+  {
+    "level_position": 4,
+    "unit_position": 1,
+    "lesson_position": 1,
+    "position": 1,
+    "exercise_type": "multiple_choice",
+    "content": {
+      "prompt": "「食べる」のて形は？",
+      "options": [
+        "食べて",
+        "食べた",
+        "食べない",
+        "食べます"
+      ],
+      "correct_answer": "食べて"
+    },
+    "difficulty": "normal"
+  },
+  {
+    "level_position": 4,
+    "unit_position": 1,
+    "lesson_position": 1,
+    "position": 2,
+    "exercise_type": "fill_blank",
+    "content": {
+      "prompt": "本を＿ください",
+      "target_text": "本を読んでください",
+      "correct_answer": "読んで"
+    },
+    "difficulty": "normal"
+  },
+  {
+    "level_position": 4,
+    "unit_position": 1,
+    "lesson_position": 1,
+    "position": 3,
+    "exercise_type": "writing",
+    "content": {
+      "prompt": "て形を使って日常の行動を書いてください",
+      "target_text": "あさおきて、ごはんをたべます"
+    },
+    "difficulty": "normal"
+  },
+  {
+    "level_position": 4,
+    "unit_position": 1,
+    "lesson_position": 1,
+    "position": 4,
+    "exercise_type": "speaking",
+    "content": {
+      "prompt": "次の文を読んでください",
+      "target_text": "すみません、ちょっとまってください"
+    },
+    "difficulty": "normal"
+  },
+  {
+    "level_position": 4,
+    "unit_position": 1,
+    "lesson_position": 1,
+    "position": 5,
+    "exercise_type": "listening",
+    "content": {
+      "prompt": "聞いて正しいものを選んでください",
+      "options": [
+        "食べて",
+        "食べた",
+        "食べる",
+        "食べない"
+      ],
+      "correct_answer": "食べて",
+      "audio_src": "/audio/placeholder.mp3"
+    },
+    "difficulty": "normal"
+  },
+  {
+    "level_position": 5,
+    "unit_position": 1,
+    "lesson_position": 1,
+    "position": 1,
+    "exercise_type": "multiple_choice",
+    "content": {
+      "prompt": "「話す」の可能形は？",
+      "options": [
+        "話せる",
+        "話した",
+        "話さない",
+        "話して"
+      ],
+      "correct_answer": "話せる"
+    },
+    "difficulty": "normal"
+  },
+  {
+    "level_position": 5,
+    "unit_position": 1,
+    "lesson_position": 1,
+    "position": 2,
+    "exercise_type": "fill_blank",
+    "content": {
+      "prompt": "日本語が＿ますか",
+      "target_text": "日本語が話せますか",
+      "correct_answer": "話せ"
+    },
+    "difficulty": "normal"
+  },
+  {
+    "level_position": 5,
+    "unit_position": 1,
+    "lesson_position": 1,
+    "position": 3,
+    "exercise_type": "writing",
+    "content": {
+      "prompt": "できることについて書いてください",
+      "target_text": "わたしはにほんごがすこしはなせます"
+    },
+    "difficulty": "normal"
+  },
+  {
+    "level_position": 5,
+    "unit_position": 1,
+    "lesson_position": 1,
+    "position": 4,
+    "exercise_type": "speaking",
+    "content": {
+      "prompt": "次の文を読んでください",
+      "target_text": "にほんごがはなせます"
+    },
+    "difficulty": "normal"
+  },
+  {
+    "level_position": 5,
+    "unit_position": 1,
+    "lesson_position": 1,
+    "position": 5,
+    "exercise_type": "listening",
+    "content": {
+      "prompt": "聞いて正しいものを選んでください",
+      "options": [
+        "話せる",
+        "話す",
+        "話した",
+        "話さない"
+      ],
+      "correct_answer": "話せる",
+      "audio_src": "/audio/placeholder.mp3"
+    },
+    "difficulty": "normal"
+  },
+  {
+    "level_position": 6,
+    "unit_position": 1,
+    "lesson_position": 1,
+    "position": 1,
+    "exercise_type": "multiple_choice",
+    "content": {
+      "prompt": "「叱る」の受身形は？",
+      "options": [
+        "叱られる",
+        "叱らせる",
+        "叱れる",
+        "叱った"
+      ],
+      "correct_answer": "叱られる"
+    },
+    "difficulty": "normal"
+  },
+  {
+    "level_position": 6,
+    "unit_position": 1,
+    "lesson_position": 1,
+    "position": 2,
+    "exercise_type": "fill_blank",
+    "content": {
+      "prompt": "先生に＿ました",
+      "target_text": "先生に叱られました",
+      "correct_answer": "叱られ"
+    },
+    "difficulty": "normal"
+  },
+  {
+    "level_position": 6,
+    "unit_position": 1,
+    "lesson_position": 1,
+    "position": 3,
+    "exercise_type": "writing",
+    "content": {
+      "prompt": "受身形を使って文を書いてください",
+      "target_text": "あめにふられました"
+    },
+    "difficulty": "normal"
+  },
+  {
+    "level_position": 6,
+    "unit_position": 1,
+    "lesson_position": 1,
+    "position": 4,
+    "exercise_type": "speaking",
+    "content": {
+      "prompt": "次の文を読んでください",
+      "target_text": "せんせいにほめられました"
+    },
+    "difficulty": "normal"
+  },
+  {
+    "level_position": 6,
+    "unit_position": 1,
+    "lesson_position": 1,
+    "position": 5,
+    "exercise_type": "listening",
+    "content": {
+      "prompt": "聞いて正しいものを選んでください",
+      "options": [
+        "叱られる",
+        "叱らせる",
+        "叱れる",
+        "叱る"
+      ],
+      "correct_answer": "叱られる",
+      "audio_src": "/audio/placeholder.mp3"
+    },
+    "difficulty": "normal"
+  },
+  {
+    "level_position": 7,
+    "unit_position": 1,
+    "lesson_position": 1,
+    "position": 1,
+    "exercise_type": "multiple_choice",
+    "content": {
+      "prompt": "「食べる」の尊敬語は？",
+      "options": [
+        "召し上がる",
+        "いただく",
+        "食べられる",
+        "食べさせる"
+      ],
+      "correct_answer": "召し上がる"
+    },
+    "difficulty": "normal"
+  },
+  {
+    "level_position": 7,
+    "unit_position": 1,
+    "lesson_position": 1,
+    "position": 2,
+    "exercise_type": "fill_blank",
+    "content": {
+      "prompt": "先生が＿ました",
+      "target_text": "先生がいらっしゃいました",
+      "correct_answer": "いらっしゃい"
+    },
+    "difficulty": "normal"
+  },
+  {
+    "level_position": 7,
+    "unit_position": 1,
+    "lesson_position": 1,
+    "position": 3,
+    "exercise_type": "writing",
+    "content": {
+      "prompt": "敬語を使ってメールを書いてください",
+      "target_text": "おいそがしいところ、おそれいります"
+    },
+    "difficulty": "normal"
+  },
+  {
+    "level_position": 7,
+    "unit_position": 1,
+    "lesson_position": 1,
+    "position": 4,
+    "exercise_type": "speaking",
+    "content": {
+      "prompt": "次の文を読んでください",
+      "target_text": "しつれいいたします"
+    },
+    "difficulty": "normal"
+  },
+  {
+    "level_position": 7,
+    "unit_position": 1,
+    "lesson_position": 1,
+    "position": 5,
+    "exercise_type": "listening",
+    "content": {
+      "prompt": "聞いて正しいものを選んでください",
+      "options": [
+        "召し上がる",
+        "いただく",
+        "食べる",
+        "食べます"
+      ],
+      "correct_answer": "召し上がる",
+      "audio_src": "/audio/placeholder.mp3"
+    },
+    "difficulty": "normal"
+  },
+  {
+    "level_position": 8,
+    "unit_position": 1,
+    "lesson_position": 1,
+    "position": 1,
+    "exercise_type": "multiple_choice",
+    "content": {
+      "prompt": "作文の構成で正しい順番は？",
+      "options": [
+        "序論→本論→結論",
+        "結論→本論→序論",
+        "本論→序論→結論",
+        "序論→結論→本論"
+      ],
+      "correct_answer": "序論→本論→結論"
+    },
+    "difficulty": "normal"
+  },
+  {
+    "level_position": 8,
+    "unit_position": 1,
+    "lesson_position": 1,
+    "position": 2,
+    "exercise_type": "fill_blank",
+    "content": {
+      "prompt": "私の意見＿述べます",
+      "target_text": "私の意見を述べます",
+      "correct_answer": "を"
+    },
+    "difficulty": "normal"
+  },
+  {
+    "level_position": 8,
+    "unit_position": 1,
+    "lesson_position": 1,
+    "position": 3,
+    "exercise_type": "writing",
+    "content": {
+      "prompt": "日本語学習の目標について作文を書いてください",
+      "target_text": "にほんごをべんきょうするりゆうは"
+    },
+    "difficulty": "normal"
+  },
+  {
+    "level_position": 8,
+    "unit_position": 1,
+    "lesson_position": 1,
+    "position": 4,
+    "exercise_type": "speaking",
+    "content": {
+      "prompt": "次の文を読んでください",
+      "target_text": "わたしのいけんをのべます"
+    },
+    "difficulty": "normal"
+  },
+  {
+    "level_position": 8,
+    "unit_position": 1,
+    "lesson_position": 1,
+    "position": 5,
+    "exercise_type": "listening",
+    "content": {
+      "prompt": "聞いて正しいものを選んでください",
+      "options": [
+        "序論",
+        "本論",
+        "結論",
+        "補論"
+      ],
+      "correct_answer": "序論",
+      "audio_src": "/audio/placeholder.mp3"
+    },
+    "difficulty": "normal"
+  },
+  {
+    "level_position": 9,
+    "unit_position": 1,
+    "lesson_position": 1,
+    "position": 1,
+    "exercise_type": "multiple_choice",
+    "content": {
+      "prompt": "「走れメロス」の作者は？",
+      "options": [
+        "太宰治",
+        "夏目漱石",
+        "芥川龍之介",
+        "三島由紀夫"
+      ],
+      "correct_answer": "太宰治"
+    },
+    "difficulty": "normal"
+  },
+  {
+    "level_position": 9,
+    "unit_position": 1,
+    "lesson_position": 1,
+    "position": 2,
+    "exercise_type": "fill_blank",
+    "content": {
+      "prompt": "メロスは＿した",
+      "target_text": "メロスは激怒した",
+      "correct_answer": "激怒"
+    },
+    "difficulty": "normal"
+  },
+  {
+    "level_position": 9,
+    "unit_position": 1,
+    "lesson_position": 1,
+    "position": 3,
+    "exercise_type": "writing",
+    "content": {
+      "prompt": "読んだ本の感想を書いてください",
+      "target_text": "このほんはとてもおもしろかったです"
+    },
+    "difficulty": "normal"
+  },
+  {
+    "level_position": 9,
+    "unit_position": 1,
+    "lesson_position": 1,
+    "position": 4,
+    "exercise_type": "speaking",
+    "content": {
+      "prompt": "次の文を読んでください",
+      "target_text": "メロスはげきどした"
+    },
+    "difficulty": "normal"
+  },
+  {
+    "level_position": 9,
+    "unit_position": 1,
+    "lesson_position": 1,
+    "position": 5,
+    "exercise_type": "listening",
+    "content": {
+      "prompt": "聞いて正しいものを選んでください",
+      "options": [
+        "太宰治",
+        "夏目漱石",
+        "芥川龍之介",
+        "三島由紀夫"
+      ],
+      "correct_answer": "太宰治",
+      "audio_src": "/audio/placeholder.mp3"
+    },
+    "difficulty": "normal"
+  },
+  {
+    "level_position": 10,
+    "unit_position": 1,
+    "lesson_position": 1,
+    "position": 1,
+    "exercise_type": "multiple_choice",
+    "content": {
+      "prompt": "ビジネスメールの書き出しは？",
+      "options": [
+        "お世話になっております",
+        "こんにちは",
+        "やあ",
+        "元気？"
+      ],
+      "correct_answer": "お世話になっております"
+    },
+    "difficulty": "normal"
+  },
+  {
+    "level_position": 10,
+    "unit_position": 1,
+    "lesson_position": 1,
+    "position": 2,
+    "exercise_type": "fill_blank",
+    "content": {
+      "prompt": "ご検討＿ほど",
+      "target_text": "ご検討のほど",
+      "correct_answer": "の"
+    },
+    "difficulty": "normal"
+  },
+  {
+    "level_position": 10,
+    "unit_position": 1,
+    "lesson_position": 1,
+    "position": 3,
+    "exercise_type": "writing",
+    "content": {
+      "prompt": "ビジネスメールを書いてください",
+      "target_text": "おせわになっております"
+    },
+    "difficulty": "normal"
+  },
+  {
+    "level_position": 10,
+    "unit_position": 1,
+    "lesson_position": 1,
+    "position": 4,
+    "exercise_type": "speaking",
+    "content": {
+      "prompt": "次の文を読んでください",
+      "target_text": "おせわになっております"
+    },
+    "difficulty": "normal"
+  },
+  {
+    "level_position": 10,
+    "unit_position": 1,
+    "lesson_position": 1,
+    "position": 5,
+    "exercise_type": "listening",
+    "content": {
+      "prompt": "聞いて正しいものを選んでください",
+      "options": [
+        "お世話になっております",
+        "こんにちは",
+        "おはよう",
+        "すみません"
+      ],
+      "correct_answer": "お世話になっております",
+      "audio_src": "/audio/placeholder.mp3"
+    },
+    "difficulty": "normal"
+  },
+  {
+    "level_position": 11,
+    "unit_position": 1,
+    "lesson_position": 1,
+    "position": 1,
+    "exercise_type": "multiple_choice",
+    "content": {
+      "prompt": "「いとをかし」の意味は？",
+      "options": [
+        "とても趣がある",
+        "とても悲しい",
+        "とても怖い",
+        "とても大きい"
+      ],
+      "correct_answer": "とても趣がある"
+    },
+    "difficulty": "normal"
+  },
+  {
+    "level_position": 11,
+    "unit_position": 1,
+    "lesson_position": 1,
+    "position": 2,
+    "exercise_type": "fill_blank",
+    "content": {
+      "prompt": "春は＿",
+      "target_text": "春はあけぼの",
+      "correct_answer": "あけぼの"
+    },
+    "difficulty": "normal"
+  },
+  {
+    "level_position": 11,
+    "unit_position": 1,
+    "lesson_position": 1,
+    "position": 3,
+    "exercise_type": "writing",
+    "content": {
+      "prompt": "古典作品について感想を書いてください",
+      "target_text": "まくらのそうしはおもしろいです"
+    },
+    "difficulty": "normal"
+  },
+  {
+    "level_position": 11,
+    "unit_position": 1,
+    "lesson_position": 1,
+    "position": 4,
+    "exercise_type": "speaking",
+    "content": {
+      "prompt": "次の文を読んでください",
+      "target_text": "はるはあけぼの"
+    },
+    "difficulty": "normal"
+  },
+  {
+    "level_position": 11,
+    "unit_position": 1,
+    "lesson_position": 1,
+    "position": 5,
+    "exercise_type": "listening",
+    "content": {
+      "prompt": "聞いて正しいものを選んでください",
+      "options": [
+        "趣がある",
+        "悲しい",
+        "怖い",
+        "大きい"
+      ],
+      "correct_answer": "趣がある",
+      "audio_src": "/audio/placeholder.mp3"
+    },
+    "difficulty": "normal"
+  },
+  {
+    "level_position": 12,
+    "unit_position": 1,
+    "lesson_position": 1,
+    "position": 1,
+    "exercise_type": "multiple_choice",
+    "content": {
+      "prompt": "「忖度」の読み方は？",
+      "options": [
+        "そんたく",
+        "ちゅうど",
+        "すいど",
+        "せんたく"
+      ],
+      "correct_answer": "そんたく"
+    },
+    "difficulty": "normal"
+  },
+  {
+    "level_position": 12,
+    "unit_position": 1,
+    "lesson_position": 1,
+    "position": 2,
+    "exercise_type": "fill_blank",
+    "content": {
+      "prompt": "彼の真意を＿する",
+      "target_text": "彼の真意を忖度する",
+      "correct_answer": "忖度"
+    },
+    "difficulty": "normal"
+  },
+  {
+    "level_position": 12,
+    "unit_position": 1,
+    "lesson_position": 1,
+    "position": 3,
+    "exercise_type": "writing",
+    "content": {
+      "prompt": "社会問題について論じてください",
+      "target_text": "げんだいしゃかいのもんだいについて"
+    },
+    "difficulty": "normal"
+  },
+  {
+    "level_position": 12,
+    "unit_position": 1,
+    "lesson_position": 1,
+    "position": 4,
+    "exercise_type": "speaking",
+    "content": {
+      "prompt": "次の文を読んでください",
+      "target_text": "かれのしんいをそんたくする"
+    },
+    "difficulty": "normal"
+  },
+  {
+    "level_position": 12,
+    "unit_position": 1,
+    "lesson_position": 1,
+    "position": 5,
+    "exercise_type": "listening",
+    "content": {
+      "prompt": "聞いて正しいものを選んでください",
+      "options": [
+        "そんたく",
+        "ちゅうど",
+        "すいど",
+        "せんたく"
+      ],
+      "correct_answer": "そんたく",
+      "audio_src": "/audio/placeholder.mp3"
+    },
+    "difficulty": "normal"
+  }
+]
