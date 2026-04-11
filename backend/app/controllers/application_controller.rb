@@ -1,6 +1,14 @@
 class ApplicationController < ActionController::API
   before_action :authenticate_learner!
 
+  rescue_from ActiveRecord::RecordNotFound do |e|
+    render json: { error: e.message }, status: :not_found
+  end
+
+  rescue_from ActiveRecord::RecordInvalid do |e|
+    render json: { error: e.message }, status: :unprocessable_entity
+  end
+
   private
 
   def authenticate_learner!
