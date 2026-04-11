@@ -3,38 +3,67 @@ name: CI
 on:
   pull_request:
   push:
-    branches: [ main ]
+    branches: [main]
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
-  lint:
+  backend-lint:
     runs-on: ubuntu-latest
     defaults:
       run:
         working-directory: backend
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Set up Ruby
-        uses: ruby/setup-ruby@v1
+      - uses: actions/checkout@v4
+      - uses: ruby/setup-ruby@v1
         with:
           bundler-cache: true
           working-directory: backend
+      - run: bundle exec rubocop
 
-      - name: Lint code for consistent style
-        run: bundle exec rubocop
+  backend-security:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: backend
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ruby/setup-ruby@v1
+        with:
+          bundler-cache: true
+          working-directory: backend
+      - run: bundle exec brakeman -q
+      - run: bundle exec bundler-audit check --update
 
-  test_backend:
+  frontend-lint:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: frontend
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: frontend/package-lock.json
+      - run: npm ci
+      - run: npx eslint .
+      - run: npx tsc --noEmit
+
+  backend-test:
     runs-on: ubuntu-latest
     defaults:
       run:
         working-directory: backend
     services:
       postgres:
-        image: postgres:16
+        image: postgres:16-alpine
         env:
-          POSTGRES_USER: postgres
-          POSTGRES_PASSWORD: postgres
+          POSTGRES_USER: kotoba
+          POSTGRES_PASSWORD: kotoba
         ports:
           - 5432:5432
         options: >-
@@ -43,47 +72,154 @@ jobs:
           --health-timeout 5s
           --health-retries 5
       redis:
-        image: redis:7
+        image: redis:7-alpine
         ports:
           - 6379:6379
     env:
       RAILS_ENV: test
-      DATABASE_URL: postgres://postgres:postgres@localhost/kotoba_test
+      DATABASE_URL: postgres://kotoba:kotoba@localhost/kotoba_test
       REDIS_URL: redis://localhost:6379/0
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Set up Ruby
-        uses: ruby/setup-ruby@v1
+      - uses: actions/checkout@v4
+      - uses: ruby/setup-ruby@v1
         with:
           bundler-cache: true
           working-directory: backend
+      - run: bundle exec rails db:create db:schema:load
+      - run: bundle exec rspec
 
-      - name: Set up database
-        run: bundle exec rails db:create db:schema:load
-
-      - name: Run tests
-        run: bundle exec rspec
-
-  test_frontend:
+  frontend-test:
     runs-on: ubuntu-latest
     defaults:
       run:
         working-directory: frontend
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Set up Node
-        uses: actions/setup-node@v4
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 22
+          cache: npm
+          cache-dependency-path: frontend/package-lock.json
+      - run: npm ci
+      - run: npx jest --ci --coverage
+
+  studio-test:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: kotoba-studio
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ruby/setup-ruby@v1
+        with:
+          bundler-cache: true
+          working-directory: kotoba-studio
+      - run: bundle exec rspec
+
+  e2e-test:
+    needs: [backend-test, frontend-test]
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:16-alpine
+        env:
+          POSTGRES_USER: kotoba
+          POSTGRES_PASSWORD: kotoba
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+      redis:
+        image: redis:7-alpine
+        ports:
+          - 6379:6379
+      ollama:
+        image: ollama/ollama:latest
+        ports:
+          - 11434:11434
+    env:
+      RAILS_ENV: test
+      DATABASE_URL: postgres://kotoba:kotoba@localhost/kotoba_test
+      REDIS_URL: redis://localhost:6379/0
+      AI_PROVIDER: ollama
+      OLLAMA_HOST: http://localhost:11434
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: ruby/setup-ruby@v1
+        with:
+          bundler-cache: true
+          working-directory: backend
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
           cache: npm
           cache-dependency-path: frontend/package-lock.json
 
-      - name: Install dependencies
-        run: npm ci
+      - name: Pull Ollama model
+        run: |
+          for i in $(seq 1 30); do
+            curl -sf http://localhost:11434/api/tags && break
+            sleep 2
+          done
+          curl -s http://localhost:11434/api/pull -d '{"name":"qwen3:8b"}' | tail -1
 
-      - name: Run tests
-        run: npm test
+      - name: Set up database and import content pack
+        working-directory: backend
+        run: |
+          bundle exec rails db:create db:schema:load
+          bundle exec rails "content_pack:import[db/content_pack]"
+          bundle exec rails db:seed
+
+      - name: Start backend
+        working-directory: backend
+        run: bundle exec puma -d
+
+      - name: Build and start frontend
+        working-directory: frontend
+        run: |
+          npm ci
+          RAILS_API_URL=http://localhost:3001 npm run build
+          npm start &
+
+      - name: Wait for services
+        run: |
+          for i in $(seq 1 30); do curl -sf http://localhost:3001/up && break; sleep 2; done
+          for i in $(seq 1 30); do curl -sf http://localhost:3000 && break; sleep 2; done
+
+      - name: Install Playwright browsers
+        working-directory: frontend
+        run: npx playwright install --with-deps chromium
+
+      - name: Run E2E tests
+        working-directory: frontend
+        run: npx playwright test --config=playwright.ci.config.ts
+
+      - name: Run manual tests
+        run: bash scripts/manual_test.sh
+
+      - name: Run manual E2E tests
+        working-directory: frontend
+        run: npx ts-node ../scripts/manual_e2e.ts
+
+      - name: Upload Playwright report
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-report
+          path: frontend/test-results/
+          retention-days: 7
+
+  docker-build:
+    needs: [e2e-test]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build backend image
+        run: docker build -t kotoba-backend ./backend
+      - name: Build frontend image
+        run: docker build -t kotoba-frontend ./frontend
