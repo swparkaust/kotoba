@@ -177,7 +177,7 @@ jobs:
 
       - name: Start backend
         working-directory: backend
-        run: bundle exec puma -d
+        run: bundle exec puma &
 
       - name: Build and start frontend
         working-directory: frontend
@@ -203,8 +203,7 @@ jobs:
         run: bash scripts/manual_test.sh
 
       - name: Run manual E2E tests
-        working-directory: frontend
-        run: npx ts-node ../scripts/manual_e2e.ts
+        run: NODE_PATH=frontend/node_modules npx tsx scripts/manual_e2e.ts
 
       - name: Upload Playwright report
         if: failure()
