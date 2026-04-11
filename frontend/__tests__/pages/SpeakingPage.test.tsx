@@ -1,4 +1,4 @@
-import { render, screen, waitFor } from "@testing-library/react";
+import { render, screen, waitFor, fireEvent } from "@testing-library/react";
 import SpeakingPage from "@/app/speaking/[lessonId]/page";
 import { api } from "@/lib/api";
 import { useSpeechRecorder } from "@/hooks/useSpeechRecorder";
@@ -17,15 +17,22 @@ jest.mock("@/hooks/useSpeechRecorder", () => ({
   useSpeechRecorder: jest.fn(),
 }));
 
+let capturedOnResult: ((text: string) => void) | null = null;
 jest.mock("@/components/SpeakingExercise", () => ({
-  SpeakingExercise: ({ targetText, onResult }: any) => (
-    <div data-testid="speaking-exercise">
-      <span data-testid="target-text">{targetText}</span>
-      <button data-testid="submit-speech" onClick={() => onResult("こんにちは")}>
-        Submit
-      </button>
-    </div>
-  ),
+  SpeakingExercise: ({ targetText, onResult, onSkip }: any) => {
+    capturedOnResult = onResult;
+    return (
+      <div data-testid="speaking-exercise">
+        <span data-testid="target-text">{targetText}</span>
+        <button data-testid="submit-speech" onClick={() => onResult("こんにちは")}>
+          Submit
+        </button>
+        <button data-testid="skip-btn" onClick={onSkip}>
+          Skip
+        </button>
+      </div>
+    );
+  },
 }));
 
 jest.mock("@/components/SpeakingFeedback", () => ({
@@ -91,6 +98,68 @@ describe("SpeakingPage", () => {
 
     await waitFor(() => {
       expect(mockSubmitSpeech).toHaveBeenCalledWith("1", "こんにちは", "こんにちは");
+    });
+  });
+
+  it("shows no exercise found message when no exercises returned", async () => {
+    mockApiGet.mockResolvedValue([]);
+
+    render(<SpeakingPage />);
+
+    await waitFor(() => {
+      expect(screen.getByText("No speaking exercise found for this lesson.")).toBeInTheDocument();
+    });
+  });
+
+  it("calls window.history.back when skip is clicked", async () => {
+    const mockBack = jest.fn();
+    jest.spyOn(window.history, "back").mockImplementation(mockBack);
+
+    mockApiGet.mockResolvedValue([
+      { id: 1, content: { prompt: "Say hello", target_text: "こんにちは", hints: [] } },
+    ]);
+
+    render(<SpeakingPage />);
+
+    await waitFor(() => {
+      expect(screen.getByTestId("skip-btn")).toBeInTheDocument();
+    });
+
+    fireEvent.click(screen.getByTestId("skip-btn"));
+    expect(mockBack).toHaveBeenCalled();
+  });
+
+  it("handles non-array exercises response", async () => {
+    mockApiGet.mockResolvedValue("not-an-array");
+
+    render(<SpeakingPage />);
+
+    await waitFor(() => {
+      expect(screen.getByText("No speaking exercise found for this lesson.")).toBeInTheDocument();
+    });
+  });
+
+  it("does not submit when exercise is null", async () => {
+    mockApiGet.mockResolvedValue([]);
+
+    render(<SpeakingPage />);
+
+    await waitFor(() => {
+      expect(screen.getByText("No speaking exercise found for this lesson.")).toBeInTheDocument();
+    });
+
+    expect(mockSubmitSpeech).not.toHaveBeenCalled();
+  });
+
+  it("shows exercise without prompt", async () => {
+    mockApiGet.mockResolvedValue([
+      { id: 1, content: { target_text: "こんにちは", hints: [] } },
+    ]);
+
+    render(<SpeakingPage />);
+
+    await waitFor(() => {
+      expect(screen.getByTestId("speaking-exercise")).toBeInTheDocument();
     });
   });
 });

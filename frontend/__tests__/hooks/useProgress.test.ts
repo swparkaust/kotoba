@@ -102,4 +102,39 @@ describe("useProgress", () => {
 
     expect(result.current.error).toBe("JLPT error");
   });
+
+  it("uses fallback message on fetchProgress failure with no message", async () => {
+    mockApi.get.mockRejectedValue({});
+    const { result } = renderHook(() => useProgress());
+
+    await act(async () => {
+      await result.current.fetchProgress();
+    });
+
+    expect(result.current.error).toBe("Failed to load progress");
+    expect(result.current.loading).toBe(false);
+  });
+
+  it("uses fallback message on fetchJlptComparison failure with no message", async () => {
+    mockApi.get.mockRejectedValue({});
+    const { result } = renderHook(() => useProgress());
+
+    await act(async () => {
+      await result.current.fetchJlptComparison();
+    });
+
+    expect(result.current.error).toBe("Failed to load JLPT data");
+  });
+
+  it("handles non-array data from fetchProgress", async () => {
+    mockApi.get.mockResolvedValue({ not: "an array" });
+    const { result } = renderHook(() => useProgress());
+
+    await act(async () => {
+      await result.current.fetchProgress();
+    });
+
+    expect(result.current.progress).toEqual([]);
+    expect(result.current.loading).toBe(false);
+  });
 });

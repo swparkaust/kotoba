@@ -104,4 +104,16 @@ describe("useWriting", () => {
 
     expect(result.current.error).toBeNull();
   });
+
+  it("uses fallback message when error has no message", async () => {
+    mockApi.post.mockRejectedValue({});
+    const { result } = renderHook(() => useWriting());
+
+    await act(async () => {
+      await result.current.submitWriting("ex-1", "text");
+    });
+
+    expect(result.current.error).toBe("Failed to submit writing");
+    expect(result.current.submitting).toBe(false);
+  });
 });

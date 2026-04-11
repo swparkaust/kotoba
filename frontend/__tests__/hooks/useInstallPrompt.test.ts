@@ -103,4 +103,17 @@ describe("useInstallPrompt", () => {
     );
     removeListenerSpy.mockRestore();
   });
+
+  it("promptInstall does nothing when no deferred prompt is available", async () => {
+    const { result } = renderHook(() => useInstallPrompt());
+
+    // No beforeinstallprompt event dispatched, so deferredPrompt is null
+    await act(async () => {
+      await result.current.promptInstall();
+    });
+
+    // Should remain in initial state
+    expect(result.current.isInstalled).toBe(false);
+    expect(result.current.isInstallable).toBe(false);
+  });
 });

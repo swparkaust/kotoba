@@ -52,4 +52,38 @@ describe("ListenPage", () => {
     expect(screen.getByTestId("audio-url")).toHaveTextContent("https://example.com/audio.mp3");
     expect(screen.getByTestId("transcription")).toHaveTextContent("今日は天気がいいです");
   });
+
+  it("shows error when fetch fails", async () => {
+    mockApiGet.mockRejectedValue(new Error("Not found"));
+
+    render(<ListenPage />);
+
+    await waitFor(() => {
+      expect(screen.getByText("Not found")).toBeInTheDocument();
+    });
+  });
+
+  it("shows fallback error message when error has no message", async () => {
+    mockApiGet.mockRejectedValue({});
+
+    render(<ListenPage />);
+
+    await waitFor(() => {
+      expect(screen.getByText("Failed to load item")).toBeInTheDocument();
+    });
+  });
+
+  it("handles item with missing optional fields", async () => {
+    mockApiGet.mockResolvedValue({
+      title: "Episode",
+    });
+
+    render(<ListenPage />);
+
+    await waitFor(() => {
+      expect(screen.getByTestId("audio-player")).toBeInTheDocument();
+    });
+    expect(screen.getByTestId("audio-url")).toHaveTextContent("");
+    expect(screen.getByTestId("transcription")).toHaveTextContent("");
+  });
 });

@@ -48,4 +48,46 @@ describe("ProgressPage", () => {
     });
     expect(screen.getByText("Progress")).toBeInTheDocument();
   });
+
+  it("shows error when fetch fails", async () => {
+    mockApiGet.mockRejectedValue(new Error("Failed to load"));
+
+    render(<ProgressPage />);
+
+    await waitFor(() => {
+      expect(screen.getByText("Failed to load")).toBeInTheDocument();
+    });
+  });
+
+  it("does not render JLPT bar when data is null", async () => {
+    mockApiGet.mockResolvedValue(null);
+
+    render(<ProgressPage />);
+
+    await waitFor(() => {
+      expect(screen.getByText("Progress")).toBeInTheDocument();
+    });
+    expect(screen.queryByTestId("jlpt-bar")).not.toBeInTheDocument();
+  });
+
+  it("shows error with default message when error has no message", async () => {
+    mockApiGet.mockRejectedValue({});
+
+    render(<ProgressPage />);
+
+    await waitFor(() => {
+      expect(screen.getByText("Failed to load progress")).toBeInTheDocument();
+    });
+  });
+
+  it("renders heading after loading completes", async () => {
+    mockApiGet.mockResolvedValue({ jlpt_label: "N3", percentage: 45 });
+
+    render(<ProgressPage />);
+
+    await waitFor(() => {
+      expect(screen.queryByText("Loading...")).not.toBeInTheDocument();
+    });
+    expect(screen.getByText("Progress")).toBeInTheDocument();
+  });
 });

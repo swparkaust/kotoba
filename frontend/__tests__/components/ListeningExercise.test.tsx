@@ -82,4 +82,29 @@ describe("ListeningExercise", () => {
     expect(screen.getByTestId("listen-btn")).toHaveTextContent("(2)");
     jest.useRealTimers();
   });
+
+  it("stops audio when clicking button while playing", () => {
+    const mockStop = jest.fn();
+    jest.spyOn(require("@/hooks/useAudio"), "useAudio").mockReturnValue({
+      play: jest.fn(),
+      stop: mockStop,
+      playing: false,
+    });
+
+    jest.useFakeTimers();
+    render(<ListeningExercise {...defaultProps} />);
+    // Start playing
+    fireEvent.click(screen.getByTestId("listen-btn"));
+    // Click again to stop while still playing (before 5s timeout)
+    fireEvent.click(screen.getByTestId("listen-btn"));
+    expect(mockStop).toHaveBeenCalled();
+    jest.useRealTimers();
+  });
+
+  it("highlights selected option after click", () => {
+    render(<ListeningExercise {...defaultProps} />);
+    fireEvent.click(screen.getByTestId("listen-option-1"));
+    const selectedBtn = screen.getByTestId("listen-option-1");
+    expect(selectedBtn.className).toContain("border-orange");
+  });
 });

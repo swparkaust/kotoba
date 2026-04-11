@@ -30,4 +30,52 @@ describe("ReviewFilter", () => {
     const select = screen.getByTestId("filter-type-select");
     expect(select).toBeInTheDocument();
   });
+
+  it("passes selected card type to onApply", () => {
+    const onApply = jest.fn();
+    render(<ReviewFilter onApply={onApply} stats={stats} />);
+    fireEvent.change(screen.getByTestId("filter-type-select"), { target: { value: "kanji" } });
+    fireEvent.click(screen.getByTestId("filter-apply"));
+    expect(onApply).toHaveBeenCalledWith(expect.objectContaining({ card_type: "kanji" }));
+  });
+
+  it("passes level min and max to onApply", () => {
+    const onApply = jest.fn();
+    render(<ReviewFilter onApply={onApply} stats={stats} />);
+    fireEvent.change(screen.getByTestId("filter-level-min"), { target: { value: "3" } });
+    fireEvent.change(screen.getByTestId("filter-level-max"), { target: { value: "7" } });
+    fireEvent.click(screen.getByTestId("filter-apply"));
+    expect(onApply).toHaveBeenCalledWith(expect.objectContaining({ level_min: 3, level_max: 7 }));
+  });
+
+  it("passes time budget to onApply", () => {
+    const onApply = jest.fn();
+    render(<ReviewFilter onApply={onApply} stats={stats} />);
+    fireEvent.change(screen.getByTestId("filter-time-budget"), { target: { value: "15" } });
+    fireEvent.click(screen.getByTestId("filter-apply"));
+    expect(onApply).toHaveBeenCalledWith(expect.objectContaining({ time_budget: 15 }));
+  });
+
+  it("passes undefined for empty fields", () => {
+    const onApply = jest.fn();
+    render(<ReviewFilter onApply={onApply} stats={stats} />);
+    fireEvent.click(screen.getByTestId("filter-apply"));
+    expect(onApply).toHaveBeenCalledWith({
+      card_type: undefined,
+      level_min: undefined,
+      level_max: undefined,
+      time_budget: undefined,
+    });
+  });
+
+  it("displays burned count in stats", () => {
+    render(<ReviewFilter onApply={jest.fn()} stats={stats} />);
+    expect(screen.getByTestId("review-stats")).toHaveTextContent("Burned: 10");
+  });
+
+  it("renders level min and max inputs", () => {
+    render(<ReviewFilter onApply={jest.fn()} stats={stats} />);
+    expect(screen.getByTestId("filter-level-min")).toBeInTheDocument();
+    expect(screen.getByTestId("filter-level-max")).toBeInTheDocument();
+  });
 });

@@ -52,4 +52,78 @@ describe("ContrastiveGrammarExercise", () => {
     render(<ContrastiveGrammarExercise set={mockSet} onAnswer={jest.fn()} />);
     expect(screen.getByText("Question 1 of 2")).toBeInTheDocument();
   });
+
+  it("advances to next question when next is clicked", () => {
+    render(<ContrastiveGrammarExercise set={mockSet} onAnswer={jest.fn()} />);
+    fireEvent.click(screen.getByText("のに"));
+    expect(screen.getByText("Next question →")).toBeInTheDocument();
+    fireEvent.click(screen.getByText("Next question →"));
+    expect(screen.getByText("Question 2 of 2")).toBeInTheDocument();
+  });
+
+  it("does not show next button on last question", () => {
+    render(<ContrastiveGrammarExercise set={mockSet} onAnswer={jest.fn()} />);
+    // Answer first question and go to second
+    fireEvent.click(screen.getByText("のに"));
+    fireEvent.click(screen.getByText("Next question →"));
+    // Answer second question
+    fireEvent.click(screen.getByText("ても"));
+    // No next button on last question
+    expect(screen.queryByText("Next question →")).not.toBeInTheDocument();
+  });
+
+  it("prevents double selection on same question", () => {
+    const onAnswer = jest.fn();
+    render(<ContrastiveGrammarExercise set={mockSet} onAnswer={onAnswer} />);
+    fireEvent.click(screen.getByText("のに"));
+    fireEvent.click(screen.getByText("ても"));
+    expect(onAnswer).toHaveBeenCalledTimes(1);
+  });
+
+  it("shows usage hint on incorrect answer", () => {
+    render(<ContrastiveGrammarExercise set={mockSet} onAnswer={jest.fn()} />);
+    fireEvent.click(screen.getByText("ても"));
+    expect(screen.getByTestId("contrastive-feedback")).toHaveTextContent("仮定的にも使える");
+  });
+
+  it("does not show usage hint on correct answer", () => {
+    render(<ContrastiveGrammarExercise set={mockSet} onAnswer={jest.fn()} />);
+    fireEvent.click(screen.getByText("のに"));
+    expect(screen.getByTestId("contrastive-feedback")).not.toHaveTextContent("仮定的にも使える");
+  });
+
+  it("handles single-exercise set without next button", () => {
+    const singleSet = {
+      ...mockSet,
+      exercises: [
+        { context: "早く起きた___遅刻した", correct: "のに", options: ["ても", "のに"] },
+      ],
+    };
+    render(<ContrastiveGrammarExercise set={singleSet} onAnswer={jest.fn()} />);
+    expect(screen.getByText("Question 1 of 1")).toBeInTheDocument();
+    fireEvent.click(screen.getByText("のに"));
+    expect(screen.queryByText("Next question →")).not.toBeInTheDocument();
+  });
+
+  it("handleNext does not advance past the last question", () => {
+    const singleSet = {
+      ...mockSet,
+      exercises: [
+        { context: "Test", correct: "のに", options: ["ても", "のに"] },
+      ],
+    };
+    render(<ContrastiveGrammarExercise set={singleSet} onAnswer={jest.fn()} />);
+    fireEvent.click(screen.getByText("のに"));
+    // No next button exists
+    expect(screen.queryByText("Next question →")).not.toBeInTheDocument();
+    // Still on question 1
+    expect(screen.getByText("Question 1 of 1")).toBeInTheDocument();
+  });
+
+  it("shows incorrect feedback with usage from first pattern", () => {
+    render(<ContrastiveGrammarExercise set={mockSet} onAnswer={jest.fn()} />);
+    fireEvent.click(screen.getByText("ても"));
+    expect(screen.getByTestId("contrastive-feedback")).toHaveTextContent("不正解");
+    expect(screen.getByTestId("contrastive-feedback")).toHaveTextContent("仮定的にも使える");
+  });
 });

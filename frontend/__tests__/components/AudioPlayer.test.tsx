@@ -52,4 +52,27 @@ describe("AudioPlayer", () => {
     fireEvent.click(playBtn);
     expect(playBtn).toHaveTextContent("⏸");
   });
+
+  it("toggles back to play state after stopping", () => {
+    render(<AudioPlayer {...defaultProps} />);
+    const playBtn = screen.getByTestId("audio-play-btn");
+    fireEvent.click(playBtn);
+    expect(playBtn).toHaveTextContent("⏸");
+    fireEvent.click(playBtn);
+    expect(playBtn).toHaveTextContent("▶");
+  });
+
+  it("calls stop when clicking play button while playing", () => {
+    const mockStop = jest.fn();
+    const mockPlayFn = jest.fn();
+    jest.spyOn(require("@/hooks/useAudio"), "useAudio").mockReturnValue({
+      play: mockPlayFn,
+      stop: mockStop,
+    });
+    render(<AudioPlayer {...defaultProps} />);
+    const playBtn = screen.getByTestId("audio-play-btn");
+    fireEvent.click(playBtn);
+    fireEvent.click(playBtn);
+    expect(mockStop).toHaveBeenCalled();
+  });
 });

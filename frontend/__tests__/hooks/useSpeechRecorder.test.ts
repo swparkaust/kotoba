@@ -148,4 +148,51 @@ describe("useSpeechRecorder", () => {
 
     expect(result.current.error).toBe("Submit failed");
   });
+
+  it("sets error and stops recording on recognition error", () => {
+    const { result } = renderHook(() => useSpeechRecorder());
+    const onTranscript = jest.fn();
+
+    act(() => {
+      result.current.startRecording(onTranscript);
+    });
+
+    expect(result.current.recording).toBe(true);
+
+    act(() => {
+      mockRecognitionInstance.onerror({ error: "network" });
+    });
+
+    expect(result.current.error).toBe("Speech recognition error: network");
+    expect(result.current.recording).toBe(false);
+  });
+
+  it("sets recording to false on recognition end", () => {
+    const { result } = renderHook(() => useSpeechRecorder());
+    const onTranscript = jest.fn();
+
+    act(() => {
+      result.current.startRecording(onTranscript);
+    });
+
+    expect(result.current.recording).toBe(true);
+
+    act(() => {
+      mockRecognitionInstance.onend();
+    });
+
+    expect(result.current.recording).toBe(false);
+  });
+
+  it("uses fallback error message on submit failure with no message", async () => {
+    mockApi.post.mockRejectedValue({});
+    const { result } = renderHook(() => useSpeechRecorder());
+
+    await act(async () => {
+      const data = await result.current.submitSpeech("ex-1", "test", "test");
+      expect(data).toBeNull();
+    });
+
+    expect(result.current.error).toBe("Failed to submit speech");
+  });
 });

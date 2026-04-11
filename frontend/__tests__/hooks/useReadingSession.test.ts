@@ -160,4 +160,65 @@ describe("useReadingSession", () => {
     });
     expect(result.current.elapsed).toBe(5);
   });
+
+  it("start clears existing timer before creating new one", () => {
+    const { result } = renderHook(() => useReadingSession("item-1"));
+
+    act(() => {
+      result.current.start();
+    });
+
+    act(() => {
+      jest.advanceTimersByTime(2000);
+    });
+    expect(result.current.elapsed).toBe(2);
+
+    // Start again - should clear the old timer
+    act(() => {
+      result.current.start();
+    });
+
+    act(() => {
+      jest.advanceTimersByTime(1000);
+    });
+    // Should be 3, not 4 (no double-counting from two timers)
+    expect(result.current.elapsed).toBe(3);
+  });
+
+  it("pause does nothing when no timer is running", () => {
+    const { result } = renderHook(() => useReadingSession("item-1"));
+
+    // Should not throw
+    act(() => {
+      result.current.pause();
+    });
+
+    expect(result.current.elapsed).toBe(0);
+  });
+
+  it("addGlossCard does not add duplicate words", () => {
+    const { result } = renderHook(() => useReadingSession("item-1"));
+
+    act(() => {
+      result.current.addGlossCard("猫", "cat");
+    });
+    expect(result.current.newCardCount).toBe(1);
+
+    act(() => {
+      result.current.addGlossCard("猫", "cat");
+    });
+    // Should still be 1 - duplicate word
+    expect(result.current.newCardCount).toBe(1);
+  });
+
+  it("uses fallback message on saveSession failure with no message", async () => {
+    mockApi.post.mockRejectedValue({});
+    const { result } = renderHook(() => useReadingSession("item-1"));
+
+    await act(async () => {
+      await result.current.saveSession("reading", 50);
+    });
+
+    expect(result.current.error).toBe("Failed to save reading session");
+  });
 });

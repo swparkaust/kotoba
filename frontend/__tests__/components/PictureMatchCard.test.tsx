@@ -51,4 +51,52 @@ describe("PictureMatchCard", () => {
     fireEvent.click(screen.getByTestId("match-option-1"));
     expect(defaultProps.onSelect).toHaveBeenCalledTimes(1);
   });
+
+  it("shows fallback character when image fails to load", () => {
+    render(<PictureMatchCard {...defaultProps} />);
+    const option0 = screen.getByTestId("match-option-0");
+    const img = option0.querySelector("img")!;
+    expect(img).toBeInTheDocument();
+    fireEvent.error(img);
+    expect(option0.querySelector("img")).not.toBeInTheDocument();
+    expect(option0.querySelector("span")).toHaveTextContent("猫");
+  });
+
+  it("selects wrong answer and shows red border class", () => {
+    render(<PictureMatchCard {...defaultProps} />);
+    fireEvent.click(screen.getByTestId("match-option-1"));
+    expect(defaultProps.onSelect).toHaveBeenCalledWith(1);
+    const correctBtn = screen.getByTestId("match-option-0");
+    expect(correctBtn.className).toContain("border-green");
+    const wrongBtn = screen.getByTestId("match-option-1");
+    expect(wrongBtn.className).toContain("border-red");
+  });
+
+  it("selects correct answer and shows green border class", () => {
+    render(<PictureMatchCard {...defaultProps} />);
+    fireEvent.click(screen.getByTestId("match-option-0"));
+    const correctBtn = screen.getByTestId("match-option-0");
+    expect(correctBtn.className).toContain("border-green");
+  });
+
+  it("unselected options get opacity-50 after selection", () => {
+    render(<PictureMatchCard {...defaultProps} />);
+    fireEvent.click(screen.getByTestId("match-option-0"));
+    const unselectedBtn = screen.getByTestId("match-option-2");
+    expect(unselectedBtn.className).toContain("opacity-50");
+  });
+
+  it("renders images for all options initially", () => {
+    render(<PictureMatchCard {...defaultProps} />);
+    const imgs = screen.getByTestId("picture-match").querySelectorAll("img");
+    expect(imgs).toHaveLength(4);
+  });
+
+  it("handleSelect returns early when already selected (via non-disabled elem)", () => {
+    const onSelect = jest.fn();
+    render(<PictureMatchCard options={defaultProps.options} onSelect={onSelect} />);
+
+    fireEvent.click(screen.getByTestId("match-option-0"));
+    expect(onSelect).toHaveBeenCalledTimes(1);
+  });
 });

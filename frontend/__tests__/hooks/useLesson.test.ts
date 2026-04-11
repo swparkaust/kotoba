@@ -100,4 +100,29 @@ describe("useLesson", () => {
     expect(result.current.error).toBe("Invalid answer");
     expect(returnedData).toBeNull();
   });
+
+  it("uses fallback message when fetchLesson error has no message", async () => {
+    mockApi.get.mockRejectedValue({});
+    const { result } = renderHook(() => useLesson("bad-id"));
+
+    await act(async () => {
+      await result.current.fetchLesson();
+    });
+
+    expect(result.current.error).toBe("Failed to load lesson");
+    expect(result.current.loading).toBe(false);
+  });
+
+  it("uses fallback message when submitAnswer error has no message", async () => {
+    mockApi.post.mockRejectedValue({});
+    const { result } = renderHook(() => useLesson("lesson-1"));
+
+    let returnedData: any;
+    await act(async () => {
+      returnedData = await result.current.submitAnswer("e1", "wrong");
+    });
+
+    expect(result.current.error).toBe("Failed to submit answer");
+    expect(returnedData).toBeNull();
+  });
 });

@@ -133,4 +133,37 @@ describe("usePushNotifications", () => {
     expect(result.current.isSubscribed).toBe(true);
     expect(mockPushManager.subscribe).not.toHaveBeenCalled();
   });
+
+  it("uses fallback message when subscribe error has no message", async () => {
+    mockPushManager.subscribe.mockRejectedValue({});
+    const { result } = renderHook(() => usePushNotifications());
+
+    await act(async () => {
+      await new Promise((r) => setTimeout(r, 0));
+    });
+
+    await act(async () => {
+      await result.current.subscribe();
+    });
+
+    expect(result.current.error).toBe("Failed to subscribe to notifications");
+    expect(result.current.isSubscribed).toBe(false);
+  });
+
+  it("sets error when api.post fails during subscribe", async () => {
+    mockPushManager.subscribe.mockResolvedValue(mockSubscription);
+    mockApi.post.mockRejectedValue(new Error("API post failed"));
+    const { result } = renderHook(() => usePushNotifications());
+
+    await act(async () => {
+      await new Promise((r) => setTimeout(r, 0));
+    });
+
+    await act(async () => {
+      await result.current.subscribe();
+    });
+
+    expect(result.current.error).toBe("API post failed");
+    expect(result.current.isSubscribed).toBe(false);
+  });
 });

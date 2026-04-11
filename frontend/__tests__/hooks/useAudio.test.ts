@@ -107,4 +107,16 @@ describe("useAudio", () => {
 
     expect(result.current.error).toBeNull();
   });
+
+  it("uses fallback message when play error has no message", async () => {
+    mockPlay.mockRejectedValue({});
+    const { result } = renderHook(() => useAudio());
+
+    await act(async () => {
+      result.current.play("test.mp3");
+      await new Promise((r) => setTimeout(r, 0));
+    });
+
+    expect(result.current.error).toBe("Audio playback failed");
+  });
 });

@@ -70,4 +70,24 @@ describe("MultipleChoice", () => {
     fireEvent.click(screen.getByText("🔊 Listen"));
     expect(mockPlay).toHaveBeenCalledWith("/audio/test.mp3");
   });
+
+  it("prevents double selection (second click is ignored)", () => {
+    const onAnswer = jest.fn();
+    render(<MultipleChoice {...defaultProps} onAnswer={onAnswer} />);
+    fireEvent.click(screen.getByTestId("choice-0"));
+    fireEvent.click(screen.getByTestId("choice-1"));
+    expect(onAnswer).toHaveBeenCalledTimes(1);
+    expect(onAnswer).toHaveBeenCalledWith("あ");
+  });
+
+  it("does not render image when imageUrl is undefined", () => {
+    render(<MultipleChoice {...defaultProps} />);
+    expect(screen.queryByRole("presentation")).not.toBeInTheDocument();
+  });
+
+  it("renders both image and audio button together", () => {
+    render(<MultipleChoice {...defaultProps} imageUrl="/img.png" audioUrl="/audio/test.mp3" />);
+    expect(screen.getByRole("presentation")).toBeInTheDocument();
+    expect(screen.getByText("🔊 Listen")).toBeInTheDocument();
+  });
 });

@@ -48,4 +48,35 @@ describe("LibraryPage", () => {
       expect(screen.getByTestId("library-browser")).toHaveTextContent("Story One,Story Two");
     });
   });
+
+  it("handles non-array response by setting empty items", async () => {
+    mockApiGet.mockResolvedValue("not-an-array");
+
+    render(<LibraryPage />);
+
+    await waitFor(() => {
+      expect(screen.getByTestId("library-browser")).toBeInTheDocument();
+      expect(screen.getByTestId("library-browser")).toHaveTextContent("");
+    });
+  });
+
+  it("shows error when fetch fails", async () => {
+    mockApiGet.mockRejectedValue(new Error("Server error"));
+
+    render(<LibraryPage />);
+
+    await waitFor(() => {
+      expect(screen.getByText("Server error")).toBeInTheDocument();
+    });
+  });
+
+  it("shows fallback error message when error has no message", async () => {
+    mockApiGet.mockRejectedValue({});
+
+    render(<LibraryPage />);
+
+    await waitFor(() => {
+      expect(screen.getByText("Failed to load library")).toBeInTheDocument();
+    });
+  });
 });

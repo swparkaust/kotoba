@@ -93,4 +93,75 @@ describe("WritingPage", () => {
       expect(mockSubmitWriting).toHaveBeenCalledWith("1", "私は学生です");
     });
   });
+
+  it("shows no exercise found message when no exercises returned", async () => {
+    mockApiGet.mockResolvedValue([]);
+
+    render(<WritingPage />);
+
+    await waitFor(() => {
+      expect(screen.getByText("No writing exercise found for this lesson.")).toBeInTheDocument();
+    });
+  });
+
+  it("renders hints when hints are provided", async () => {
+    mockApiGet.mockResolvedValue([
+      { id: 1, content: { prompt: "Write about yourself", hints: ["Use polite form", "Introduce your hobby"] } },
+    ]);
+
+    render(<WritingPage />);
+
+    await waitFor(() => {
+      expect(screen.getByText("Hint: Use polite form")).toBeInTheDocument();
+    });
+    expect(screen.getByText("Hint: Introduce your hobby")).toBeInTheDocument();
+  });
+
+  it("does not render hints when hints array is empty", async () => {
+    mockApiGet.mockResolvedValue([
+      { id: 1, content: { prompt: "Write something", hints: [] } },
+    ]);
+
+    render(<WritingPage />);
+
+    await waitFor(() => {
+      expect(screen.getByTestId("writing-exercise")).toBeInTheDocument();
+    });
+    expect(screen.queryByText(/Hint:/)).not.toBeInTheDocument();
+  });
+
+  it("does not render hints when hints is undefined", async () => {
+    mockApiGet.mockResolvedValue([
+      { id: 1, content: { prompt: "Write something" } },
+    ]);
+
+    render(<WritingPage />);
+
+    await waitFor(() => {
+      expect(screen.getByTestId("writing-exercise")).toBeInTheDocument();
+    });
+    expect(screen.queryByText(/Hint:/)).not.toBeInTheDocument();
+  });
+
+  it("handles non-array exercises response", async () => {
+    mockApiGet.mockResolvedValue("not-an-array");
+
+    render(<WritingPage />);
+
+    await waitFor(() => {
+      expect(screen.getByText("No writing exercise found for this lesson.")).toBeInTheDocument();
+    });
+  });
+
+  it("does not submit when exercise is null (handleSubmit early return)", async () => {
+    mockApiGet.mockResolvedValue([]);
+
+    render(<WritingPage />);
+
+    await waitFor(() => {
+      expect(screen.getByText("No writing exercise found for this lesson.")).toBeInTheDocument();
+    });
+
+    expect(mockSubmitWriting).not.toHaveBeenCalled();
+  });
 });

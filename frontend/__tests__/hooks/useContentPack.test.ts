@@ -86,4 +86,15 @@ describe("useContentPack", () => {
 
     expect(result.current.error).toBe("Network failure");
   });
+
+  it("uses fallback message when error has no message", async () => {
+    mockApi.get.mockRejectedValue({});
+    const { result } = renderHook(() => useContentPack());
+
+    await act(async () => {
+      await result.current.checkForUpdate(1);
+    });
+
+    expect(result.current.error).toBe("Failed to check for updates");
+  });
 });

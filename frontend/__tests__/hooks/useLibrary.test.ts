@@ -101,4 +101,98 @@ describe("useLibrary", () => {
     );
     expect(result.current.items).toEqual([{ id: 2 }]);
   });
+
+  it("sets error on fetchByLevel failure", async () => {
+    mockApi.get.mockRejectedValue(new Error("Level fetch error"));
+    const { result } = renderHook(() => useLibrary());
+
+    await act(async () => {
+      await result.current.fetchByLevel(1, 5);
+    });
+
+    expect(result.current.error).toBe("Level fetch error");
+    expect(result.current.items).toEqual([]);
+  });
+
+  it("uses fallback message on fetchByLevel failure with no message", async () => {
+    mockApi.get.mockRejectedValue({});
+    const { result } = renderHook(() => useLibrary());
+
+    await act(async () => {
+      await result.current.fetchByLevel(1, 5);
+    });
+
+    expect(result.current.error).toBe("Failed to load library");
+    expect(result.current.items).toEqual([]);
+  });
+
+  it("sets error on fetchStats failure", async () => {
+    mockApi.get.mockRejectedValue(new Error("Stats error"));
+    const { result } = renderHook(() => useLibrary());
+
+    await act(async () => {
+      await result.current.fetchStats();
+    });
+
+    expect(result.current.error).toBe("Stats error");
+  });
+
+  it("uses fallback message on fetchStats failure with no message", async () => {
+    mockApi.get.mockRejectedValue({});
+    const { result } = renderHook(() => useLibrary());
+
+    await act(async () => {
+      await result.current.fetchStats();
+    });
+
+    expect(result.current.error).toBe("Failed to load reading stats");
+  });
+
+  it("uses fallback message on fetchRecommended failure with no message", async () => {
+    mockApi.get.mockRejectedValue({});
+    const { result } = renderHook(() => useLibrary());
+
+    await act(async () => {
+      await result.current.fetchRecommended();
+    });
+
+    expect(result.current.error).toBe("Failed to load library");
+    expect(result.current.items).toEqual([]);
+  });
+
+  it("fetchByLevel without itemType omits item_type param", async () => {
+    mockApi.get.mockResolvedValue([{ id: 3 }]);
+    const { result } = renderHook(() => useLibrary());
+
+    await act(async () => {
+      await result.current.fetchByLevel(2, 4, undefined, "ko");
+    });
+
+    expect(mockApi.get).toHaveBeenCalledWith(
+      "/library?language_code=ko&level_min=2&level_max=4"
+    );
+    expect(result.current.items).toEqual([{ id: 3 }]);
+  });
+
+  it("fetchRecommended handles non-array response by setting empty items", async () => {
+    mockApi.get.mockResolvedValue("not-an-array");
+    const { result } = renderHook(() => useLibrary());
+
+    await act(async () => {
+      await result.current.fetchRecommended();
+    });
+
+    expect(result.current.items).toEqual([]);
+  });
+
+  it("fetchByLevel handles non-array response by setting empty items", async () => {
+    mockApi.get.mockResolvedValue("not-an-array");
+    const { result } = renderHook(() => useLibrary());
+
+    await act(async () => {
+      await result.current.fetchByLevel(1, 5);
+    });
+
+    expect(result.current.items).toEqual([]);
+  });
 });

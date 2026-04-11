@@ -108,4 +108,50 @@ describe("useReview", () => {
 
     expect(result.current.error).toBe("Server error");
   });
+
+  it("sets error on submitReview failure", async () => {
+    mockApi.post.mockRejectedValue(new Error("Submit error"));
+    const { result } = renderHook(() => useReview());
+
+    await act(async () => {
+      await result.current.submitReview("c1", true);
+    });
+
+    expect(result.current.error).toBe("Submit error");
+  });
+
+  it("uses fallback message on submitReview failure with no message", async () => {
+    mockApi.post.mockRejectedValue({});
+    const { result } = renderHook(() => useReview());
+
+    await act(async () => {
+      await result.current.submitReview("c1", false);
+    });
+
+    expect(result.current.error).toBe("Failed to submit review");
+  });
+
+  it("uses fallback message on fetchDueCards failure with no message", async () => {
+    mockApi.get.mockRejectedValue({});
+    const { result } = renderHook(() => useReview());
+
+    await act(async () => {
+      await result.current.fetchDueCards();
+    });
+
+    expect(result.current.error).toBe("Failed to load review cards");
+    expect(result.current.cards).toEqual([]);
+  });
+
+  it("fetchDueCards handles non-array response by setting empty cards", async () => {
+    mockApi.get.mockResolvedValue("not-an-array");
+    const { result } = renderHook(() => useReview());
+
+    await act(async () => {
+      await result.current.fetchDueCards();
+    });
+
+    expect(result.current.cards).toEqual([]);
+    expect(result.current.remaining).toBe(0);
+  });
 });
