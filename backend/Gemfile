@@ -11,7 +11,7 @@ gem "sidekiq", "~> 7.0"
 gem "web-push", "~> 3.0"
 gem "anthropic", "~> 0.3"
 gem "image_processing", "~> 1.13"
-gem "connection_pool", "~> 2.4"
+gem "connection_pool", "~> 3.0"
 gem "ruby-openai"
 gem "dotenv-rails"
 gem "tzinfo-data", platforms: %i[windows jruby]
