@@ -36,10 +36,16 @@ RSpec.describe Studio::ContentPackExporter do
       curriculum_units: units_relation)
   end
 
+  let(:exercise_lesson_double) do
+    unit_for_ex = double("UnitForExercise", position: 1, curriculum_level: double("LevelForExercise", position: 1))
+    double("LessonForExercise", position: 1, curriculum_unit: unit_for_ex)
+  end
+
   let(:exercise_double) do
     double("Exercise",
       id: 1, lesson_id: 1, position: 1, exercise_type: "multiple_choice",
-      content: { "prompt" => "test" }, difficulty: "easy")
+      content: { "prompt" => "test" }, difficulty: "easy",
+      lesson: exercise_lesson_double)
   end
 
   let(:asset_double) do
@@ -67,7 +73,13 @@ RSpec.describe Studio::ContentPackExporter do
     exercises_query = double("ExercisesQuery")
     allow(Exercise).to receive(:joins).and_return(exercises_query)
     allow(exercises_query).to receive(:where).and_return(exercises_query)
+    allow(exercises_query).to receive(:includes).and_return(exercises_query)
     allow(exercises_query).to receive(:map) { |&block| [exercise_double].map(&block) }
+
+    stub_const("LibraryItem", Class.new { def self.where(**); end })
+    library_query = double("LibraryQuery")
+    allow(LibraryItem).to receive(:where).and_return(library_query)
+    allow(library_query).to receive(:map) { |&block| [].map(&block) }
 
     assets_query = double("AssetsQuery")
     allow(ContentAsset).to receive(:joins).and_return(assets_query)
@@ -131,7 +143,16 @@ RSpec.describe Studio::ContentPackExporter do
 
         exercises = JSON.parse(File.read(exercises_path))
         expect(exercises.size).to eq(1)
-        expect(exercises[0]["exercise_type"]).to eq("multiple_choice")
+        ex = exercises[0]
+        expect(ex["exercise_type"]).to eq("multiple_choice")
+        expect(ex["level_position"]).to eq(1)
+        expect(ex["unit_position"]).to eq(1)
+        expect(ex["lesson_position"]).to eq(1)
+        expect(ex["position"]).to eq(1)
+        expect(ex["content"]).to eq({ "prompt" => "test" })
+        expect(ex["difficulty"]).to eq("easy")
+        expect(ex).not_to have_key("id")
+        expect(ex).not_to have_key("lesson_id")
       end
     end
 

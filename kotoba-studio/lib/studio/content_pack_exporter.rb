@@ -13,6 +13,7 @@ module Studio
       export_manifest(output_path)
       export_curriculum(output_path)
       export_exercises(output_path)
+      export_library(output_path)
       export_assets(output_path)
 
       log_info "Content pack exported to #{output_path}"
@@ -51,11 +52,15 @@ module Studio
       exercises = Exercise.joins(lesson: { curriculum_unit: { curriculum_level: :language } })
                           .where(languages: { code: @lang.code })
                           .where(qa_status: "passed")
+                          .includes(lesson: { curriculum_unit: :curriculum_level })
 
       exercises_data = exercises.map do |ex|
+        level = ex.lesson.curriculum_unit.curriculum_level
+        unit = ex.lesson.curriculum_unit
         {
-          id: ex.id,
-          lesson_id: ex.lesson_id,
+          level_position: level.position,
+          unit_position: unit.position,
+          lesson_position: ex.lesson.position,
           position: ex.position,
           exercise_type: ex.exercise_type,
           content: ex.content,
@@ -64,6 +69,26 @@ module Studio
       end
 
       File.write("#{path}/exercises.json", JSON.pretty_generate(exercises_data))
+    end
+
+    def export_library(path)
+      items = LibraryItem.where(language: language, active: true)
+
+      library_data = items.map do |item|
+        {
+          item_type: item.item_type,
+          title: item.title,
+          body_text: item.body_text,
+          audio_url: item.audio_url,
+          attribution: item.attribution,
+          license: item.license,
+          difficulty_level: item.difficulty_level,
+          word_count: item.word_count,
+          glosses: item.glosses
+        }
+      end
+
+      File.write("#{path}/library.json", JSON.pretty_generate(library_data))
     end
 
     def export_assets(path)

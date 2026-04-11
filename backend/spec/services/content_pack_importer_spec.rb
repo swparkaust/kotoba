@@ -32,13 +32,13 @@ RSpec.describe ContentPackImporter, type: :service do
               position: 1,
               title: "Unit 1",
               description: "First unit",
-              target_items: { characters: ["あ"] },
+              target_items: { characters: [ "あ" ] },
               lessons: [
                 {
                   position: 1,
                   title: "Lesson 1",
                   skill_type: "character_intro",
-                  objectives: ["Learn あ"]
+                  objectives: [ "Learn あ" ]
                 }
               ]
             }
@@ -138,6 +138,62 @@ RSpec.describe ContentPackImporter, type: :service do
       importer.import!
       expect(importer.stats[:levels]).to eq(1)
       expect(importer.stats[:lessons]).to eq(1)
+    end
+
+    it "imports exercises from exercises.json using position matching" do
+      exercises = [
+        { level_position: 1, unit_position: 1, lesson_position: 1, position: 1,
+          exercise_type: "multiple_choice", content: { "prompt" => "test", "options" => %w[a b], "correct_answer" => "a" },
+          difficulty: "normal" }
+      ]
+      File.write(File.join(pack_dir, "exercises.json"), exercises.to_json)
+
+      importer = described_class.new(path: pack_dir)
+      importer.import!
+      expect(Exercise.count).to eq(1)
+      expect(Exercise.last.exercise_type).to eq("multiple_choice")
+      expect(Exercise.last.qa_status).to eq("passed")
+      expect(importer.stats[:exercises]).to eq(1)
+    end
+
+    it "skips exercises with non-existent curriculum positions" do
+      exercises = [
+        { level_position: 99, unit_position: 1, lesson_position: 1, position: 1,
+          exercise_type: "fill_blank", content: { "prompt" => "test" }, difficulty: "normal" }
+      ]
+      File.write(File.join(pack_dir, "exercises.json"), exercises.to_json)
+
+      importer = described_class.new(path: pack_dir)
+      importer.import!
+      expect(Exercise.count).to eq(0)
+    end
+
+    it "imports library items from library.json" do
+      library = [
+        { item_type: "graded_reader", title: "桃太郎", body_text: "むかしむかし",
+          audio_url: nil, attribution: "Folk tale", license: "public_domain",
+          difficulty_level: 5, word_count: 800, glosses: [] }
+      ]
+      File.write(File.join(pack_dir, "library.json"), library.to_json)
+
+      importer = described_class.new(path: pack_dir)
+      importer.import!
+      expect(LibraryItem.count).to eq(1)
+      expect(LibraryItem.last.title).to eq("桃太郎")
+      expect(LibraryItem.last.item_type).to eq("graded_reader")
+    end
+
+    it "imports library items with audio_url" do
+      library = [
+        { item_type: "podcast", title: "ニュース", body_text: "きょうのニュース",
+          audio_url: "/audio/news.mp3", attribution: "NHK", license: "public_domain",
+          difficulty_level: 3, word_count: 200, glosses: [] }
+      ]
+      File.write(File.join(pack_dir, "library.json"), library.to_json)
+
+      importer = described_class.new(path: pack_dir)
+      importer.import!
+      expect(LibraryItem.last.audio_url).to eq("/audio/news.mp3")
     end
   end
 end
