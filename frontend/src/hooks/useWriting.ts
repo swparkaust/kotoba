@@ -21,8 +21,8 @@ export function useWriting() {
       const data = await api.post("/writing/submit", { exercise_id: exerciseId, text });
       setFeedback(data);
       return data;
-    } catch (e: any) {
-      setError(e?.message || "Failed to submit writing");
+    } catch (e: unknown) {
+      setError(e instanceof Error ? e.message : "Failed to submit writing");
     } finally {
       setSubmitting(false);
     }

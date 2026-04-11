@@ -37,8 +37,8 @@ export function useReadingSession(itemId: string) {
         progress_pct: progressPct,
         new_srs_cards: newCardsRef.current,
       });
-    } catch (e: any) {
-      setError(e?.message || "Failed to save reading session");
+    } catch (e: unknown) {
+      setError(e instanceof Error ? e.message : "Failed to save reading session");
     }
   }, [itemId]);
 

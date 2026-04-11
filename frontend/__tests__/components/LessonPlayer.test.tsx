@@ -13,10 +13,19 @@ jest.mock("@/components/ExerciseRenderer", () => ({
 describe("LessonPlayer", () => {
   const defaultProps = {
     lesson: {
+      id: 1,
+      position: 1,
+      title: "Test Lesson",
+      skill_type: "vocabulary",
+      objectives: ["Learn basics"],
+      content_status: "ready",
+      content_assets: [],
+      progress_status: "not_started",
+      score: null,
       exercises: [
-        { id: "ex1", exercise_type: "multiple_choice", content: { prompt: "Q1", options: ["a", "b"] } },
-        { id: "ex2", exercise_type: "fill_blank", content: { prompt: "Q2" } },
-        { id: "ex3", exercise_type: "trace", content: { character: "あ" } },
+        { id: 1, position: 1, exercise_type: "multiple_choice", content: { prompt: "Q1", options: ["a", "b"] } },
+        { id: 2, position: 2, exercise_type: "fill_blank", content: { prompt: "Q2" } },
+        { id: 3, position: 3, exercise_type: "trace", content: { character: "あ" } },
       ],
     },
     currentExercise: 0,
@@ -63,7 +72,7 @@ describe("LessonPlayer", () => {
     render(
       <LessonPlayer
         {...defaultProps}
-        lesson={{ exercises: [{ id: "ex1", exercise_type: "multiple_choice", content: { prompt: "Q1", options: ["a"] } }] }}
+        lesson={{ ...defaultProps.lesson, exercises: [{ id: 1, position: 1, exercise_type: "multiple_choice", content: { prompt: "Q1", options: ["a"] } }] }}
         currentExercise={1}
       />
     );
@@ -82,7 +91,7 @@ describe("LessonPlayer", () => {
 
   it("does not call onComplete when lesson has no exercises", () => {
     const onComplete = jest.fn();
-    render(<LessonPlayer {...defaultProps} lesson={{ exercises: [] }} currentExercise={0} onComplete={onComplete} />);
+    render(<LessonPlayer {...defaultProps} lesson={{ ...defaultProps.lesson, exercises: [] }} currentExercise={0} onComplete={onComplete} />);
     expect(onComplete).not.toHaveBeenCalled();
   });
 
@@ -90,6 +99,6 @@ describe("LessonPlayer", () => {
     const onAnswer = jest.fn();
     render(<LessonPlayer {...defaultProps} onAnswer={onAnswer} />);
     fireEvent.click(screen.getByTestId("mock-answer-btn"));
-    expect(onAnswer).toHaveBeenCalledWith("ex1", "test-answer");
+    expect(onAnswer).toHaveBeenCalledWith("1", "test-answer");
   });
 });

@@ -4,15 +4,32 @@ import { useEffect, useState } from "react";
 import { api } from "@/lib/api";
 import { ReviewSession } from "@/components/ReviewSession";
 import { ReviewFilter } from "@/components/ReviewFilter";
+import { ReviewCard } from "@/hooks/useReview";
+
+interface ReviewStats {
+  total: number;
+  active: number;
+  burned: number;
+  due_now: number;
+  due_today: number;
+}
+
+interface ReviewFilters {
+  card_type?: string;
+  level_min?: number;
+  level_max?: number;
+  time_budget?: number;
+}
 
 export default function ReviewPage() {
-  const [cards, setCards] = useState<any[]>([]);
+  const [cards, setCards] = useState<ReviewCard[]>([]);
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [stats, setStats] = useState({ total: 0, active: 0, burned: 0, due_now: 0, due_today: 0 });
+  const [stats, setStats] = useState<ReviewStats>({ total: 0, active: 0, burned: 0, due_now: 0, due_today: 0 });
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- synchronous setState before async fetch is standard loading-state pattern
     setLoading(true);
     Promise.all([
       api.get("/reviews").then((data) => setCards(Array.isArray(data) ? data : [])),
@@ -44,7 +61,7 @@ export default function ReviewPage() {
     }
   };
 
-  const handleFilter = async (filters: any) => {
+  const handleFilter = async (filters: ReviewFilters) => {
     setError(null);
     try {
       const params = new URLSearchParams();
@@ -53,8 +70,8 @@ export default function ReviewPage() {
       const data = await api.get(`/reviews?${params.toString()}`);
       setCards(Array.isArray(data) ? data : []);
       setCurrentIndex(0);
-    } catch (e: any) {
-      setError(e?.message || "Failed to apply filter");
+    } catch (e: unknown) {
+      setError(e instanceof Error ? e.message : "Failed to apply filter");
     }
   };
 

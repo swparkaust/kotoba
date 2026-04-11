@@ -60,8 +60,8 @@ export default function PlacementPage() {
             overall_score: data.overall_score,
             id: data.id,
           });
-        } catch (e: any) {
-          setError(e?.message || "Failed to submit placement test");
+        } catch (e: unknown) {
+          setError(e instanceof Error ? e.message : "Failed to submit placement test");
         } finally {
           setSubmitting(false);
         }
@@ -78,8 +78,8 @@ export default function PlacementPage() {
       try {
         await api.post(`/placement/${result.id}/accept`, { chosen_level: level });
         router.push("/dashboard");
-      } catch (e: any) {
-        setError(e?.message || "Failed to accept placement");
+      } catch (e: unknown) {
+        setError(e instanceof Error ? e.message : "Failed to accept placement");
       }
     },
     [result, router]

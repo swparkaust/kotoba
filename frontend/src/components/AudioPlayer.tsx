@@ -23,7 +23,7 @@ export function AudioPlayer({ src, label }: AudioPlayerProps) {
       play(src, SPEEDS[speedIndex]);
       setPlaying(true);
     }
-  }, [src, play, stop, playing]);
+  }, [src, play, stop, playing, speedIndex]);
 
   const cycleSpeed = useCallback(() => {
     setSpeedIndex((prev) => (prev + 1) % SPEEDS.length);

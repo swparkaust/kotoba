@@ -8,22 +8,59 @@ import { LevelMap } from "@/components/LevelMap";
 import { JlptProgressBar } from "@/components/JlptProgressBar";
 import { StreakFreeEncouragement } from "@/components/StreakFreeEncouragement";
 
+interface CurriculumLevel {
+  id: number;
+  position: number;
+  title: string;
+  mext_grade: number;
+  jlpt_approx: string;
+  description: string;
+  curriculum_units: Array<{
+    id: number;
+    position: number;
+    title: string;
+    description: string;
+    target_items: string[];
+    lessons: Array<{
+      id: number;
+      position: number;
+      title: string;
+      skill_type: string;
+      content_status: string;
+    }>;
+  }>;
+  lesson_count: number;
+  completed_count: number;
+}
+
+interface JlptData {
+  jlpt_label: string;
+  percentage: number;
+  completed_levels: number;
+}
+
+interface ProgressEntry {
+  id: number;
+  status: string;
+}
+
 export default function DashboardPage() {
   const router = useRouter();
   const { languageCode } = useLanguage();
-  const [levels, setLevels] = useState<any[]>([]);
-  const [jlpt, setJlpt] = useState<any>(null);
+  const [levels, setLevels] = useState<CurriculumLevel[]>([]);
+  const [jlpt, setJlpt] = useState<JlptData | null>(null);
   const [lessonsCompleted, setLessonsCompleted] = useState(0);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- synchronous setState before async fetch is standard loading-state pattern
     setLoading(true);
     Promise.all([
       api.get(`/curriculum?language_code=${languageCode}`).then(setLevels),
       api.get(`/progress/jlpt_comparison?language_code=${languageCode}`).then(setJlpt),
       api.get("/progress").then((data) => {
-        setLessonsCompleted((Array.isArray(data) ? data : []).filter((p: any) => p.status === "completed").length);
+        setLessonsCompleted((Array.isArray(data) ? data : []).filter((p: ProgressEntry) => p.status === "completed").length);
       }),
     ])
       .catch((e) => setError(e?.message || "Failed to load dashboard"))

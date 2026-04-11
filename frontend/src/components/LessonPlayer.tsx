@@ -2,9 +2,10 @@
 
 import { useEffect } from "react";
 import { ExerciseRenderer } from "./ExerciseRenderer";
+import { Lesson } from "@/hooks/useLesson";
 
 interface LessonPlayerProps {
-  lesson: any;
+  lesson: Lesson | null;
   currentExercise: number;
   onAnswer: (exerciseId: string, answer: string) => void;
   onComplete: () => void;
@@ -41,7 +42,7 @@ export function LessonPlayer({ lesson, currentExercise, onAnswer, onComplete }: 
       {exercise && (
         <ExerciseRenderer
           exercise={exercise}
-          onAnswer={(answer) => onAnswer(exercise.id, answer)}
+          onAnswer={(answer) => onAnswer(String(exercise.id), answer)}
         />
       )}
     </div>

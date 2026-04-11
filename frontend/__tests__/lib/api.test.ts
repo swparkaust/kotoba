@@ -21,26 +21,26 @@ beforeEach(() => {
   Object.keys(mockLocalStorage).forEach((k) => delete mockLocalStorage[k]);
 });
 
-function loadModule() {
+function loadBrowserModule() {
   return require("@/lib/api") as typeof import("@/lib/api");
 }
 
 describe("setAuthToken / getAuthToken", () => {
   it("stores and retrieves a token", () => {
-    const { setAuthToken, getAuthToken } = loadModule();
+    const { setAuthToken, getAuthToken } = loadBrowserModule();
     setAuthToken("tok_abc");
     expect(getAuthToken()).toBe("tok_abc");
   });
 
   it("persists token to localStorage", () => {
-    const { setAuthToken } = loadModule();
+    const { setAuthToken } = loadBrowserModule();
     setAuthToken("tok_xyz");
     expect(localStorage.setItem).toHaveBeenCalledWith("auth_token", "tok_xyz");
   });
 
   it("reads token from localStorage when in-memory token is absent", () => {
     mockLocalStorage["auth_token"] = "tok_stored";
-    const { getAuthToken } = loadModule();
+    const { getAuthToken } = loadBrowserModule();
     expect(getAuthToken()).toBe("tok_stored");
   });
 });
@@ -50,7 +50,7 @@ describe("api.get", () => {
     const mockResponse = { ok: true, status: 200, json: () => Promise.resolve({ data: 1 }) };
     global.fetch = jest.fn().mockResolvedValue(mockResponse);
 
-    const { api, setAuthToken } = loadModule();
+    const { api, setAuthToken } = loadBrowserModule();
     setAuthToken("tok_get");
     const result = await api.get("/lessons");
 
@@ -70,7 +70,7 @@ describe("api.post", () => {
     const mockResponse = { ok: true, status: 200, json: () => Promise.resolve({ id: 42 }) };
     global.fetch = jest.fn().mockResolvedValue(mockResponse);
 
-    const { api, setAuthToken } = loadModule();
+    const { api, setAuthToken } = loadBrowserModule();
     setAuthToken("tok_post");
     const result = await api.post("/exercises", { answer: "あ" });
 
@@ -91,7 +91,7 @@ describe("api.patch", () => {
     const mockResponse = { ok: true, status: 200, json: () => Promise.resolve({ updated: true }) };
     global.fetch = jest.fn().mockResolvedValue(mockResponse);
 
-    const { api, setAuthToken } = loadModule();
+    const { api, setAuthToken } = loadBrowserModule();
     setAuthToken("tok_patch");
     const result = await api.patch("/lessons/1", { title: "Updated" });
 
@@ -112,7 +112,7 @@ describe("api.delete", () => {
     const mockResponse = { ok: true, status: 200, json: () => Promise.resolve({ deleted: true }) };
     global.fetch = jest.fn().mockResolvedValue(mockResponse);
 
-    const { api, setAuthToken } = loadModule();
+    const { api, setAuthToken } = loadBrowserModule();
     setAuthToken("tok_delete");
     const result = await api.delete("/lessons/1");
 
@@ -132,7 +132,7 @@ describe("204 response", () => {
     const mockResponse = { ok: true, status: 204 };
     global.fetch = jest.fn().mockResolvedValue(mockResponse);
 
-    const { api, setAuthToken } = loadModule();
+    const { api, setAuthToken } = loadBrowserModule();
     setAuthToken("tok_204");
     const result = await api.delete("/lessons/1");
 
@@ -145,7 +145,7 @@ describe("401 response", () => {
     const mockResponse = { ok: false, status: 401, statusText: "Unauthorized" };
     global.fetch = jest.fn().mockResolvedValue(mockResponse);
 
-    const { api, setAuthToken } = loadModule();
+    const { api, setAuthToken } = loadBrowserModule();
     setAuthToken("tok_expired");
 
     await expect(api.get("/profile")).rejects.toThrow("Unauthorized");
@@ -164,7 +164,7 @@ describe("non-401 error response", () => {
     const mockResponse = { ok: false, status: 500, statusText: "Internal Server Error" };
     global.fetch = jest.fn().mockResolvedValue(mockResponse);
 
-    const { api, setAuthToken } = loadModule();
+    const { api, setAuthToken } = loadBrowserModule();
     setAuthToken("tok_500");
 
     await expect(api.get("/lessons")).rejects.toThrow("500 Internal Server Error");
@@ -211,7 +211,7 @@ describe("401 on auth pages", () => {
     const mockResponse = { ok: false, status: 401, statusText: "Unauthorized" };
     global.fetch = jest.fn().mockResolvedValue(mockResponse);
 
-    const { api } = loadModule();
+    const { api } = loadBrowserModule();
 
     await expect(api.get("/profile")).rejects.toThrow("Unauthorized");
 
@@ -227,7 +227,7 @@ describe("401 on auth pages", () => {
     const mockResponse = { ok: false, status: 401, statusText: "Unauthorized" };
     global.fetch = jest.fn().mockResolvedValue(mockResponse);
 
-    const { api } = loadModule();
+    const { api } = loadBrowserModule();
 
     await expect(api.get("/profile")).rejects.toThrow("Unauthorized");
 
@@ -242,7 +242,7 @@ describe("request without auth token", () => {
     const mockResponse = { ok: true, status: 200, json: () => Promise.resolve({ data: 1 }) };
     global.fetch = jest.fn().mockResolvedValue(mockResponse);
 
-    const { api } = loadModule();
+    const { api } = loadBrowserModule();
     await api.get("/public");
 
     expect(global.fetch).toHaveBeenCalledWith(

@@ -5,11 +5,12 @@ import { useParams } from "next/navigation";
 import { api } from "@/lib/api";
 import { ImmersiveReader } from "@/components/ImmersiveReader";
 import { useReadingSession } from "@/hooks/useReadingSession";
+import { LibraryItem } from "@/hooks/useLibrary";
 
 export default function ReadPage() {
   const params = useParams();
   const itemId = params.itemId as string;
-  const [item, setItem] = useState<any>(null);
+  const [item, setItem] = useState<LibraryItem | null>(null);
   const [error, setError] = useState<string | null>(null);
   const { elapsed, wordsRead, start, pause, addGlossCard, setWordsRead, saveSession } = useReadingSession(itemId);
 
@@ -20,7 +21,7 @@ export default function ReadPage() {
 
   // Keep a ref to the latest progress so cleanup always has the current value
   const progressRef = useRef(progress);
-  progressRef.current = progress;
+  useEffect(() => { progressRef.current = progress; }, [progress]);
 
   useEffect(() => {
     api.get(`/library/${itemId}`)

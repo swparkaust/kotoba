@@ -7,9 +7,9 @@ describe("UnitCard", () => {
       id: 5,
       title: "Greetings and Self-Introduction",
       lessons: [
-        { id: 101, position: 1 },
-        { id: 102, position: 2 },
-        { id: 103, position: 3 },
+        { id: 101, position: 1, title: "Lesson 1", skill_type: "vocabulary", content_status: "ready" },
+        { id: 102, position: 2, title: "Lesson 2", skill_type: "grammar", content_status: "ready" },
+        { id: 103, position: 3, title: "Lesson 3", skill_type: "reading", content_status: "ready" },
       ],
     },
     onSelectLesson: jest.fn(),
