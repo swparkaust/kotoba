@@ -335,8 +335,8 @@ GEM
       ffi (~> 1.12)
       logger
     securerandom (0.4.1)
-    shoulda-matchers (6.5.0)
-      activesupport (>= 5.2.0)
+    shoulda-matchers (7.0.1)
+      activesupport (>= 7.1)
     sidekiq (7.2.4)
       concurrent-ruby (< 2)
       connection_pool (>= 2.3.0)
@@ -406,7 +406,7 @@ DEPENDENCIES
   rubocop-rails-omakase
   rubocop-rspec
   ruby-openai
-  shoulda-matchers (~> 6.0)
+  shoulda-matchers (~> 7.0)
   sidekiq (~> 7.0)
   simplecov
   tzinfo-data
