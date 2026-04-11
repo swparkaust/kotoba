@@ -29,6 +29,11 @@ RSpec.describe Api::V1::LibraryController, type: :controller do
       expect(response).to have_http_status(:ok)
       expect(JSON.parse(response.body)["title"]).to eq(item.title)
     end
+
+    it "returns 404 for non-existent item" do
+      get :show, params: { id: 999999 }
+      expect(response).to have_http_status(:not_found)
+    end
   end
 
   describe "GET #reading_stats" do
@@ -58,6 +63,43 @@ RSpec.describe Api::V1::LibraryController, type: :controller do
       }.to change(ReadingSession, :count).by(1)
         .and change(SrsCard, :count).by(1)
       expect(response).to have_http_status(:created)
+    end
+
+    it "returns 404 for non-existent item" do
+      post :record_session, params: { id: 999999, session_type: "reading", duration_seconds: 60 }
+      expect(response).to have_http_status(:not_found)
+    end
+
+    it "defaults session_type to 'listening' when item has audio_url" do
+      language = create(:language, code: "ja")
+      item = create(:library_item, language: language, difficulty_level: 6, audio_url: "https://example.com/audio.mp3")
+
+      post :record_session, params: {
+        id: item.id,
+        duration_seconds: 300,
+        words_read: 0,
+        progress_pct: 0.3
+      }
+
+      expect(response).to have_http_status(:created)
+      session = ReadingSession.last
+      expect(session.session_type).to eq("listening")
+    end
+
+    it "defaults session_type to 'reading' when item has no audio_url" do
+      language = create(:language, code: "ja")
+      item = create(:library_item, language: language, difficulty_level: 6, audio_url: nil)
+
+      post :record_session, params: {
+        id: item.id,
+        duration_seconds: 300,
+        words_read: 100,
+        progress_pct: 0.5
+      }
+
+      expect(response).to have_http_status(:created)
+      session = ReadingSession.last
+      expect(session.session_type).to eq("reading")
     end
   end
 end

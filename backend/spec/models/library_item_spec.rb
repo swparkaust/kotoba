@@ -57,4 +57,30 @@ RSpec.describe LibraryItem, type: :model do
       expect(LibraryItem.audio_items).to contain_exactly(podcast, lecture)
     end
   end
+
+  describe "unhappy paths" do
+    it "rejects an invalid item_type" do
+      item = build(:library_item, item_type: "video")
+      expect(item).not_to be_valid
+      expect(item.errors[:item_type]).to be_present
+    end
+
+    it "rejects difficulty_level below valid range" do
+      item = build(:library_item, difficulty_level: 0)
+      expect(item).not_to be_valid
+      expect(item.errors[:difficulty_level]).to be_present
+    end
+
+    it "rejects difficulty_level above valid range" do
+      item = build(:library_item, difficulty_level: 13)
+      expect(item).not_to be_valid
+      expect(item.errors[:difficulty_level]).to be_present
+    end
+
+    it "rejects a missing title" do
+      item = build(:library_item, title: nil)
+      expect(item).not_to be_valid
+      expect(item.errors[:title]).to be_present
+    end
+  end
 end

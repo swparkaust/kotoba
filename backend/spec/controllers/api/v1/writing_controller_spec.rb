@@ -20,6 +20,11 @@ RSpec.describe Api::V1::WritingController, type: :controller do
       expect(data["score"]).to eq(80)
       expect(WritingSubmission.count).to eq(1)
     end
+
+    it "returns 404 for non-existent exercise" do
+      post :submit, params: { exercise_id: 999999, text: "テスト" }
+      expect(response).to have_http_status(:not_found)
+    end
   end
 
   describe "GET #history" do

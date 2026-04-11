@@ -35,4 +35,23 @@ RSpec.describe JlptMapper, type: :service do
     expect(range_labels).not_to be_empty
     expect(labels.none? { |l| l.include?("-") && !l.include?("–") && !l.start_with?("Pre-") }).to be true
   end
+
+  it "returns Pre-N5 when no curriculum levels exist for the language" do
+    learner = create(:learner)
+    language = create(:language, code: "ko", name: "Korean", native_name: "한국어")
+    result = mapper.current_jlpt(learner: learner, language: language)
+    expect(result[:jlpt_label]).to eq("Pre-N5")
+    expect(result[:completed_levels]).to eq(0)
+    expect(result[:percentage]).to eq(0)
+  end
+
+  it "returns Pre-N5 when levels exist but none are completed" do
+    learner = create(:learner)
+    language = create(:language, code: "ja")
+    create(:curriculum_level, language: language, position: 1)
+    create(:curriculum_level, language: language, position: 2)
+    result = mapper.current_jlpt(learner: learner, language: language)
+    expect(result[:jlpt_label]).to eq("Pre-N5")
+    expect(result[:completed_levels]).to eq(0)
+  end
 end

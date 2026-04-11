@@ -22,4 +22,25 @@ RSpec.describe Language, type: :model do
       expect(Language.active).to eq([active])
     end
   end
+
+  describe "unhappy paths" do
+    it "rejects a duplicate code" do
+      create(:language, code: "ja")
+      duplicate = build(:language, code: "ja")
+      expect(duplicate).not_to be_valid
+      expect(duplicate.errors[:code]).to be_present
+    end
+
+    it "rejects a missing name" do
+      language = build(:language, name: nil)
+      expect(language).not_to be_valid
+      expect(language.errors[:name]).to be_present
+    end
+
+    it "rejects a missing native_name" do
+      language = build(:language, native_name: nil)
+      expect(language).not_to be_valid
+      expect(language.errors[:native_name]).to be_present
+    end
+  end
 end

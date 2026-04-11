@@ -40,4 +40,28 @@ RSpec.describe WritingEvaluator, type: :service do
     expect(result.score).to eq(0)
     expect(result.suggestions).to eq([])
   end
+
+  it "returns default evaluation when AI returns blank text" do
+    allow(router).to receive(:call).and_return(
+      AiResponse.new(text: "", model: "test", task: :writing_evaluation)
+    )
+    learner = create(:learner)
+    exercise = create(:exercise, exercise_type: "writing")
+    result = service.evaluate(learner: learner, exercise: exercise, submitted_text: "テスト")
+    expect(result.score).to eq(0)
+    expect(result.grammar_feedback).to eq("")
+    expect(result.suggestions).to eq([])
+  end
+
+  it "handles AI response with missing keys gracefully" do
+    allow(router).to receive(:call).and_return(
+      AiResponse.new(text: '{"score":50}', model: "test", task: :writing_evaluation)
+    )
+    learner = create(:learner)
+    exercise = create(:exercise, exercise_type: "writing")
+    result = service.evaluate(learner: learner, exercise: exercise, submitted_text: "テスト")
+    expect(result.score).to eq(50)
+    expect(result.grammar_feedback).to eq("")
+    expect(result.suggestions).to eq([])
+  end
 end

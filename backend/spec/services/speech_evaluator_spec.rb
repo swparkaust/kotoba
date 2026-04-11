@@ -40,4 +40,28 @@ RSpec.describe SpeechEvaluator, type: :service do
     expect(result.accuracy_score).to eq(0)
     expect(result.problem_sounds).to eq([])
   end
+
+  it "returns default evaluation when AI returns malformed JSON" do
+    allow(router).to receive(:call).and_return(
+      AiResponse.new(text: "not valid json {{{", model: "test", task: :speech_evaluation)
+    )
+    learner = create(:learner)
+    exercise = create(:exercise, exercise_type: "speaking")
+    result = service.evaluate(learner: learner, exercise: exercise, transcription: "テスト", target_text: "テスト")
+    expect(result).to be_a(SpeechEvaluation)
+    expect(result.accuracy_score).to eq(0)
+    expect(result.pronunciation_notes).to eq("")
+    expect(result.problem_sounds).to eq([])
+  end
+
+  it "returns default evaluation when AI returns valid JSON that is not a Hash" do
+    allow(router).to receive(:call).and_return(
+      AiResponse.new(text: '"just a string"', model: "test", task: :speech_evaluation)
+    )
+    learner = create(:learner)
+    exercise = create(:exercise, exercise_type: "speaking")
+    result = service.evaluate(learner: learner, exercise: exercise, transcription: "テスト", target_text: "テスト")
+    expect(result.accuracy_score).to eq(0)
+    expect(result.problem_sounds).to eq([])
+  end
 end

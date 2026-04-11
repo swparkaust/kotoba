@@ -51,4 +51,16 @@ RSpec.describe PlacementEvaluator, type: :service do
     expect(result.recommended_level).to eq(1)
     expect(result.overall_score).to eq(0.0)
   end
+
+  it "falls back to level 1 when AI returns valid JSON that is not a Hash" do
+    allow(router).to receive(:call).and_return(
+      AiResponse.new(text: "[1, 2, 3]", model: "test", task: :placement_evaluation)
+    )
+    learner = create(:learner)
+    language = create(:language, code: "ja")
+    result = service.evaluate(learner: learner, language: language, responses: [])
+    expect(result).to be_a(PlacementResult)
+    expect(result.recommended_level).to eq(1)
+    expect(result.overall_score).to eq(0.0)
+  end
 end

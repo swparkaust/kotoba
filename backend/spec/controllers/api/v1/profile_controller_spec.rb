@@ -27,5 +27,10 @@ RSpec.describe Api::V1::ProfileController, type: :controller do
       expect(response).to have_http_status(:ok)
       expect(learner.reload.active_language_code).to eq("ko")
     end
+
+    it "returns 422 for invalid update" do
+      patch :update, params: { display_name: "" }
+      expect(response).to have_http_status(:unprocessable_entity)
+    end
   end
 end

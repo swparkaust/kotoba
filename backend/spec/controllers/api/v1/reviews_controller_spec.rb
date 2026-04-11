@@ -32,6 +32,18 @@ RSpec.describe Api::V1::ReviewsController, type: :controller do
       card.reload
       expect(card.interval_days).to be > 1
     end
+
+    it "returns 404 for non-existent card" do
+      post :submit, params: { id: 999999, correct: true }
+      expect(response).to have_http_status(:not_found)
+    end
+
+    it "returns 404 for another learner's card" do
+      other = create(:learner)
+      card = create(:srs_card, learner: other, next_review_at: 1.hour.ago)
+      post :submit, params: { id: card.id, correct: true }
+      expect(response).to have_http_status(:not_found)
+    end
   end
 
   describe "POST #reactivate" do
@@ -42,6 +54,11 @@ RSpec.describe Api::V1::ReviewsController, type: :controller do
       card.reload
       expect(card.burned).to be false
       expect(card.interval_days).to eq(1)
+    end
+
+    it "returns 404 for non-existent card" do
+      post :reactivate, params: { id: 999999 }
+      expect(response).to have_http_status(:not_found)
     end
   end
 end

@@ -63,6 +63,12 @@ RSpec.describe Api::V1::ExercisesController, type: :controller do
       post :submit, params: { id: exercise.id, answer: "" }
       expect(response).to have_http_status(:unprocessable_entity)
     end
+
+    it "returns 404 when exercise is not found" do
+      post :submit, params: { id: 99999, answer: "あ" }
+      expect(response).to have_http_status(:not_found)
+      expect(JSON.parse(response.body)["error"]).to eq("Exercise not found")
+    end
   end
 
   describe "GET #show" do
@@ -80,4 +86,5 @@ RSpec.describe Api::V1::ExercisesController, type: :controller do
       expect(response).to have_http_status(:not_found)
     end
   end
+
 end

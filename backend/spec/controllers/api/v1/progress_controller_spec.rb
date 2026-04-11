@@ -44,5 +44,11 @@ RSpec.describe Api::V1::ProgressController, type: :controller do
       patch :update, params: { lesson_id: lesson1.id, status: "completed", score: 85 }
       expect(LearnerProgress.find_by(learner: learner, lesson: lesson2)&.status).to eq("available")
     end
+
+    it "returns 404 for non-existent lesson" do
+      allow(ProgressChannel).to receive(:broadcast_update)
+      patch :update, params: { lesson_id: 999999, status: "completed", score: 80 }
+      expect(response).to have_http_status(:not_found)
+    end
   end
 end

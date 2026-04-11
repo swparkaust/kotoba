@@ -1,6 +1,18 @@
 require 'rails_helper'
 
 RSpec.describe ProgressChannel, type: :channel do
+  describe "#subscribed" do
+    it "streams for the current learner" do
+      learner = create(:learner)
+
+      stub_connection current_learner: learner
+      subscribe
+
+      expect(subscription).to be_confirmed
+      expect(subscription).to have_stream_for(learner)
+    end
+  end
+
   describe ".broadcast_update" do
     it "broadcasts data when learner exists" do
       learner = create(:learner)

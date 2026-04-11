@@ -94,4 +94,17 @@ RSpec.describe PlacementQuestionGenerator, type: :service do
     result = service.generate(language: language, levels: 1..2)
     expect(result.length).to eq(PlacementQuestionGenerator::QUESTIONS_PER_LEVEL * 2)
   end
+
+  it "falls back when router raises a StandardError" do
+    allow(router).to receive(:call).and_raise(StandardError, "network failure")
+    create(:curriculum_level, language: language, position: 1)
+    result = service.generate(language: language, levels: 1..1)
+    expect(result).to be_an(Array)
+    expect(result.length).to eq(PlacementQuestionGenerator::QUESTIONS_PER_LEVEL)
+    result.each do |q|
+      expect(q).to include(:prompt, :options, :correct_answer, :skill_tested, :level)
+      expect(q[:options].length).to eq(4)
+      expect(q[:options]).to include(q[:correct_answer])
+    end
+  end
 end

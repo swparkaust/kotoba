@@ -28,6 +28,13 @@ RSpec.describe WebPushSender, type: :service do
       .to change(PushSubscription, :count).by(-1)
   end
 
+  it "logs and swallows generic errors from WebPush" do
+    allow(WebPush).to receive(:payload_send).and_raise(StandardError.new("network glitch"))
+    expect(Rails.logger).to receive(:error).with(/WebPush failed.*network glitch/)
+    expect { described_class.notify_all(title: "Test", body: "Hello") }
+      .not_to change(PushSubscription, :count)
+  end
+
   it "skips sending when VAPID keys are missing" do
     allow(Rails.application.credentials).to receive(:dig).and_return(nil)
     allow(ENV).to receive(:[]).and_return(nil)

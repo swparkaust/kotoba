@@ -50,6 +50,15 @@ RSpec.describe AiProviders::OpenaiAdapter do
       response = adapter.complete(model: "gpt-4o", system: "test", prompt: "test")
       expect(response.text).to be_nil
     end
+
+    it "returns AiResponse with nil text on non-JSON response body" do
+      stub_request(:post, "https://api.openai.com/v1/chat/completions")
+        .to_return(status: 200, body: "not json at all", headers: { "Content-Type" => "text/plain" })
+      response = adapter.complete(model: "gpt-4o", system: "test", prompt: "test")
+      expect(response).to be_a(AiResponse)
+      expect(response.text).to be_nil
+      expect(response.provider).to eq("openai")
+    end
   end
 
   describe "#provider_name" do
