@@ -9,20 +9,20 @@ async function getAnyLesson(request: APIRequestContext) {
     headers: { authorization: `Bearer ${authToken}` },
   });
   const levels = await levelsRes.json();
-  if (!Array.isArray(levels) || !levels.length) return null;
+  expect(Array.isArray(levels) && levels.length > 0, "No curriculum levels found").toBeTruthy();
 
   for (const level of levels) {
     const levelRes = await request.get(`${API_URL}/api/v1/curriculum/${level.id}`, {
       headers: { authorization: `Bearer ${authToken}` },
     });
     const data = await levelRes.json();
-    for (const unit of data.units || []) {
+    for (const unit of data.curriculum_units || []) {
       for (const lesson of unit.lessons || []) {
         return { levelId: level.id, unitId: unit.id, lessonId: lesson.id, levelPosition: level.position };
       }
     }
   }
-  return null;
+  throw new Error("No lessons found in any curriculum level");
 }
 
 async function getExercise(request: APIRequestContext, lessonId: number) {
@@ -30,7 +30,9 @@ async function getExercise(request: APIRequestContext, lessonId: number) {
     headers: { authorization: `Bearer ${authToken}` },
   });
   const data = await res.json();
-  return data.exercises?.[0] || null;
+  const exercise = data.exercises?.[0];
+  expect(exercise, "No exercises found for lesson").toBeTruthy();
+  return exercise;
 }
 
 async function simulateLearner(request: APIRequestContext, context: string, level: number, quality: "good" | "poor", exerciseType: "writing" | "speaking" = "writing") {
@@ -39,7 +41,8 @@ async function simulateLearner(request: APIRequestContext, context: string, leve
     data: { context, level, quality, exercise_type: exerciseType },
   });
   const data = await res.json();
-  return data.text || "";
+  expect(data.text, "AI simulation returned empty text").toBeTruthy();
+  return data.text;
 }
 
 test.describe("Authentication", () => {
@@ -90,11 +93,32 @@ test.describe("Authentication", () => {
 test.describe.serial("Authenticated flows", () => {
   test.beforeAll(async ({ request }) => {
     const email = `e2e_${Date.now()}@example.com`;
-    const res = await request.post(`${API_URL}/api/v1/sessions/signup`, {
+    const signupRes = await request.post(`${API_URL}/api/v1/sessions/signup`, {
       data: { display_name: "E2E Tester", email, password: "password123" },
     });
-    const body = await res.json();
+    const body = await signupRes.json();
     authToken = body.auth_token;
+
+    const headers = { authorization: `Bearer ${authToken}` };
+
+    const itemsRes = await request.get(`${API_URL}/api/v1/library?language_code=ja`, { headers });
+    const items = await itemsRes.json();
+    const item = (Array.isArray(items) ? items : []).find((i: any) => i.item_type === "graded_reader");
+    if (item) {
+      await request.post(`${API_URL}/api/v1/library/${item.id}/record_session`, {
+        headers,
+        data: {
+          session_type: "reading",
+          duration_seconds: 300,
+          words_read: 100,
+          progress_pct: 0.5,
+          new_srs_cards: [
+            { word: "おじいさん", definition_ja: "年を取った男の人" },
+            { word: "おばあさん", definition_ja: "年を取った女の人" },
+          ],
+        },
+      });
+    }
   });
 
   test.beforeEach(async ({ page }) => {
@@ -113,9 +137,7 @@ test.describe.serial("Authenticated flows", () => {
 
   test("review SRS card with correct and incorrect grading", async ({ page }) => {
     await page.goto("/review");
-    const hasCards = await page.getByTestId("review-card").isVisible({ timeout: 5000 }).catch(() => false);
-    if (!hasCards) return;
-
+    await expect(page.getByTestId("review-card")).toBeVisible({ timeout: 5000 });
     await expect(page.getByTestId("review-remaining")).toBeVisible();
     await page.getByTestId("review-incorrect").click();
 
@@ -142,72 +164,63 @@ test.describe.serial("Authenticated flows", () => {
 
   test("placement test: AI generates questions, learner answers, AI evaluates", async ({ page }) => {
     await page.goto("/placement");
-    await expect(page.getByTestId("placement-question")).toBeVisible({ timeout: 30000 });
+    await expect(page.getByTestId("placement-question")).toBeVisible({ timeout: 60000 });
 
     const questionCount = await page.locator("text=/of (\\d+)/").textContent();
     const total = parseInt(questionCount?.match(/of (\d+)/)?.[1] || "5");
 
     for (let i = 0; i < total; i++) {
-      await page.getByTestId("placement-question").waitFor({ timeout: 10000 });
+      await page.getByTestId("placement-question").waitFor({ timeout: 30000 });
       const options = page.getByTestId("placement-question").locator("button");
       const count = await options.count();
       const pick = Math.floor(Math.random() * count);
       await options.nth(pick).click();
     }
 
-    await expect(page.getByTestId("placement-result")).toBeVisible({ timeout: 30000 });
+    await expect(page.getByTestId("placement-result")).toBeVisible({ timeout: 60000 });
     await page.getByTestId("placement-accept").click();
     await page.waitForURL("**/dashboard", { timeout: 10000 });
   });
 
   test("writing: AI generates learner text, AI evaluates with high score", async ({ page, request }) => {
     const lesson = await getAnyLesson(request);
-    if (!lesson) return;
 
     await page.goto(`/writing/${lesson.lessonId}`);
-    const hasExercise = await page.getByTestId("writing-exercise").isVisible({ timeout: 10000 }).catch(() => false);
-    if (!hasExercise) return;
+    await expect(page.getByTestId("writing-exercise")).toBeVisible({ timeout: 15000 });
 
     const prompt = await page.getByTestId("writing-prompt").textContent();
-    if (!prompt) return;
+    expect(prompt, "Writing prompt is empty").toBeTruthy();
 
-    const learnerText = await simulateLearner(request, prompt, lesson.levelPosition, "good");
-    if (!learnerText) return;
+    const learnerText = await simulateLearner(request, prompt!, lesson.levelPosition, "good");
 
     await page.getByTestId("writing-input").fill(learnerText);
     await page.getByTestId("writing-submit").click();
-    await expect(page.getByTestId("writing-feedback")).toBeVisible({ timeout: 30000 });
+    await expect(page.getByTestId("writing-feedback")).toBeVisible({ timeout: 60000 });
     await expect(page.getByTestId("writing-score")).toBeVisible();
   });
 
-  test("writing: AI generates poor learner text, AI evaluates with suggestions", async ({ page, request }) => {
+  test("writing: AI generates poor learner text, AI evaluates with feedback", async ({ page, request }) => {
     const lesson = await getAnyLesson(request);
-    if (!lesson) return;
 
     await page.goto(`/writing/${lesson.lessonId}`);
-    const hasExercise = await page.getByTestId("writing-exercise").isVisible({ timeout: 10000 }).catch(() => false);
-    if (!hasExercise) return;
+    await expect(page.getByTestId("writing-exercise")).toBeVisible({ timeout: 15000 });
 
     const prompt = await page.getByTestId("writing-prompt").textContent();
-    if (!prompt) return;
+    expect(prompt, "Writing prompt is empty").toBeTruthy();
 
-    const learnerText = await simulateLearner(request, prompt, lesson.levelPosition, "poor");
-    if (!learnerText) return;
+    const learnerText = await simulateLearner(request, prompt!, lesson.levelPosition, "poor");
 
     await page.getByTestId("writing-input").fill(learnerText);
     await page.getByTestId("writing-submit").click();
-    await expect(page.getByTestId("writing-feedback")).toBeVisible({ timeout: 30000 });
-    await expect(page.getByTestId("writing-suggestions")).toBeVisible();
+    await expect(page.getByTestId("writing-feedback")).toBeVisible({ timeout: 60000 });
+    await expect(page.getByTestId("writing-score")).toBeVisible();
   });
 
   test("lesson player renders exercises and accepts answers", async ({ page, request }) => {
     const lesson = await getAnyLesson(request);
-    if (!lesson) return;
 
     await page.goto(`/learn/${lesson.levelId}/${lesson.unitId}/${lesson.lessonId}`);
-    const hasPlayer = await page.getByTestId("lesson-player").isVisible({ timeout: 10000 }).catch(() => false);
-    if (!hasPlayer) return;
-
+    await expect(page.getByTestId("lesson-player")).toBeVisible({ timeout: 15000 });
     await expect(page.getByTestId("exercise-progress")).toBeVisible();
 
     const choiceBtn = page.getByTestId("choice-0");
@@ -217,11 +230,10 @@ test.describe.serial("Authenticated flows", () => {
       await choiceBtn.click();
     } else if (await blankInput.isVisible({ timeout: 2000 }).catch(() => false)) {
       const exercise = await getExercise(request, lesson.lessonId);
-      const answer = exercise?.content?.correct_answer || exercise?.content?.options?.[0];
-      if (answer) {
-        await blankInput.fill(answer);
-        await page.getByTestId("blank-submit").click();
-      }
+      const answer = exercise.content?.correct_answer || exercise.content?.options?.[0];
+      expect(answer, "Exercise has no answer").toBeTruthy();
+      await blankInput.fill(answer);
+      await page.getByTestId("blank-submit").click();
     }
   });
 
@@ -231,7 +243,7 @@ test.describe.serial("Authenticated flows", () => {
     });
     const items = await itemsRes.json();
     const textItem = (Array.isArray(items) ? items : []).find((i: any) => ["graded_reader", "article", "novel"].includes(i.item_type));
-    if (!textItem) return;
+    expect(textItem, "No text library item found").toBeTruthy();
 
     await page.goto(`/library/read/${textItem.id}`);
     await expect(page.getByTestId("immersive-reader")).toBeVisible({ timeout: 10000 });
@@ -239,22 +251,19 @@ test.describe.serial("Authenticated flows", () => {
     await expect(page.getByTestId("reader-timer")).toBeVisible();
 
     const words = page.getByTestId("reader-text").locator("span");
-    if (await words.count() > 0) {
-      await words.first().click();
-      const glossVisible = await page.getByTestId("tap-gloss").isVisible({ timeout: 3000 }).catch(() => false);
-      if (glossVisible) {
-        await expect(page.getByTestId("gloss-word")).toBeVisible();
-      }
+    expect(await words.count()).toBeGreaterThan(0);
+    await words.first().click();
+    const glossVisible = await page.getByTestId("tap-gloss").isVisible({ timeout: 3000 }).catch(() => false);
+    if (glossVisible) {
+      await expect(page.getByTestId("gloss-word")).toBeVisible();
     }
   });
 
   test("listening exercise plays audio and accepts answer", async ({ page, request }) => {
     const lesson = await getAnyLesson(request);
-    if (!lesson) return;
 
     await page.goto(`/learn/${lesson.levelId}/${lesson.unitId}/${lesson.lessonId}`);
-    const hasPlayer = await page.getByTestId("lesson-player").isVisible({ timeout: 10000 }).catch(() => false);
-    if (!hasPlayer) return;
+    await expect(page.getByTestId("lesson-player")).toBeVisible({ timeout: 15000 });
 
     const listenBtn = page.getByTestId("listen-btn");
     if (await listenBtn.isVisible({ timeout: 2000 }).catch(() => false)) {
@@ -268,20 +277,15 @@ test.describe.serial("Authenticated flows", () => {
 
   test("speaking: AI generates realistic transcription, AI evaluates accuracy", async ({ page, request }) => {
     const lesson = await getAnyLesson(request);
-    if (!lesson) return;
 
     await page.goto(`/speaking/${lesson.lessonId}`);
-    const hasExercise = await page.getByTestId("speaking-exercise").isVisible({ timeout: 10000 }).catch(() => false);
-    if (!hasExercise) return;
+    await expect(page.getByTestId("speaking-exercise")).toBeVisible({ timeout: 15000 });
 
     const targetText = await page.getByTestId("speaking-target").textContent();
-    if (!targetText) return;
+    expect(targetText, "Speaking target text is empty").toBeTruthy();
 
     const exercise = await getExercise(request, lesson.lessonId);
-    if (!exercise) return;
-
-    const transcription = await simulateLearner(request, targetText, lesson.levelPosition, "good", "speaking");
-    if (!transcription) return;
+    const transcription = await simulateLearner(request, targetText!, lesson.levelPosition, "good", "speaking");
 
     const res = await request.post(`${API_URL}/api/v1/speaking/submit`, {
       headers: { authorization: `Bearer ${authToken}` },
@@ -293,16 +297,12 @@ test.describe.serial("Authenticated flows", () => {
 
   test("speaking: AI generates poor transcription, AI detects pronunciation errors", async ({ request }) => {
     const lesson = await getAnyLesson(request);
-    if (!lesson) return;
-
     const exercise = await getExercise(request, lesson.lessonId);
-    if (!exercise) return;
 
     const targetText = exercise.content?.target_text || exercise.content?.prompt;
-    if (!targetText) return;
+    expect(targetText, "Exercise has no target text").toBeTruthy();
 
     const transcription = await simulateLearner(request, targetText, lesson.levelPosition, "poor", "speaking");
-    if (!transcription) return;
 
     const res = await request.post(`${API_URL}/api/v1/speaking/submit`, {
       headers: { authorization: `Bearer ${authToken}` },

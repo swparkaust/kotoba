@@ -166,7 +166,11 @@ jobs:
             curl -sf http://localhost:11434/api/tags && break
             sleep 2
           done
-          curl -s http://localhost:11434/api/pull -d '{"name":"qwen3:8b"}' | tail -1
+          echo "Pulling qwen3:8b..."
+          curl -sf http://localhost:11434/api/pull -d '{"name":"qwen3:8b"}' > /dev/null
+          echo "Verifying model is available..."
+          curl -sf http://localhost:11434/api/tags | grep -q "qwen3:8b"
+          echo "Model ready."
 
       - name: Set up database and import content pack
         working-directory: backend

@@ -32,7 +32,7 @@ class ContentPackImporter
 
     ActiveRecord::Base.transaction do
       import_curriculum(curriculum, language)
-      import_exercises if (@path / "exercises.json").exist?
+      import_exercises(language) if (@path / "exercises.json").exist?
       import_library(language) if (@path / "library.json").exist?
       version.update!(status: "ready", published_at: Time.current)
     end
@@ -40,15 +40,20 @@ class ContentPackImporter
 
   private
 
-  def import_exercises
-    language = Language.find_by!(code: @manifest["language_code"])
+  def import_exercises(language)
+    levels = CurriculumLevel.where(language: language).index_by(&:position)
+    units = CurriculumUnit.where(curriculum_level: levels.values)
+                          .index_by { |u| [ u.curriculum_level_id, u.position ] }
+    lessons = Lesson.where(curriculum_unit: units.values)
+                    .index_by { |l| [ l.curriculum_unit_id, l.position ] }
+
     exercises = JSON.parse((@path / "exercises.json").read)
     exercises.each do |ex_data|
-      level = CurriculumLevel.find_by(language: language, position: ex_data["level_position"])
+      level = levels[ex_data["level_position"]]
       next unless level
-      unit = CurriculumUnit.find_by(curriculum_level: level, position: ex_data["unit_position"])
+      unit = units[[ level.id, ex_data["unit_position"] ]]
       next unless unit
-      lesson = Lesson.find_by(curriculum_unit: unit, position: ex_data["lesson_position"])
+      lesson = lessons[[ unit.id, ex_data["lesson_position"] ]]
       next unless lesson
 
       Exercise.find_or_create_by!(
