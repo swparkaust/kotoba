@@ -14,26 +14,18 @@ interface ContrastiveGrammarExerciseProps {
 export function ContrastiveGrammarExercise({ set, onAnswer }: ContrastiveGrammarExerciseProps) {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [selectedAnswer, setSelectedAnswer] = useState<string | null>(null);
-  const [showFeedback, setShowFeedback] = useState(false);
 
   const exercise = set.exercises[currentIndex];
   const isCorrect = selectedAnswer === exercise?.correct;
 
-  const handleAnswer = useCallback(
-    (opt: string) => {
-      if (selectedAnswer !== null) return;
-      setSelectedAnswer(opt);
-      setShowFeedback(true);
-      onAnswer(opt);
-    },
-    [selectedAnswer, onAnswer]
-  );
+  const handleContinue = useCallback(() => {
+    onAnswer(selectedAnswer!);
+  }, [selectedAnswer, onAnswer]);
 
   const handleNext = useCallback(() => {
     if (currentIndex < set.exercises.length - 1) {
       setCurrentIndex((i) => i + 1);
       setSelectedAnswer(null);
-      setShowFeedback(false);
     }
   }, [currentIndex, set.exercises.length]);
 
@@ -62,7 +54,7 @@ export function ContrastiveGrammarExercise({ set, onAnswer }: ContrastiveGrammar
             {exercise.options.map((opt, i) => (
               <button
                 key={i}
-                onClick={() => handleAnswer(opt)}
+                onClick={() => setSelectedAnswer(opt)}
                 disabled={selectedAnswer !== null}
                 className={`rounded-lg border px-4 py-2 transition-colors ${
                   selectedAnswer === null
@@ -81,7 +73,7 @@ export function ContrastiveGrammarExercise({ set, onAnswer }: ContrastiveGrammar
         </div>
       )}
 
-      {showFeedback && (
+      {selectedAnswer !== null && (
         <div
           data-testid="contrastive-feedback"
           className={`rounded-xl p-4 ${isCorrect ? "bg-green-50 text-green-800" : "bg-red-50 text-red-800"}`}
@@ -90,9 +82,17 @@ export function ContrastiveGrammarExercise({ set, onAnswer }: ContrastiveGrammar
           {!isCorrect && set.patterns[0] && (
             <p className="text-sm mt-1">{set.patterns[0].usage_ja}</p>
           )}
-          {currentIndex < set.exercises.length - 1 && (
+          {currentIndex < set.exercises.length - 1 ? (
             <button onClick={handleNext} className="mt-2 text-sm underline">
               Next question →
+            </button>
+          ) : (
+            <button
+              data-testid="contrastive-continue"
+              onClick={handleContinue}
+              className="mt-3 w-full rounded-xl bg-orange-500 py-3 text-white font-medium hover:bg-orange-600 transition-colors"
+            >
+              Continue
             </button>
           )}
         </div>

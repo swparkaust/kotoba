@@ -30,9 +30,16 @@ describe("PictureMatchCard", () => {
     expect(screen.getByText("犬")).toBeInTheDocument();
   });
 
-  it("calls onSelect with the clicked index", () => {
+  it("does not call onSelect until continue is clicked", () => {
     render(<PictureMatchCard {...defaultProps} />);
     fireEvent.click(screen.getByTestId("match-option-2"));
+    expect(defaultProps.onSelect).not.toHaveBeenCalled();
+  });
+
+  it("calls onSelect with the clicked index after continue", () => {
+    render(<PictureMatchCard {...defaultProps} />);
+    fireEvent.click(screen.getByTestId("match-option-2"));
+    fireEvent.click(screen.getByTestId("match-continue"));
     expect(defaultProps.onSelect).toHaveBeenCalledWith(2);
   });
 
@@ -49,7 +56,9 @@ describe("PictureMatchCard", () => {
     render(<PictureMatchCard {...defaultProps} />);
     fireEvent.click(screen.getByTestId("match-option-0"));
     fireEvent.click(screen.getByTestId("match-option-1"));
+    fireEvent.click(screen.getByTestId("match-continue"));
     expect(defaultProps.onSelect).toHaveBeenCalledTimes(1);
+    expect(defaultProps.onSelect).toHaveBeenCalledWith(0);
   });
 
   it("shows fallback character when image fails to load", () => {
@@ -62,10 +71,21 @@ describe("PictureMatchCard", () => {
     expect(option0.querySelector("span")).toHaveTextContent("猫");
   });
 
+  it("shows correct feedback on right answer", () => {
+    render(<PictureMatchCard {...defaultProps} />);
+    fireEvent.click(screen.getByTestId("match-option-0"));
+    expect(screen.getByTestId("match-feedback")).toHaveTextContent("正解");
+  });
+
+  it("shows correct answer on wrong selection", () => {
+    render(<PictureMatchCard {...defaultProps} />);
+    fireEvent.click(screen.getByTestId("match-option-1"));
+    expect(screen.getByTestId("match-feedback")).toHaveTextContent("猫");
+  });
+
   it("selects wrong answer and shows red border class", () => {
     render(<PictureMatchCard {...defaultProps} />);
     fireEvent.click(screen.getByTestId("match-option-1"));
-    expect(defaultProps.onSelect).toHaveBeenCalledWith(1);
     const correctBtn = screen.getByTestId("match-option-0");
     expect(correctBtn.className).toContain("border-green");
     const wrongBtn = screen.getByTestId("match-option-1");
@@ -95,8 +115,7 @@ describe("PictureMatchCard", () => {
   it("handleSelect returns early when already selected (via non-disabled elem)", () => {
     const onSelect = jest.fn();
     render(<PictureMatchCard options={defaultProps.options} onSelect={onSelect} />);
-
     fireEvent.click(screen.getByTestId("match-option-0"));
-    expect(onSelect).toHaveBeenCalledTimes(1);
+    expect(onSelect).not.toHaveBeenCalled();
   });
 });

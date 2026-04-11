@@ -232,6 +232,7 @@ test.describe.serial("Authenticated flows", () => {
 
     if (await choiceBtn.isVisible({ timeout: 2000 }).catch(() => false)) {
       await choiceBtn.click();
+      await page.getByTestId("choice-continue").click();
     } else if (await blankInput.isVisible({ timeout: 2000 }).catch(() => false)) {
       const lessonUrl = page.url();
       const lessonId = lessonUrl.split("/").pop();
@@ -240,6 +241,7 @@ test.describe.serial("Authenticated flows", () => {
       expect(answer, "Exercise has no answer").toBeTruthy();
       await blankInput.fill(answer);
       await page.getByTestId("blank-submit").click();
+      await page.getByTestId("blank-continue").click();
     }
   });
 
@@ -277,6 +279,7 @@ test.describe.serial("Authenticated flows", () => {
       const option = page.getByTestId("listen-option-0");
       if (await option.isVisible({ timeout: 3000 }).catch(() => false)) {
         await option.click();
+        await page.getByTestId("listen-continue").click();
       }
     }
   });

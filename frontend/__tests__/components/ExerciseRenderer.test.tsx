@@ -41,6 +41,45 @@ jest.mock("@/components/PictureMatchCard", () => ({
   ),
 }));
 
+jest.mock("@/components/ContrastiveGrammarExercise", () => ({
+  ContrastiveGrammarExercise: (props: any) => (
+    <div data-testid="mock-contrastive-grammar">
+      {props.set.cluster_name}
+      <button data-testid="cg-answer" onClick={() => props.onAnswer("test")}>Answer</button>
+    </div>
+  ),
+}));
+
+jest.mock("@/components/PragmaticScenario", () => ({
+  PragmaticScenario: (props: any) => (
+    <div data-testid="mock-pragmatic-scenario">
+      {props.scenario.title}
+      <button data-testid="ps-choice" onClick={() => props.onChoice(0)}>Choose</button>
+    </div>
+  ),
+}));
+
+jest.mock("@/components/AuthenticReader", () => ({
+  AuthenticReader: (props: any) => (
+    <div data-testid="mock-authentic-reader">{props.source.title}</div>
+  ),
+}));
+
+jest.mock("@/components/RealAudioPlayer", () => ({
+  RealAudioPlayer: (props: any) => (
+    <div data-testid="mock-real-audio">{props.audioUrl}</div>
+  ),
+}));
+
+jest.mock("@/components/WritingExercise", () => ({
+  WritingExercise: (props: any) => (
+    <div data-testid="mock-writing-exercise">
+      {props.prompt}
+      <button data-testid="writing-submit-mock" onClick={() => props.onSubmit("text")}>Submit</button>
+    </div>
+  ),
+}));
+
 describe("ExerciseRenderer", () => {
   const defaultProps = {
     exercise: {
@@ -141,7 +180,7 @@ describe("ExerciseRenderer", () => {
     expect(screen.getByTestId("mock-fill-blank")).toBeInTheDocument();
   });
 
-  it("renders inline options as fallback for unknown type with options", () => {
+  it("renders MultipleChoice as fallback for unknown type with options", () => {
     render(
       <ExerciseRenderer
         {...defaultProps}
@@ -153,10 +192,7 @@ describe("ExerciseRenderer", () => {
       />
     );
     expect(screen.getByTestId("exercise-type-custom_quiz")).toBeInTheDocument();
-    expect(screen.getByText("Pick one")).toBeInTheDocument();
-    expect(screen.getByText("A")).toBeInTheDocument();
-    expect(screen.getByText("B")).toBeInTheDocument();
-    expect(screen.getByText("C")).toBeInTheDocument();
+    expect(screen.getByTestId("mock-multiple-choice")).toHaveTextContent("Pick one");
   });
 
   it("falls back to FillInBlank for reorder exercise type", () => {
@@ -170,7 +206,7 @@ describe("ExerciseRenderer", () => {
     expect(screen.getByTestId("mock-fill-blank")).toBeInTheDocument();
   });
 
-  it("falls back to FillInBlank for writing exercise type", () => {
+  it("renders WritingExercise for writing exercise type", () => {
     render(
       <ExerciseRenderer
         {...defaultProps}
@@ -178,7 +214,7 @@ describe("ExerciseRenderer", () => {
       />
     );
     expect(screen.getByTestId("exercise-type-writing")).toBeInTheDocument();
-    expect(screen.getByTestId("mock-fill-blank")).toBeInTheDocument();
+    expect(screen.getByTestId("mock-writing-exercise")).toBeInTheDocument();
   });
 
   it("falls back to FillInBlank for speaking exercise type", () => {
@@ -192,7 +228,7 @@ describe("ExerciseRenderer", () => {
     expect(screen.getByTestId("mock-fill-blank")).toBeInTheDocument();
   });
 
-  it("falls back to inline options for reorder type with options", () => {
+  it("falls back to MultipleChoice for reorder type with options", () => {
     render(
       <ExerciseRenderer
         {...defaultProps}
@@ -204,24 +240,7 @@ describe("ExerciseRenderer", () => {
       />
     );
     expect(screen.getByTestId("exercise-type-reorder")).toBeInTheDocument();
-    expect(screen.getByText("X")).toBeInTheDocument();
-    expect(screen.getByText("Y")).toBeInTheDocument();
-  });
-
-  it("calls onAnswer when fallback inline option is clicked", () => {
-    const onAnswer = jest.fn();
-    render(
-      <ExerciseRenderer
-        exercise={{
-          id: 14,
-          exercise_type: "speaking",
-          content: { prompt: "Pick", options: ["Alpha", "Beta"] },
-        }}
-        onAnswer={onAnswer}
-      />
-    );
-    fireEvent.click(screen.getByText("Alpha"));
-    expect(onAnswer).toHaveBeenCalledWith("Alpha");
+    expect(screen.getByTestId("mock-multiple-choice")).toHaveTextContent("Reorder these");
   });
 
   it("calls onAnswer with correct_answer when trace exercise completes", () => {
@@ -588,5 +607,281 @@ describe("ExerciseRenderer", () => {
     );
     fireEvent.click(screen.getByTestId("pm-oob"));
     expect(onAnswer).toHaveBeenCalledWith("");
+  });
+
+  it("renders ContrastiveGrammarExercise for contrastive_grammar type", () => {
+    render(
+      <ExerciseRenderer
+        exercise={{
+          id: 50,
+          exercise_type: "contrastive_grammar",
+          content: { cluster_name: "〜ても vs 〜のに", patterns: [], exercises: [] },
+        }}
+        onAnswer={jest.fn()}
+      />
+    );
+    expect(screen.getByTestId("exercise-type-contrastive_grammar")).toBeInTheDocument();
+    expect(screen.getByTestId("mock-contrastive-grammar")).toHaveTextContent("〜ても vs 〜のに");
+  });
+
+  it("contrastive_grammar calls onAnswer with selected answer", () => {
+    const onAnswer = jest.fn();
+    render(
+      <ExerciseRenderer
+        exercise={{
+          id: 51,
+          exercise_type: "contrastive_grammar",
+          content: { cluster_name: "test", patterns: [], exercises: [] },
+        }}
+        onAnswer={onAnswer}
+      />
+    );
+    fireEvent.click(screen.getByTestId("cg-answer"));
+    expect(onAnswer).toHaveBeenCalledWith("test");
+  });
+
+  it("renders PragmaticScenario for pragmatic_choice type", () => {
+    render(
+      <ExerciseRenderer
+        exercise={{
+          id: 52,
+          exercise_type: "pragmatic_choice",
+          content: {
+            title: "上司の誘い",
+            situation_ja: "test",
+            dialogue: [],
+            choices: [{ response: "はい", consequence: "ok", score: 100 }],
+            analysis: { rule: "rule" },
+          },
+        }}
+        onAnswer={jest.fn()}
+      />
+    );
+    expect(screen.getByTestId("exercise-type-pragmatic_choice")).toBeInTheDocument();
+    expect(screen.getByTestId("mock-pragmatic-scenario")).toHaveTextContent("上司の誘い");
+  });
+
+  it("pragmatic_choice calls onAnswer with selected response", () => {
+    const onAnswer = jest.fn();
+    render(
+      <ExerciseRenderer
+        exercise={{
+          id: 53,
+          exercise_type: "pragmatic_choice",
+          content: {
+            title: "test",
+            situation_ja: "test",
+            dialogue: [],
+            choices: [{ response: "ちょっと...", consequence: "ok", score: 100 }],
+            analysis: { rule: "rule" },
+          },
+        }}
+        onAnswer={onAnswer}
+      />
+    );
+    fireEvent.click(screen.getByTestId("ps-choice"));
+    expect(onAnswer).toHaveBeenCalledWith("ちょっと...");
+  });
+
+  it("pragmatic_choice with empty choices returns empty string", () => {
+    const onAnswer = jest.fn();
+    render(
+      <ExerciseRenderer
+        exercise={{
+          id: 54,
+          exercise_type: "pragmatic_choice",
+          content: { title: "t", situation_ja: "s", dialogue: [], choices: [], analysis: { rule: "" } },
+        }}
+        onAnswer={onAnswer}
+      />
+    );
+    fireEvent.click(screen.getByTestId("ps-choice"));
+    expect(onAnswer).toHaveBeenCalledWith("");
+  });
+
+  it("renders AuthenticReader with Done button for authentic_reading type", () => {
+    render(
+      <ExerciseRenderer
+        exercise={{
+          id: 55,
+          exercise_type: "authentic_reading",
+          content: { title: "Reading Title", body_text: "text", attribution: "src" },
+        }}
+        onAnswer={jest.fn()}
+      />
+    );
+    expect(screen.getByTestId("exercise-type-authentic_reading")).toBeInTheDocument();
+    expect(screen.getByTestId("mock-authentic-reader")).toHaveTextContent("Reading Title");
+    expect(screen.getByTestId("reading-done")).toBeInTheDocument();
+  });
+
+  it("authentic_reading Done button calls onAnswer", () => {
+    const onAnswer = jest.fn();
+    render(
+      <ExerciseRenderer
+        exercise={{
+          id: 56,
+          exercise_type: "authentic_reading",
+          content: { title: "t", body_text: "b", attribution: "a" },
+        }}
+        onAnswer={onAnswer}
+      />
+    );
+    fireEvent.click(screen.getByTestId("reading-done"));
+    expect(onAnswer).toHaveBeenCalledWith("done");
+  });
+
+  it("renders RealAudioPlayer with Done button for real_audio_comprehension type", () => {
+    render(
+      <ExerciseRenderer
+        exercise={{
+          id: 57,
+          exercise_type: "real_audio_comprehension",
+          content: { audio_src: "/audio.mp3", transcription: "transcript" },
+        }}
+        onAnswer={jest.fn()}
+      />
+    );
+    expect(screen.getByTestId("exercise-type-real_audio_comprehension")).toBeInTheDocument();
+    expect(screen.getByTestId("mock-real-audio")).toHaveTextContent("/audio.mp3");
+    expect(screen.getByTestId("listening-done")).toBeInTheDocument();
+  });
+
+  it("real_audio_comprehension Done button calls onAnswer", () => {
+    const onAnswer = jest.fn();
+    render(
+      <ExerciseRenderer
+        exercise={{
+          id: 58,
+          exercise_type: "real_audio_comprehension",
+          content: { audio_src: "/a.mp3", transcription: "t" },
+        }}
+        onAnswer={onAnswer}
+      />
+    );
+    fireEvent.click(screen.getByTestId("listening-done"));
+    expect(onAnswer).toHaveBeenCalledWith("done");
+  });
+
+  it("renders WritingExercise for writing type", () => {
+    render(
+      <ExerciseRenderer
+        exercise={{
+          id: 59,
+          exercise_type: "writing",
+          content: { prompt: "Write something" },
+        }}
+        onAnswer={jest.fn()}
+      />
+    );
+    expect(screen.getByTestId("exercise-type-writing")).toBeInTheDocument();
+    expect(screen.getByTestId("mock-writing-exercise")).toHaveTextContent("Write something");
+  });
+
+  it("writing calls onAnswer with submitted text", () => {
+    const onAnswer = jest.fn();
+    render(
+      <ExerciseRenderer
+        exercise={{
+          id: 60,
+          exercise_type: "writing",
+          content: { prompt: "Write" },
+        }}
+        onAnswer={onAnswer}
+      />
+    );
+    fireEvent.click(screen.getByTestId("writing-submit-mock"));
+    expect(onAnswer).toHaveBeenCalledWith("text");
+  });
+
+  it("contrastive_grammar handles missing content gracefully", () => {
+    render(
+      <ExerciseRenderer
+        exercise={{ id: 61, exercise_type: "contrastive_grammar", content: {} }}
+        onAnswer={jest.fn()}
+      />
+    );
+    expect(screen.getByTestId("mock-contrastive-grammar")).toBeInTheDocument();
+  });
+
+  it("pragmatic_choice handles missing content gracefully", () => {
+    render(
+      <ExerciseRenderer
+        exercise={{ id: 62, exercise_type: "pragmatic_choice", content: {} }}
+        onAnswer={jest.fn()}
+      />
+    );
+    expect(screen.getByTestId("mock-pragmatic-scenario")).toBeInTheDocument();
+  });
+
+  it("authentic_reading handles missing scaffolding gracefully", () => {
+    render(
+      <ExerciseRenderer
+        exercise={{ id: 63, exercise_type: "authentic_reading", content: {} }}
+        onAnswer={jest.fn()}
+      />
+    );
+    expect(screen.getByTestId("mock-authentic-reader")).toBeInTheDocument();
+    expect(screen.getByTestId("reading-done")).toBeInTheDocument();
+  });
+
+  it("real_audio_comprehension handles missing content gracefully", () => {
+    render(
+      <ExerciseRenderer
+        exercise={{ id: 64, exercise_type: "real_audio_comprehension", content: {} }}
+        onAnswer={jest.fn()}
+      />
+    );
+    expect(screen.getByTestId("mock-real-audio")).toBeInTheDocument();
+    expect(screen.getByTestId("listening-done")).toBeInTheDocument();
+  });
+
+  it("real_audio_comprehension passes scaffolding with mapped questions", () => {
+    render(
+      <ExerciseRenderer
+        exercise={{
+          id: 65,
+          exercise_type: "real_audio_comprehension",
+          content: {
+            audio_src: "/a.mp3",
+            transcription: "t",
+            scaffolding: {
+              comprehension_questions: [
+                { question_ja: "何を聞きましたか？", expected_answer_ja: "answer" },
+              ],
+              listening_tips: ["Listen carefully"],
+            },
+          },
+        }}
+        onAnswer={jest.fn()}
+      />
+    );
+    expect(screen.getByTestId("mock-real-audio")).toBeInTheDocument();
+  });
+
+  it("authentic_reading Done button disables after click to prevent double submission", () => {
+    const onAnswer = jest.fn();
+    render(
+      <ExerciseRenderer
+        exercise={{ id: 66, exercise_type: "authentic_reading", content: { title: "t" } }}
+        onAnswer={onAnswer}
+      />
+    );
+    fireEvent.click(screen.getByTestId("reading-done"));
+    fireEvent.click(screen.getByTestId("reading-done"));
+    expect(onAnswer).toHaveBeenCalledTimes(1);
+  });
+
+  it("real_audio_comprehension Done button disables after click to prevent double submission", () => {
+    const onAnswer = jest.fn();
+    render(
+      <ExerciseRenderer
+        exercise={{ id: 67, exercise_type: "real_audio_comprehension", content: { audio_src: "/a.mp3" } }}
+        onAnswer={onAnswer}
+      />
+    );
+    fireEvent.click(screen.getByTestId("listening-done"));
+    fireEvent.click(screen.getByTestId("listening-done"));
+    expect(onAnswer).toHaveBeenCalledTimes(1);
   });
 });

@@ -1,40 +1,44 @@
 "use client";
 
-import { useState, useCallback } from "react";
+import { useState, useCallback, useRef, useEffect } from "react";
 import { useAudio } from "@/hooks/useAudio";
 
 interface ListeningExerciseProps {
   audioSrc: string;
   options: string[];
+  correctIndex: number;
   onAnswer: (index: number) => void;
 }
 
-export function ListeningExercise({ audioSrc, options, onAnswer }: ListeningExerciseProps) {
+export function ListeningExercise({ audioSrc, options, correctIndex, onAnswer }: ListeningExerciseProps) {
   const { play, stop } = useAudio();
   const [playing, setPlaying] = useState(false);
   const [selected, setSelected] = useState<number | null>(null);
   const [playCount, setPlayCount] = useState(0);
+  const playTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  useEffect(() => {
+    return () => {
+      if (playTimerRef.current) clearTimeout(playTimerRef.current);
+    };
+  }, []);
 
   const handlePlay = useCallback(() => {
     if (playing) {
       stop();
       setPlaying(false);
+      if (playTimerRef.current) clearTimeout(playTimerRef.current);
     } else {
       setPlaying(true);
       setPlayCount((c) => c + 1);
       play(audioSrc);
-      // Estimate audio duration, reset playing state after reasonable time
-      setTimeout(() => setPlaying(false), 5000);
+      playTimerRef.current = setTimeout(() => setPlaying(false), 5000);
     }
   }, [audioSrc, play, stop, playing]);
 
-  const handleSelect = useCallback(
-    (index: number) => {
-      setSelected(index);
-      onAnswer(index);
-    },
-    [onAnswer]
-  );
+  const handleContinue = useCallback(() => {
+    onAnswer(selected!);
+  }, [selected, onAnswer]);
 
   return (
     <div data-testid="listening-exercise" className="space-y-4">
@@ -70,20 +74,44 @@ export function ListeningExercise({ audioSrc, options, onAnswer }: ListeningExer
           <button
             key={i}
             data-testid={`listen-option-${i}`}
-            onClick={() => handleSelect(i)}
+            onClick={() => setSelected(i)}
             disabled={selected !== null}
             className={`w-full text-left rounded-xl border-2 p-3 transition-colors ${
-              selected === i
-                ? "border-orange-400 bg-orange-50"
-                : "border-stone-200 hover:bg-orange-50 hover:border-orange-200"
-            } ${selected !== null && selected !== i ? "opacity-50" : ""}`}
+              selected === null
+                ? "border-stone-200 hover:bg-orange-50 hover:border-orange-200"
+                : i === correctIndex
+                ? "border-green-400 bg-green-50"
+                : i === selected
+                ? "border-red-400 bg-red-50"
+                : "border-stone-200 opacity-50"
+            }`}
           >
             {opt}
           </button>
         ))}
       </div>
 
-      {playCount === 0 && (
+      {selected !== null && (
+        <>
+          <div
+            data-testid="listen-feedback"
+            className={`rounded-xl p-3 text-center ${
+              selected === correctIndex ? "bg-green-50 text-green-700" : "bg-red-50 text-red-700"
+            }`}
+          >
+            {selected === correctIndex ? "正解！" : `正しい答えは「${options[correctIndex]}」です`}
+          </div>
+          <button
+            data-testid="listen-continue"
+            onClick={handleContinue}
+            className="w-full rounded-xl bg-orange-500 py-3 text-white font-medium hover:bg-orange-600 transition-colors"
+          >
+            Continue
+          </button>
+        </>
+      )}
+
+      {playCount === 0 && selected === null && (
         <p className="text-xs text-stone-400 text-center">
           Press listen to hear the audio before answering.
         </p>

@@ -12,10 +12,8 @@ export function PictureMatchCard({ options, onSelect, correctIndex }: PictureMat
   const [selected, setSelected] = useState<number | null>(null);
   const [imageErrors, setImageErrors] = useState<Set<number>>(new Set());
 
-  const handleSelect = (index: number) => {
-    if (selected !== null) return; // Already answered
-    setSelected(index);
-    onSelect(index);
+  const handleContinue = () => {
+    onSelect(selected!);
   };
 
   const handleImageError = (index: number) => {
@@ -30,30 +28,53 @@ export function PictureMatchCard({ options, onSelect, correctIndex }: PictureMat
   };
 
   return (
-    <div data-testid="picture-match" className="grid grid-cols-2 gap-4">
-      {options.map((opt, index) => (
-        <button
-          key={index}
-          data-testid={`match-option-${index}`}
-          onClick={() => handleSelect(index)}
-          disabled={selected !== null}
-          className={`rounded-xl border-2 p-4 transition-colors ${getBorderColor(index)}`}
-        >
-          <div className="w-24 h-24 mx-auto rounded-lg mb-2 overflow-hidden bg-stone-100 flex items-center justify-center">
-            {imageErrors.has(index) ? (
-              <span className="text-4xl">{opt.label.charAt(0)}</span>
-            ) : (
-              <img
-                src={opt.imageUrl}
-                alt={opt.label}
-                className="w-full h-full object-cover"
-                onError={() => handleImageError(index)}
-              />
-            )}
+    <div data-testid="picture-match" className="space-y-4">
+      <div className="grid grid-cols-2 gap-4">
+        {options.map((opt, index) => (
+          <button
+            key={index}
+            data-testid={`match-option-${index}`}
+            onClick={() => setSelected(index)}
+            disabled={selected !== null}
+            className={`rounded-xl border-2 p-4 transition-colors ${getBorderColor(index)}`}
+          >
+            <div className="w-24 h-24 mx-auto rounded-lg mb-2 overflow-hidden bg-stone-100 flex items-center justify-center">
+              {imageErrors.has(index) ? (
+                <span className="text-4xl">{opt.label.charAt(0)}</span>
+              ) : (
+                <img
+                  src={opt.imageUrl}
+                  alt={opt.label}
+                  className="w-full h-full object-cover"
+                  onError={() => handleImageError(index)}
+                />
+              )}
+            </div>
+            <p className="text-center text-stone-700">{opt.label}</p>
+          </button>
+        ))}
+      </div>
+      {selected !== null && (
+        <>
+          <div
+            data-testid="match-feedback"
+            className={`rounded-xl p-3 text-center ${
+              selected === correctIndex ? "bg-green-50 text-green-700" : "bg-red-50 text-red-700"
+            }`}
+          >
+            {selected === correctIndex
+              ? "正解！"
+              : `正しい答えは「${correctIndex !== undefined ? options[correctIndex]?.label : ""}」です`}
           </div>
-          <p className="text-center text-stone-700">{opt.label}</p>
-        </button>
-      ))}
+          <button
+            data-testid="match-continue"
+            onClick={handleContinue}
+            className="w-full rounded-xl bg-orange-500 py-3 text-white font-medium hover:bg-orange-600 transition-colors"
+          >
+            Continue
+          </button>
+        </>
+      )}
     </div>
   );
 }

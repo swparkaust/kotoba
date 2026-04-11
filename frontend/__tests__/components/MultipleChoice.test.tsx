@@ -24,10 +24,17 @@ describe("MultipleChoice", () => {
     expect(screen.getByTestId("choice-3")).toBeInTheDocument();
   });
 
-  it("calls onAnswer with the selected option text", () => {
+  it("calls onAnswer with the selected option text after clicking continue", () => {
     render(<MultipleChoice {...defaultProps} />);
     fireEvent.click(screen.getByTestId("choice-1"));
+    fireEvent.click(screen.getByTestId("choice-continue"));
     expect(defaultProps.onAnswer).toHaveBeenCalledWith("い");
+  });
+
+  it("does not call onAnswer until continue is clicked", () => {
+    render(<MultipleChoice {...defaultProps} />);
+    fireEvent.click(screen.getByTestId("choice-0"));
+    expect(defaultProps.onAnswer).not.toHaveBeenCalled();
   });
 
   it("shows feedback after answering correctly", () => {
@@ -76,6 +83,7 @@ describe("MultipleChoice", () => {
     render(<MultipleChoice {...defaultProps} onAnswer={onAnswer} />);
     fireEvent.click(screen.getByTestId("choice-0"));
     fireEvent.click(screen.getByTestId("choice-1"));
+    fireEvent.click(screen.getByTestId("choice-continue"));
     expect(onAnswer).toHaveBeenCalledTimes(1);
     expect(onAnswer).toHaveBeenCalledWith("あ");
   });

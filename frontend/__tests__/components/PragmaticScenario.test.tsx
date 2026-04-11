@@ -27,10 +27,18 @@ describe("PragmaticScenario", () => {
     expect(screen.getByText("行きたくないです")).toBeInTheDocument();
   });
 
-  it("calls onChoice when a choice is selected", () => {
+  it("does not call onChoice until continue is clicked", () => {
     const onChoice = jest.fn();
     render(<PragmaticScenario scenario={mockScenario} onChoice={onChoice} />);
     fireEvent.click(screen.getByText("ちょっと今日は..."));
+    expect(onChoice).not.toHaveBeenCalled();
+  });
+
+  it("calls onChoice after clicking continue", () => {
+    const onChoice = jest.fn();
+    render(<PragmaticScenario scenario={mockScenario} onChoice={onChoice} />);
+    fireEvent.click(screen.getByText("ちょっと今日は..."));
+    fireEvent.click(screen.getByTestId("scenario-continue"));
     expect(onChoice).toHaveBeenCalledWith(0);
   });
 
@@ -57,7 +65,9 @@ describe("PragmaticScenario", () => {
     render(<PragmaticScenario scenario={mockScenario} onChoice={onChoice} />);
     fireEvent.click(screen.getByText("ちょっと今日は..."));
     fireEvent.click(screen.getByText("行きたくないです"));
+    fireEvent.click(screen.getByTestId("scenario-continue"));
     expect(onChoice).toHaveBeenCalledTimes(1);
+    expect(onChoice).toHaveBeenCalledWith(0);
   });
 
   it("shows suboptimal feedback when non-best choice is selected", () => {
@@ -94,7 +104,6 @@ describe("PragmaticScenario", () => {
     };
     render(<PragmaticScenario scenario={scenarioNoImplied} onChoice={jest.fn()} />);
     fireEvent.click(screen.getByText("ちょっと今日は..."));
-    // Empty implied_meaning should not render the arrow text
     expect(screen.queryByText("→")).not.toBeInTheDocument();
   });
 
@@ -105,14 +114,12 @@ describe("PragmaticScenario", () => {
 
   it("does not show implied meaning before selection", () => {
     render(<PragmaticScenario scenario={mockScenario} onChoice={jest.fn()} />);
-    // implied_meaning should not be visible before any choice is made
     expect(screen.queryByText(/一緒に来てほしい/)).not.toBeInTheDocument();
   });
 
   it("shows all choices with consequences after selection", () => {
     render(<PragmaticScenario scenario={mockScenario} onChoice={jest.fn()} />);
     fireEvent.click(screen.getByText("ちょっと今日は..."));
-    // Both choices should show their consequences
     expect(screen.getByText(/自然な断り方です/)).toBeInTheDocument();
     expect(screen.getByText(/直接的すぎます/)).toBeInTheDocument();
   });
