@@ -17,6 +17,7 @@ gem "dotenv-rails"
 gem "tzinfo-data", platforms: %i[windows jruby]
 
 group :development, :test do
+  gem "simplecov", require: false
   gem "rspec-rails", "~> 7.0"
   gem "factory_bot_rails", "~> 6.4"
   gem "shoulda-matchers", "~> 6.0"
