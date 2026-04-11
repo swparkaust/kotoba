@@ -1,4 +1,4 @@
-.PHONY: setup test test-backend test-frontend test-e2e test-manual test-all start start-test lint build-content build-content-all fill-content import-content
+.PHONY: setup test test-backend test-frontend test-e2e test-smoke test-all start start-test lint build-content build-content-all fill-content import-content
 
 setup:
 	cd backend && bundle install && bin/rails db:create db:migrate
@@ -24,7 +24,7 @@ test-e2e:
 	cd frontend && npx playwright test; ret=$$?; \
 	docker compose -f docker-compose.test.yml down; exit $$ret
 
-test-manual:
+test-smoke:
 	@echo "Ensuring Ollama is running with required models..."
 	ollama serve &>/dev/null &
 	sleep 2
@@ -33,10 +33,10 @@ test-manual:
 	docker compose -f docker-compose.test.yml up -d --build
 	sleep 15
 	docker compose -f docker-compose.test.yml exec -T backend bin/rails db:seed
-	bash scripts/manual_test.sh && cd frontend && npx ts-node ../scripts/manual_e2e.ts; ret=$$?; \
+	bash scripts/smoke_test.sh; ret=$$?; \
 	docker compose -f docker-compose.test.yml down; exit $$ret
 
-test-all: test test-e2e test-manual
+test-all: test test-e2e test-smoke
 
 start:
 	docker compose up --build

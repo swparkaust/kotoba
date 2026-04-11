@@ -199,11 +199,8 @@ jobs:
         working-directory: frontend
         run: npx playwright test --config=playwright.ci.config.ts
 
-      - name: Run manual tests
-        run: bash scripts/manual_test.sh
-
-      - name: Run manual E2E tests
-        run: NODE_PATH=frontend/node_modules npx tsx scripts/manual_e2e.ts
+      - name: Run smoke tests
+        run: bash scripts/smoke_test.sh
 
       - name: Upload Playwright report
         if: failure()

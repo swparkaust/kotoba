@@ -83,7 +83,7 @@ ollama pull qwen3:8b
 ```bash
 make test             # RSpec + Jest
 make test-e2e         # Playwright against live services
-make test-manual      # Integration test + browser verification
+make test-smoke       # API smoke tests
 make test-all         # Everything
 ```
 
