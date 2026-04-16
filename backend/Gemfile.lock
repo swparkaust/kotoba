@@ -76,10 +76,9 @@ GEM
       tzinfo (~> 2.0, >= 2.0.5)
     addressable (2.9.0)
       public_suffix (>= 2.0.2, < 8.0)
-    anthropic (0.4.1)
-      event_stream_parser (>= 0.3.0, < 2.0.0)
-      faraday (>= 1)
-      faraday-multipart (>= 1)
+    anthropic (1.35.0)
+      cgi
+      connection_pool
     ast (2.4.3)
     base64 (0.3.0)
     bcrypt (3.1.22)
@@ -385,7 +384,7 @@ PLATFORMS
   x86_64-linux-musl
 
 DEPENDENCIES
-  anthropic (~> 0.3)
+  anthropic (~> 1.35)
   bcrypt (~> 3.1.7)
   bootsnap
   brakeman
